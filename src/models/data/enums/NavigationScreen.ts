@@ -1,0 +1,14 @@
+export enum NavigationScreen {
+    REGISTER_EMAIL = "registerEmail",
+    LOGIN_EMAIL = "loginEmail",
+    LOGIN_ORGANIZATION = "loginOrganization",
+    LOGIN_PASSWORD = "loginPassword",
+    VAULTS = "vaults",
+    CREATE_VAULTS = "createVaults",
+    PASSWORDS = "passwords",
+    CREATE_PASSWORDS = "createPasswords",
+    ENVIRONMENTS = "environments",
+    CREATE_ENVIRONMENT = "environmentCreate",
+    ENVIRONMENT_DETAILS = "environmentDetails",
+    SETTINGS = "settings",
+}

@@ -1,0 +1,1 @@
+export const getIconUrl = (domain: string) => `https://icon.horse/icon/${domain}`
