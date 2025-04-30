@@ -73,6 +73,17 @@ export class LoginRepository {
 
         return response.data
     }
+
+    public async signOut(): Promise<void> {
+        try {
+            await this.api.post("/signout", {}, {
+                headers: {
+                    Authorization: `Bearer ${LoginRepository.token}`
+                }
+            })
+        } catch (_) {}
+        LoginRepository.token = ""
+    }
 }
 
 

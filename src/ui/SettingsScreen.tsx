@@ -9,6 +9,7 @@ import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { Vault } from "@/types"
 import { usePreferencesState } from "@/store/usePreferencesState"
+import { useGlobalState } from "@/store/useGlobalState"
 
 interface SettingsScreenProps {
     settingsTab: string;
@@ -39,6 +40,7 @@ export default function SettingsScreen({
     onSettingsTabChange, onAutoLockTimeoutChange, onClipboardClearTimeoutChange,
     onShowFavoritesFirstChange, onMinimizeOnCopyChange
 }: SettingsScreenProps) {
+    const { signout } = useGlobalState()
     const { isDarkTheme, setDarkTheme } = usePreferencesState()
     const { resetNavigation, navigateTo } = useNavigationState()
 
@@ -158,7 +160,7 @@ export default function SettingsScreen({
                                     variant="outline"
                                     size="sm"
                                     className="w-full h-7 text-xs text-destructive hover:bg-destructive/10"
-                                    onClick={() => { resetNavigation(NavigationScreen.LOGIN_ORGANIZATION) }} // Encerrar sessão e retornar aos ambientes
+                                    onClick={signout}
                                 >
                                     Encerrar Sessão e retornar aos ambientes
                                 </Button>
