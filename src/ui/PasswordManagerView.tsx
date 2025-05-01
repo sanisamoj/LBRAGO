@@ -15,6 +15,7 @@ import CreateVaultScreen from "./CreateVaultScreen"
 import AddPasswordScreen from "./AddPasswordScreen"
 import EnvironmentsScreen from "./EnvironmentsScreen"
 import CreateEnvironmentScreen from "./CreateEnvironmentScreen"
+import VerifyCodeScreen from "./VerifyCodeScreen"
 
 export default function PasswordManagerView() {
   const { getCurrentScreen, navigateTo } = useNavigationState()
@@ -143,6 +144,8 @@ export default function PasswordManagerView() {
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-invisible">
 
           {getCurrentScreen() === NavigationScreen.LOGIN_EMAIL && <LoginEmailScreen />}
+
+          {getCurrentScreen() === NavigationScreen.VERIFY_CODE && <VerifyCodeScreen />}
 
           {getCurrentScreen() === NavigationScreen.REGISTER_EMAIL && <RegisterScreen />}
 

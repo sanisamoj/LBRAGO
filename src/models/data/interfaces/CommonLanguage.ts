@@ -63,4 +63,18 @@ export interface CommonLanguage {
     dragOrClickToUpload: string
     selectImage: string
     upload: string
+
+    verifyYourEmail: string
+    codeSentTo: string
+    enterCodeBelow: string
+    verificationCode: string
+    codePlaceHolder: string
+    invalidCode: string
+    changeEmail: string
+    resendCode: string
+
+    userNotFoundWithThisEmail: string
+    sendAuthEmailCode: string
+    sendAuthEmailAttempsExceeded: string
+    sentCodeSuccess: string
 }

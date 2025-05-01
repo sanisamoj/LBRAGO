@@ -1,6 +1,7 @@
 export enum NavigationScreen {
     REGISTER_EMAIL = "registerEmail",
     LOGIN_EMAIL = "loginEmail",
+    VERIFY_CODE = "verifyCode",
     LOGIN_ORGANIZATION = "loginOrganization",
     LOGIN_PASSWORD = "loginPassword",
     VAULTS = "vaults",

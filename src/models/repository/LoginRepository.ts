@@ -36,14 +36,21 @@ export class LoginRepository {
         return this.token
     }
 
-    public async getLoginInfo(email: string): Promise<LoginInfoResponse[]> {
-        const response = await this.api.get("/login", {
-            params: {
-                email: email
-            }
+    public async getLoginInfo(email: string, code: string): Promise<LoginInfoResponse[]> {
+        const response = await this.api.post("/login", {
+            email: email,
+            code: code
         })
 
         return response.data
+    }
+
+    public async codeProcessLogin(email: string): Promise<void> {
+        await this.api.post("/auth", { email: email }, {
+            headers: {
+                Authorization: `Bearer ${LoginRepository.token}`
+            }
+        })
     }
 
     public async getTokenForUserCreation(code: string): Promise<MinOrgWithTokenResponse> {
@@ -81,7 +88,7 @@ export class LoginRepository {
                     Authorization: `Bearer ${LoginRepository.token}`
                 }
             })
-        } catch (_) {}
+        } catch (_) { }
         LoginRepository.token = ""
     }
 }

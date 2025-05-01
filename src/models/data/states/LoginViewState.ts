@@ -8,6 +8,12 @@ export interface LoginViewState {
     userLoginInfo: LoginInfoResponse[]
     selectedOrganization: LoginInfoResponse | null
 
+    verificationCodeInput: string
+    setVerificationCodeInput: (code: string) => void
+    verifyCode: () => Promise<void>
+    resendCode: () => Promise<void>
+    resetToEmailInput: () => void
+
     setEmail: (email: string) => void
     verifyEmail: () => Promise<void>
     selectOrganization: (organization: LoginInfoResponse) => void

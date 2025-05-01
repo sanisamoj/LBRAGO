@@ -56,6 +56,7 @@ export default function RegisterScreen() {
                                 onChange={(e) => setCode(e.target.value)}
                                 className="h-8 pl-8 text-xs"
                                 placeholder={translations.invitationCode}
+                                disabled={isLoading}
                                 autoFocus
                             />
                         </div>
@@ -91,6 +92,7 @@ export default function RegisterScreen() {
                                 onChange={(e) => setNickname(e.target.value)}
                                 className="h-8 pl-8 pr-8 text-xs"
                                 placeholder={translations.createUsername}
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
@@ -108,6 +110,7 @@ export default function RegisterScreen() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="h-8 pl-8 pr-8 text-xs"
                                 placeholder={translations.createStrongPassword}
+                                disabled={isLoading}
                             />
                             <Button
                                 type="button"
@@ -147,6 +150,7 @@ export default function RegisterScreen() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 className="h-8 pl-8 pr-8 text-xs"
                                 placeholder={translations.confirmYourPassword}
+                                disabled={isLoading}
                             />
                             <Button
                                 type="button"

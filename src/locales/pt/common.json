@@ -62,5 +62,19 @@
     "remove": "Remover",
     "dragOrClickToUpload": "Arraste ou clique para enviar",
     "selectImage": "Escolher Imagem",
-    "upload": "upload"
+    "upload": "upload",
+
+    "verifyYourEmail": "Verifique seu Email",
+    "codeSentTo": "Enviamos um código de verificação para",
+    "enterCodeBelow": "Insira o código abaixo para continuar.",
+    "verificationCode": "Código de Verificação",
+    "codePlaceHolder": "0000000",
+    "invalidCode": "Código inválido",
+    "changeEmail": "Mudar Email",
+    "resendCode": "Reenviar Código",
+
+    "userNotFoundWithThisEmail": "Nenhum usuário foi encontrado com este Email.",
+    "sendAuthEmailCode": "Enviar código",
+    "sendAuthEmailAttempsExceeded": "Limite de tentativas excedido. Por favor, tente novamente mais tarde.",
+    "sentCodeSuccess": "Código enviado com sucesso!"
 }

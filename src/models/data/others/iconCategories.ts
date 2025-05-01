@@ -13,7 +13,8 @@ export const iconCategories = [
             "reddit.com",
             "whatsapp.com",
             "discord.com",
-            "snapchat.com"
+            "snapchat.com",
+            "telegram.org"
         ]
     },
     {
@@ -30,7 +31,11 @@ export const iconCategories = [
             "zoom.us",
             "miro.com",
             "drive.google.com",
-            "teams.microsoft.com"
+            "teams.microsoft.com",
+            "gitlab.com",
+            "hubspot.com",
+            "office.com", 
+            "salesforce.com"
         ]
     },
     {
@@ -48,7 +53,13 @@ export const iconCategories = [
             "outlook.com",
             "1password.com",
             "lastpass.com",
-            "bitwarden.com"
+            "bitwarden.com",
+            "uber.com",
+            "99app.com", // Popular no Brasil
+            "rappi.com.br", // Popular no Brasil
+            "deezer.com",
+            "music.apple.com",
+            "nubank.com.br"
         ]
     },
     {
@@ -67,7 +78,11 @@ export const iconCategories = [
             "stackoverflow.com",
             "vercel.com",
             "netlify.com",
-            "theverge.com"
+            "theverge.com",
+            "godaddy.com",
+            "hostinger.com",
+            "mongodb.com",
+            "oracle.com"
         ]
     },
     {
@@ -84,7 +99,16 @@ export const iconCategories = [
             "weather.com",
             "tripadvisor.com",
             "canva.com",
-            "bing.com"
+            "bing.com",
+            "disneyplus.com",
+            "max.com",
+            "primevideo.com",
+            "tv.apple.com",
+            "coursera.org",
+            "udemy.com",
+            "duolingo.com",
+            "quora.com",
+            "imgur.com"
         ]
     }
 ]

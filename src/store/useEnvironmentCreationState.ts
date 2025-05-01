@@ -8,6 +8,7 @@ import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { AxiosError } from "axios"
 import { useLanguageState } from "./useLanguageState"
+import { Config } from "@/Config"
 
 export interface EnvironmentCreationState {
     environmentName: string
@@ -45,7 +46,7 @@ export const useEnvironmentCreationState = create<EnvironmentCreationState>((set
     isLoading: false,
 
     file: undefined,
-    imageUrl: undefined,
+    imageUrl: Config.FAVICON_URL,
 
     setFile: (file: File | undefined) => set({ file }),
     setImageUrl: (imageUrl: string | undefined) => set({ imageUrl }),

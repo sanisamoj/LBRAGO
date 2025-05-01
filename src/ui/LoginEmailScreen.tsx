@@ -54,8 +54,8 @@ export default function LoginEmailScreen() {
           {isError && <p className="text-[10px] text-red-500">{errorMessage}</p>}
         </div>
 
-        <Button type="submit" className="w-full h-8 text-xs" disabled={isLoading}>
-          {isLoading ? "Verificando..." : "Continuar"}
+        <Button type="submit" className="w-full h-8 text-xs" disabled={isLoading || email === ""}>
+          {translations.sendAuthEmailCode}
         </Button>
       </form>
 

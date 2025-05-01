@@ -119,7 +119,7 @@ export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: I
               <TabsTrigger value={translations.upload} className="text-[10px]"> {translations.upload} </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="icons" className="mt-2">
+            <TabsContent value={translations.icons}className="mt-2">
               <ScrollArea className="custom-scroll-area max-h-60 overflow-y-auto space-y-3 pr-2">
                 {iconCategories.map((category) => (
                   <div key={category.name} className="space-y-1">
@@ -127,6 +127,7 @@ export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: I
                     <div className="grid grid-cols-6 gap-1">
                       {category.icons.map((iconIdentifier) => {
                         const iconUrl = getIconUrl(iconIdentifier);
+                        console.log(iconUrl)
                         return (
                           <div
                             key={iconIdentifier}

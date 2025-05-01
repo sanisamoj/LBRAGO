@@ -43,6 +43,7 @@ export default function CreateEnvironmentScreen() {
                             onChange={(e) => setEnvironmentName(e.target.value)}
                             className="h-8 text-xs"
                             placeholder={translations.environmentNamePlaceholder}
+                            disabled={isLoading}
                             required
                         />
                     </div>
@@ -65,6 +66,7 @@ export default function CreateEnvironmentScreen() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="h-8 pl-8 text-xs"
                                     placeholder={translations.emailPlaceHolder}
+                                    disabled={isLoading}
                                     required
                                 />
                             </div>
@@ -83,6 +85,7 @@ export default function CreateEnvironmentScreen() {
                                     onChange={(e) => setUsername(e.target.value)}
                                     className="h-8 pl-8 text-xs"
                                     placeholder="Ex: Jomasinas"
+                                    disabled={isLoading}
                                     required
                                 />
                             </div>
@@ -102,6 +105,7 @@ export default function CreateEnvironmentScreen() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="h-8 pl-8 pr-8 text-xs"
                                     placeholder={translations.createStrongPassword}
+                                    disabled={isLoading}
                                 />
                                 <Button
                                     type="button"
@@ -141,6 +145,7 @@ export default function CreateEnvironmentScreen() {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="h-8 pl-8 pr-8 text-xs"
                                     placeholder={translations.confirmYourPassword}
+                                    disabled={isLoading}
                                 />
                                 <Button
                                     type="button"
