@@ -50,7 +50,31 @@ func GeneratePasswordHash(password string) (*models.PasswordHashData, error) {
 		Salt: saltBase64,
 		Hash: hashBase64,
 	}, nil
+}
 
+func GeneratePswHashWithParam(dto models.PVGenerateDTO) (*models.PasswordHashData, error) {
+	saltBytes, err := Base64ToBytes(dto.Salt)
+	if err != nil {
+		log.Printf("Error decoding base64 salt: %v\n", err)
+		return nil, fmt.Errorf("failed to decode base64 salt: %w", err)
+	}
+
+	hashBytes := argon2.IDKey(
+		[]byte(dto.Password),
+		saltBytes,
+		dto.Parameters.Time,
+		dto.Parameters.Memory,
+		dto.Parameters.Parallelism,
+		dto.Parameters.SaltLength,
+	)
+
+	saltBase64 := BytesToBase64(saltBytes)
+	hashBase64 := BytesToBase64(hashBytes)
+
+	return &models.PasswordHashData{
+		Salt: saltBase64,
+		Hash: hashBase64,
+	}, nil
 }
 
 func AesGcmEncrypt(plaintext []byte, key []byte) (models.AesGcmEncryptedData, error) {

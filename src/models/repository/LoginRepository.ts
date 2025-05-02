@@ -5,6 +5,7 @@ import { MinOrgWithTokenResponse } from "../data/interfaces/MinOrgWithTokenRespo
 import { CreateUserRequest } from "../data/interfaces/CreateUserRequest"
 import { CreateOrganizationRequest } from "../data/interfaces/CreateOrganizationRequest"
 import { OrganizationCreationResponse } from "../data/interfaces/OrganizationCreationResponse"
+import { EnvironmentLoginRequest } from "../data/interfaces/EnvironmentLoginRequest"
 
 export class LoginRepository {
     private static instance: LoginRepository | null = null
@@ -43,6 +44,10 @@ export class LoginRepository {
         })
 
         return response.data
+    }
+
+    public async login(request: EnvironmentLoginRequest): Promise<void> {
+        await this.api.post("/environment/login", request)
     }
 
     public async codeProcessLogin(email: string): Promise<void> {

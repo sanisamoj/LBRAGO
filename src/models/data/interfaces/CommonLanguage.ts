@@ -77,4 +77,9 @@ export interface CommonLanguage {
     sendAuthEmailCode: string
     sendAuthEmailAttempsExceeded: string
     sentCodeSuccess: string
+
+    authenticating: string
+    authenticate: string
+
+    acessDenied: string
 }

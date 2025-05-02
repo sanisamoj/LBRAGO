@@ -76,5 +76,10 @@
     "userNotFoundWithThisEmail": "Nenhum usuário foi encontrado com este Email.",
     "sendAuthEmailCode": "Enviar código",
     "sendAuthEmailAttempsExceeded": "Limite de tentativas excedido. Por favor, tente novamente mais tarde.",
-    "sentCodeSuccess": "Código enviado com sucesso!"
+    "sentCodeSuccess": "Código enviado com sucesso!",
+
+    "authenticating": "Autenticando",
+    "authenticate": "Autenticar",
+
+    "acessDenied": "Acesso negado"
 }

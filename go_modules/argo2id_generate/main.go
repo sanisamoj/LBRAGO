@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"lembrago/models"
 	"lembrago/utils"
@@ -10,7 +11,52 @@ import (
 )
 
 func main() {
-	password := os.Args[1]
+	createUserF := flag.String("cn", "", "User passwords")
+	pvGenerateF := flag.String("pv", "", "Generate password verifier")
+	flag.Parse()
+
+	actionTaken := false
+
+	if *createUserF != "" {
+		GenerateUser(*createUserF)
+		actionTaken = true
+		os.Exit(0) 
+	}
+
+	if *pvGenerateF != "" {
+		var dto models.PVGenerateDTO
+		err := json.Unmarshal([]byte(*pvGenerateF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+
+		phd, err := utils.GeneratePswHashWithParam(dto)
+		if err != nil {
+			log.Printf("Error generating password hash: %v\n", err)
+			os.Exit(1)
+		}
+
+		jsonData, err := json.Marshal(phd)
+		if err != nil {
+			log.Printf("Error generating json: %v", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(jsonData))
+
+		actionTaken = true
+		os.Exit(0)
+	}
+
+	if !actionTaken {
+		log.Printf("Provide actions (--cn or --pv)")
+		flag.Usage()
+		os.Exit(1)
+	}
+}
+
+func GenerateUser(password string) {
 	pvHash, err := utils.GeneratePasswordHash(password)
 	if err != nil {
 		log.Printf("Error generating password hash: %v\n", err)

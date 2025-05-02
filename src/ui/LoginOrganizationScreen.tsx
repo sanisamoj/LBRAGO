@@ -8,7 +8,7 @@ import { LoginInfoResponse } from "@/models/data/interfaces/LoginInfoResponse"
 import { useLanguageState } from "@/store/useLanguageState"
 
 export default function LoginOrganizationScreen() {
-  const { navigateReplace, navigateTo } = useNavigationState()
+  const { navigateReplace } = useNavigationState()
   const { userLoginInfo, selectOrganization } = useLoginViewState()
   const { translations } = useLanguageState()
 
@@ -29,7 +29,7 @@ export default function LoginOrganizationScreen() {
               <div
                 key={info.orgId}
                 className="flex items-center py-2 px-3 cursor-pointer hover:bg-accent transition-colors"
-                onClick={() => { selectOrganization(info); navigateTo(NavigationScreen.LOGIN_PASSWORD) }}
+                onClick={() => { selectOrganization(info) }}
               >
                 {info.organizationImageUrl ? (
                   <img

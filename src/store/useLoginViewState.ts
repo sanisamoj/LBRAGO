@@ -7,6 +7,11 @@ import { LoginRepository } from "@/models/repository/LoginRepository"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
+import { PasswordVerifierLoginResponse } from "@/models/data/interfaces/PasswordVerifierLoginResponse"
+import { GeneratePasswordVerifierInfo } from "@/models/data/interfaces/GeneratePasswordVerifierInfo"
+import { invoke } from "@tauri-apps/api/core"
+import { MinimalPasswordVerifier } from "@/models/data/interfaces/MinimalPasswordVerifier"
+import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLoginRequest"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -17,6 +22,8 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
     selectedOrganization: null,
 
     verificationCodeInput: "",
+
+    password: "",
 
     setEmail: (email: string) => set({ email: email, isError: false, errorMessage: "" }),
     setIsLoading: (isLoading: boolean) => set({ isLoading }),
@@ -33,9 +40,9 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
 
             set({ isLoading: false, isError: false, errorMessage: "" })
             toast.error(translations.sentCodeSuccess)
-        } catch (error : AxiosError | any) {
+        } catch (error: AxiosError | any) {
             if (error.response.status === 429) {
-                
+
                 set({
                     isLoading: false,
                     isError: true,
@@ -55,24 +62,25 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
 
     setVerificationCodeInput: (code: string) => {
         set({ verificationCodeInput: code })
-        const { translations } = useLanguageState.getState()
         if (code.length >= 6) {
-            try {
-                get().verifyCode()
-            } catch (error) {
-                set({ isError: true, errorMessage: translations.invalidCode })
-            }
+            get().verifyCode()
+        } else {
+            set({ isError: false, errorMessage: "" })
         }
     },
     verifyCode: async () => {
-        const repository: LoginRepository = LoginRepository.getInstance()
-        const loginInfoResponseList: LoginInfoResponse[] = await repository.getLoginInfo(get().email, get().verificationCodeInput)
-        set({ userLoginInfo: loginInfoResponseList })
+        try {
+            const repository: LoginRepository = LoginRepository.getInstance()
+            const loginInfoResponseList: LoginInfoResponse[] = await repository.getLoginInfo(get().email, get().verificationCodeInput)
+            set({ userLoginInfo: loginInfoResponseList })
 
-        const { navigateReplace } = useNavigationState.getState()
-        navigateReplace(NavigationScreen.LOGIN_ORGANIZATION)
-
-        set({ isError: false, errorMessage: "", email: "", verificationCodeInput: "" })
+            const { navigateReplace } = useNavigationState.getState()
+            navigateReplace(NavigationScreen.LOGIN_ORGANIZATION)
+            set({ isError: false, errorMessage: "", email: "", verificationCodeInput: "" })
+        } catch (error) {
+            const { translations } = useLanguageState.getState()
+            set({ isError: true, errorMessage: translations.invalidCode })
+        }
     },
     resendCode: async () => {
         const { translations } = useLanguageState.getState()
@@ -94,6 +102,41 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
         set({ selectedOrganization: info })
         const { navigateTo } = useNavigationState.getState()
         navigateTo(NavigationScreen.LOGIN_PASSWORD)
+    },
+
+    setPassword: (password: string) => set({ password }),
+
+    environnmentAuth: async () => {
+        const passwordVerifier: PasswordVerifierLoginResponse | undefined = get().selectedOrganization?.passwordVerifier
+        if (!passwordVerifier) return
+
+        const generatePVInfo: GeneratePasswordVerifierInfo = {
+            salt: passwordVerifier.salt,
+            parameters: passwordVerifier.parameters,
+            password: get().password
+        }
+
+        try {
+            const jsonStr: string = JSON.stringify(generatePVInfo)
+            const result: string = await invoke<string>('generate_user_credentials_with_param', { arg: jsonStr })
+            const minPasswordVerifier: MinimalPasswordVerifier = JSON.parse(result)
+
+            const loginRepository = LoginRepository.getInstance()
+            const loginRequest: EnvironmentLoginRequest = {
+                orgId: get().selectedOrganization!.orgId,
+                email: get().email,
+                verifier: minPasswordVerifier.verifier
+            }
+            await loginRepository.login(loginRequest)
+
+        } catch (error) {
+            const { translations } = useLanguageState.getState()
+            toast.error(translations.acessDenied)
+            return
+        }
+
+        const { resetNavigation } = useNavigationState.getState()
+        resetNavigation(NavigationScreen.VAULTS)
     },
 
     getOrganizationInfoByCreationCode: async (code: string) => {

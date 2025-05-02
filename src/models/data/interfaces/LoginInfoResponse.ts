@@ -1,4 +1,4 @@
-import { PasswordVerifierLoginResponse } from "./UserWithOrganizationResponse"
+import { PasswordVerifierLoginResponse } from "./PasswordVerifierLoginResponse"
 
 export interface LoginInfoResponse {
     orgId: string

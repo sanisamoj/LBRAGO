@@ -4,7 +4,6 @@ type User struct {
 	PasswordVerifier PasswordVerifier `json:"passwordVerifier"`
 	SaltEk           string           `json:"salt_ek"`
 	Keys             Keys             `json:"keys"`
-	// MyVault          MyVault          `json:"myVault"`
 }
 
 type PasswordVerifierParameters struct {
@@ -38,11 +37,17 @@ type PasswordHashData struct {
 }
 
 type AesGcmEncryptedData struct {
-	Nonce  string `json:"nonce"`  // Base64 encoded nonce
+	Nonce  string `json:"nonce"`      // Base64 encoded nonce
 	Cipher string `json:"ciphertext"` // Base64 encoded cipher
 }
 
 type RsaKeyPair struct {
 	PublicKey  string // Base64 encoded PEM
 	PrivateKey string // Base64 encoded PEM
+}
+
+type PVGenerateDTO struct {
+	Salt       string                     `json:"salt"`
+	Parameters PasswordVerifierParameters `json:"parameters"`
+	Password   string                     `json:"password"`
 }

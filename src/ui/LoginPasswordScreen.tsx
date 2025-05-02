@@ -6,36 +6,24 @@ import { Eye, EyeOff, Lock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { useNavigationState } from "@/store/useNavigationState"
-import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useLoginViewState } from "@/store/useLoginViewState"
+import { useLanguageState } from "@/store/useLanguageState"
 
 export default function LoginPasswordScreen() {
-  const { resetNavigation } = useNavigationState()
-  const { selectedOrganization } = useLoginViewState()
+  const { translations } = useLanguageState()
+  const { selectedOrganization, password, setPassword, isLoading, environnmentAuth, isError, errorMessage } = useLoginViewState()
 
-  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call delay
-    setTimeout(() => {
-      resetNavigation(NavigationScreen.VAULTS)
-      setIsLoading(false)
-    }, 1000)
+    environnmentAuth()
   }
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-center p-6">
 
-        {/* Bloco de apresentação da empresa */}
         <div className="flex items-center gap-3 mb-6">
           {selectedOrganization?.organizationImageUrl ? (
             <img
@@ -56,7 +44,7 @@ export default function LoginPasswordScreen() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <Label htmlFor="password" className="text-xs font-medium">
-              Senha Mestra
+              {translations.masterPassword}
             </Label>
             <div className="relative">
               <Lock className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -65,8 +53,8 @@ export default function LoginPasswordScreen() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-8 pl-8 pr-8 text-xs"
-                placeholder="Sua senha mestra"
+                className={`h-8 pl-8 pr-8 text-xs ${isError ? "border-red-500" : ""}`}
+                placeholder={translations.masterPassword}
                 required
                 autoFocus
               />
@@ -84,26 +72,10 @@ export default function LoginPasswordScreen() {
                 )}
               </Button>
             </div>
+            {isError && <p className="text-[10px] text-red-500 mt-2">{errorMessage}</p>}
           </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="remember"
-                checked={rememberMe}
-                onCheckedChange={(checked) => setRememberMe(checked === true)}
-              />
-              <Label htmlFor="remember" className="text-[10px] font-medium cursor-pointer">
-                Lembrar-me
-              </Label>
-            </div>
-            <Button variant="link" className="h-auto p-0 text-[10px]">
-              Esqueceu a senha?
-            </Button>
-          </div>
-
           <Button type="submit" className="w-full h-8 text-xs" disabled={isLoading}>
-            {isLoading ? "Entrando..." : "Entrar"}
+            {isLoading ? translations.authenticating : translations.authenticate}
           </Button>
         </form>
       </div>
