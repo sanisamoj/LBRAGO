@@ -39,7 +39,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
             navigateReplace(NavigationScreen.VERIFY_CODE)
 
             set({ isLoading: false, isError: false, errorMessage: "" })
-            toast.error(translations.sentCodeSuccess)
+            toast.success(translations.sentCodeSuccess)
         } catch (error: AxiosError | any) {
             if (error.response.status === 429) {
 
