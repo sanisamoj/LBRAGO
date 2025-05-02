@@ -1,19 +1,5 @@
-import type { Company, Password, Vault } from "./types"
+import type { Password, Vault } from "./types"
 
-export const companies: Company[] = [
-  { id: "1", name: "Acme Corp" },
-  { id: "2", name: "Startup Inc" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-  { id: "3", name: "Tech Solutions" },
-]
 
 export const vaults: Vault[] = [
   {

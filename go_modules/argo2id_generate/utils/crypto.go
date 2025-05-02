@@ -65,7 +65,7 @@ func GeneratePswHashWithParam(dto models.PVGenerateDTO) (*models.PasswordHashDat
 		dto.Parameters.Time,
 		dto.Parameters.Memory,
 		dto.Parameters.Parallelism,
-		dto.Parameters.SaltLength,
+		dto.Parameters.KeyLength,
 	)
 
 	saltBase64 := BytesToBase64(saltBytes)

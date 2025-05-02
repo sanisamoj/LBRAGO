@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react"
-import { companies, passwords as allPasswords, vaults as allVaults } from "../data"
+import { useState, useEffect } from "react"
+import { passwords as allPasswords, vaults as allVaults } from "../data"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useNavigationState } from "@/store/useNavigationState"
 import { Vault, Password } from "@/types"
@@ -22,8 +22,7 @@ export default function PasswordManagerView() {
 
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
   const [selectedPassword, setSelectedPassword] = useState<Password | null>(null)
-
-  const [showPassword, setShowPassword] = useState(false) // Específico de PasswordsScreen, mas pode ser útil manter aqui
+  const [showPassword, setShowPassword] = useState(false)
 
   // Específico de PasswordsScreen
   const [mounted, setMounted] = useState(false)
@@ -36,8 +35,6 @@ export default function PasswordManagerView() {
   const [clipboardClearTimeout, setClipboardClearTimeout] = useState(30)
   const [showFavoritesFirst, setShowFavoritesFirst] = useState(true)
   const [minimizeOnCopy, setMinimizeOnCopy] = useState(false)
-
-  const mainContainerRef = useRef<HTMLDivElement>(null) // Ref principal para ResizeObserver
 
   // --- Effects ---
   useEffect(() => {
@@ -132,16 +129,12 @@ export default function PasswordManagerView() {
     });
   };
 
-
   return (
     <div className="flex items-center justify-center h-screen bg-white dark:bg-zinc-900" data-tauri-drag-region>
-      <div
-        ref={mainContainerRef}
-        className="w-full h-full bg-card flex flex-col overflow-hidden"
-      >
+      <div className="w-full h-full bg-card flex flex-col overflow-hidden">
         <HeaderNavigation />
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-invisible">
+        <div key={getCurrentScreen()} className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-invisible">
 
           {getCurrentScreen() === NavigationScreen.LOGIN_EMAIL && <LoginEmailScreen />}
 
@@ -153,6 +146,13 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.LOGIN_PASSWORD && <LoginPasswordScreen />}
 
+          {getCurrentScreen() === NavigationScreen.VAULTS && (
+            <VaultsScreen
+              vaults={allVaults}
+              onVaultClick={handleVaultClick}
+            />
+          )}
+
           {getCurrentScreen() === NavigationScreen.ENVIRONMENTS && (
             <EnvironmentsScreen
               onEnvironmentClick={() => { }}
@@ -161,12 +161,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.CREATE_ENVIRONMENT && (<CreateEnvironmentScreen />)}
 
-          {getCurrentScreen() === NavigationScreen.VAULTS && (
-            <VaultsScreen
-              vaults={allVaults}
-              onVaultClick={handleVaultClick}
-            />
-          )}
+          
 
           {getCurrentScreen() === NavigationScreen.PASSWORDS && selectedVault && ( // Garante que selectedVault não é null
             <PasswordsScreen

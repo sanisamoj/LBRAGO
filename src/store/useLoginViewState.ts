@@ -119,7 +119,6 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
         try {
             const jsonStr: string = JSON.stringify(generatePVInfo)
             const result: string = await invoke<string>('generate_user_credentials_with_param', { arg: jsonStr })
-            console.log(result)
             const minPasswordVerifier: MinimalPasswordVerifier = JSON.parse(result)
 
             const loginRepository = LoginRepository.getInstance()
@@ -128,10 +127,9 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 email: get().email,
                 verifier: minPasswordVerifier.hash
             }
-            console.log(loginRequest)
             await loginRepository.login(loginRequest)
 
-        } catch (error) {
+        } catch (_) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.acessDenied)
             return
