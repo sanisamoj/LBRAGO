@@ -86,4 +86,12 @@ export interface CommonLanguage {
     errorToFindPasswords: string
     errorToRegenerateUserPrivkey: string
     dontHaveAVaultCreateOne: string
+
+    addNewVault: string
+    description: string
+    nameCreateVaultPlaceholder: string
+    decriptionCreateVaultPlaceholder: string
+    encryptingVault: string
+    createVault: string
+    users: string
 }

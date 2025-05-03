@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import IconSelectorScreen from "./IconSelectScreen"
 import { useNavigationState } from "@/store/useNavigationState"
 import UserSelector from "./UserSelector"
+import { useLanguageState } from "@/store/useLanguageState"
 
 interface CreateVaultScreenProps {
   onSave: (vaultData: {
@@ -24,14 +25,13 @@ interface CreateVaultScreenProps {
 export default function CreateVaultScreen({
   onSave,
 }: CreateVaultScreenProps) {
-  const { navigateTo } = useNavigationState()
+  const { translations } = useLanguageState()
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [selectedIcon, setSelectedIcon] = useState("blocks")
   const [selectedBg, setSelectedBg] = useState("bg-blue-100")
   const [isLoading, setIsLoading] = useState(false)
-  const [newUserEmail, setNewUserEmail] = useState("")
   const [users, setUsers] = useState<{ id: string; email: string; name: string; avatar?: string }[]>([
     { id: "default", email: "usuario@acmecorp.com", name: "João Silva", avatar: "/placeholder.svg?height=32&width=32" },
   ])
@@ -72,39 +72,39 @@ export default function CreateVaultScreen({
         {/* Name and Description */}
         <div className="space-y-1">
           <Label htmlFor="name" className="text-xs font-medium">
-            Nome do Cofre
+            {translations.addNewVault}
           </Label>
           <Input
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="h-8 text-xs"
-            placeholder="Ex: Marketing, Desenvolvimento, etc."
+            placeholder={translations.nameCreateVaultPlaceholder}
             required
           />
         </div>
 
         <div className="space-y-1">
           <Label htmlFor="description" className="text-xs font-medium">
-            Descrição
+            {translations.description}
           </Label>
           <Textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="min-h-[60px] text-xs"
-            placeholder="Descreva o propósito deste cofre"
+            placeholder={translations.decriptionCreateVaultPlaceholder}
           />
         </div>
 
         {/* Users Section */}
         <div className="space-y-2">
-          <Label className="text-xs font-medium">Usuários</Label>
+          <Label className="text-xs font-medium">{translations.users}</Label>
           <UserSelector selectedUsers={users} onAddUser={handleAddUser} onRemoveUser={handleRemoveUser} />
         </div>
 
         <Button type="submit" className="w-full h-8 text-xs mt-4 mb-4" disabled={isLoading}>
-          {isLoading ? "Salvando..." : "Criar Cofre"}
+          {isLoading ? translations.encryptingVault : translations.createVault}
         </Button>
       </form>
     </div>

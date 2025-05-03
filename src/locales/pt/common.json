@@ -85,5 +85,13 @@
     "errorToFindVaults": "Erro ao encontrar cofres.",
     "errorToFindPasswords": "Erro ao encontrar senhas.",
     "errorToRegenerateUserPrivkey": "Erro ao regenerar chave privada do usuário. Contate o suporte.",
-    "dontHaveAVaultCreateOne": "Você ainda não tem cofres, Crie um!"
+    "dontHaveAVaultCreateOne": "Você ainda não tem cofres, Crie um!",
+
+    "addNewVault": "Adicionar Novo Cofre",
+    "description": "Descrição",
+    "nameCreateVaultPlaceholder": "Ex: Marketing, Desenvolvimento, etc.",
+    "decriptionCreateVaultPlaceholder": "Descreva o propósito deste cofre",
+    "encryptingVault": "Encriptando cofre",
+    "createVault": "Criar Cofre",
+    "users": "Usuários"
 }

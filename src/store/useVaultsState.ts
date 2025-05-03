@@ -12,12 +12,12 @@ export interface VaultsState {
     initVaultState: () => Promise<void>
 
     e_vaults: EVaultWithMemberInfo[]
-    vault: DecryptedVault[]
+    vaults: DecryptedVault[]
 }
 
 export const useVaultsState = create<VaultsState>((set) => ({
     e_vaults: [],
-    vault: [],
+    vaults: [],
 
     initVaultState: async () => {
         const { pk } = useGlobalState.getState()
@@ -47,6 +47,7 @@ export const useVaultsState = create<VaultsState>((set) => ({
                     orgId: e_vault.orgId,
                     decryptedVaultMetadata: decryptedVaultMetadataList[0].decryptedVaultMetadata,
                     personalVault: e_vault.personalVault,
+                    permission: e_vault.permission,
                     vaultCreatedBy: e_vault.vaultCreatedBy,
                     vaultUpdatedAt: e_vault.vaultUpdatedAt,
                     vaultCreatedAt: e_vault.vaultCreatedAt
@@ -54,7 +55,10 @@ export const useVaultsState = create<VaultsState>((set) => ({
 
                 decryptedVaults.push(decryptedVault)
             }
-        } catch (_) {
+            console.log("decryptedVaults", decryptedVaults)
+            set({ vaults: decryptedVaults })
+        } catch (error) {
+            console.log("error", error)
             const { translations } = useLanguageState.getState()
             toast.warning(translations.dontHaveAVaultCreateOne)
         }

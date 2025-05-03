@@ -30,9 +30,6 @@ export default function PasswordManagerView() {
   const [editedPasswordData, setEditedPasswordData] = useState<Partial<Password>>({}) // Específico de PasswordsScreen
   const [settingsTab, setSettingsTab] = useState("general") // Específico de SettingsScreen
 
-  // Settings state (gerenciado aqui, passado para SettingsScreen)
-  const [autoLockTimeout, setAutoLockTimeout] = useState(5)
-  const [clipboardClearTimeout, setClipboardClearTimeout] = useState(30)
   const [showFavoritesFirst, setShowFavoritesFirst] = useState(true)
   const [minimizeOnCopy, setMinimizeOnCopy] = useState(false)
 
@@ -40,14 +37,6 @@ export default function PasswordManagerView() {
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  // --- Funções de Callback ---
-  const handleVaultClick = (vault: Vault) => {
-    setSelectedVault(vault)
-    navigateTo(NavigationScreen.PASSWORDS)
-    setSelectedPassword(null) // Resetar ao mudar de cofre
-    setEditingPassword(null)  // Resetar ao mudar de cofre
-  }
 
   const handlePasswordClick = (password: Password) => {
     if (editingPassword === password.id) return;
@@ -61,33 +50,12 @@ export default function PasswordManagerView() {
     // A lógica de scroll interno agora deve ir para PasswordsScreen
   }
 
-  const navigateBack = () => {
-    if (getCurrentScreen() === "passwords") {
-      navigateTo(NavigationScreen.VAULTS)
-      setSelectedPassword(null)
-      setEditingPassword(null)
-    } else if (getCurrentScreen() === "settings") {
-      navigateTo(NavigationScreen.VAULTS) // Ou talvez voltar para a tela anterior? Aqui volta pra cofres.
-    }
-  }
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     if (minimizeOnCopy) {
       // Idealmente, chamar handleToggleMinimize se a animação for desejad
       // Ou apenas: setMinimized(true); se for instantâneo
     }
-  }
-
-  const toggleTheme = () => {
-    // Implementar lógica de tema aqui ou em um contexto global
-    console.log("Toggle theme clicked");
-  }
-
-  const openSettings = () => {
-    navigateTo(NavigationScreen.SETTINGS)
-    setSelectedPassword(null)
-    setEditingPassword(null)
   }
 
   // Funções de Edição (passadas para PasswordsScreen)
@@ -146,10 +114,11 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.LOGIN_PASSWORD && <LoginPasswordScreen />}
 
-          {getCurrentScreen() === NavigationScreen.VAULTS && (
-            <VaultsScreen
-              vaults={allVaults}
-              onVaultClick={handleVaultClick}
+          {getCurrentScreen() === NavigationScreen.VAULTS && <VaultsScreen />}
+
+          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && (
+            <CreateVaultScreen
+              onSave={() => { }}
             />
           )}
 
@@ -194,12 +163,6 @@ export default function PasswordManagerView() {
               onSettingsTabChange={setSettingsTab}
               onShowFavoritesFirstChange={setShowFavoritesFirst}
               vaults={allVaults} // Para a lista de Gerenciar Cofres
-            />
-          )}
-
-          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && (
-            <CreateVaultScreen
-              onSave={() => { }}
             />
           )}
 

@@ -5,6 +5,7 @@ export interface DecryptedVault {
     orgId: string
     decryptedVaultMetadata: DecryptedVaultMetadata
     personalVault: boolean
+    permission: string
     vaultCreatedBy: string
     vaultUpdatedAt: string
     vaultCreatedAt: string
