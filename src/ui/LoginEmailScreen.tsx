@@ -78,7 +78,7 @@ export default function LoginEmailScreen() {
       <div className="p-2 w-full max-w-sm">
         <p className="text-center text-[11px] text-muted-foreground dark:text-gray-400">
           {translations.wantCreateEnvironmentToYourTeam}{" "}
-          <Button onClick={() => navigateTo(NavigationScreen.VAULTS)} variant="link" className="h-auto p-0 text-[10px] cursor-pointer">
+          <Button onClick={() => navigateTo(NavigationScreen.CREATE_ENVIRONMENT)} variant="link" className="h-auto p-0 text-[10px] cursor-pointer">
             {translations.clickHere}
           </Button>
         </p>

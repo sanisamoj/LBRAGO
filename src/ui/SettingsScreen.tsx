@@ -114,25 +114,6 @@ export default function SettingsScreen({
                                 Adicionar Cofre
                             </Button>
                         </div>
-                        {/* Gerenciar Organizações */}
-                        {/* <div className="rounded-lg border border-border overflow-hidden">
-                            <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">Organizações</h3></div>
-                            <div className="max-h-[150px] overflow-y-auto">
-                                {companies.map((company) => (
-                                    <div key={company.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0">
-                                        <div className="h-7 w-7 bg-primary/10 rounded-md flex items-center justify-center mr-2"><Users className="h-4 w-4 text-primary" /></div>
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="text-xs font-bold truncate">{company.name}</h4>
-                                            <p className="text-xs text-muted-foreground truncate">Proprietário</p>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0" title="Editar organização"><Edit2 className="h-3 w-3" /></Button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <Button variant="ghost" size="sm" className="w-full h-8 text-xs rounded-t-none border-t border-border"> <Plus className="h-3 w-3 mr-1" /> Adicionar Organização </Button>
-                        </div> */}
                     </TabsContent>
 
                     <TabsContent value="security" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2">
