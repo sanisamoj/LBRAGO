@@ -1,7 +1,37 @@
+import { PreferencesStore } from "@/models/data/interfaces/PreferenceStore"
 import { PreferencesState } from "@/models/data/states/PreferencesState"
+import { load, Store } from "@tauri-apps/plugin-store"
 import { create } from "zustand"
 
-export const usePreferencesState = create<PreferencesState>((set) => ({
+export const usePreferencesState = create<PreferencesState>((set, get) => ({
     isDarkTheme: false,
-    setDarkTheme: (isDarkTheme: boolean) => set({ isDarkTheme })
+    minimizeOnCopy: false,
+    clearClipboardTimeout: 0,
+
+    setDarkTheme: async (isDarkTheme: boolean) => {
+        set({ isDarkTheme })
+        await get().updatePreferencesStore()
+    },
+    setMinimizeOnCopy: async (minimizeOnCopy: boolean) => {
+        set({ minimizeOnCopy })
+        await get().updatePreferencesStore()
+    },
+    setClearClipboardTimeout: async (clearClipboardTimeout: number) => {
+        set({ clearClipboardTimeout })
+        get().updatePreferencesStore()
+    },
+
+    updatePreferencesStore: async () => {
+        const store: Store = await load('store.json', { autoSave: false })
+        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout } = usePreferencesState.getState()
+
+        const preferencesStore: PreferencesStore = {
+            isDarkTheme: isDarkTheme,
+            minimizeOnCopy: minimizeOnCopy,
+            clearClipboardTimeout: clearClipboardTimeout
+        }
+        await store.set('preferencesStore', preferencesStore)
+        await store.save()
+        return
+    },
 }))

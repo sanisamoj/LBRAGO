@@ -4,3 +4,4 @@ export interface UserStore {
     user: UserResponse
     token: string
 }
+

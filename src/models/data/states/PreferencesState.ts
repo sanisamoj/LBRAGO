@@ -1,4 +1,11 @@
 export interface PreferencesState {
     isDarkTheme: boolean
-    setDarkTheme: (isDarkTheme: boolean) => void
+    minimizeOnCopy: boolean
+    clearClipboardTimeout: number
+
+    setDarkTheme: (isDarkTheme: boolean) => Promise<void>
+    setMinimizeOnCopy: (minimizeOnCopy: boolean) => Promise<void>
+    setClearClipboardTimeout: (clearClipboardTimeout: number) => Promise<void>
+
+    updatePreferencesStore: () => Promise<void>
 }
