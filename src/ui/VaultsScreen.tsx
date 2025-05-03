@@ -27,7 +27,6 @@ export default function VaultsScreen() {
                             <div className={`h-9 w-9 rounded-md flex items-center justify-center mr-3`}>
                                 <VaultIcon
                                     icon={vault.decryptedVaultMetadata.imageUrl}
-                                    iconColor={vault.id === "sales" ? "#E97B43" : "#4B7BE5"}
                                     className="h-5 w-5"
                                 />
                             </div>

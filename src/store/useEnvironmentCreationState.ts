@@ -122,11 +122,12 @@ export const useEnvironmentCreationState = create<EnvironmentCreationState>((set
             get().clearState()
             toast.success(translations.environmentCreatedSuccess)
         } catch (error: AxiosError | any) {
-            if (error?.response.status === 409) {
-                toast.error(translations.environmentExistsEmailError)
-                set({ isLoading: false })
-                return
-            }
+            console.log(error)
+            // if (error?.response.status === 409) {
+            //     toast.error(translations.environmentExistsEmailError)
+            //     set({ isLoading: false })
+            //     return
+            // }
             toast.error(translations.somethingWentWrongError)
         }
         set({ isLoading: false })

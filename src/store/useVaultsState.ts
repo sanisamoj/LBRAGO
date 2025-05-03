@@ -7,20 +7,15 @@ import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 import { DecryptVaultMetadataDTO } from "@/models/data/interfaces/DecryptVaultMetadataDTO"
 import { useGlobalState } from "./useGlobalState"
 import { invoke } from "@tauri-apps/api/core"
-
-export interface VaultsState {
-    initVaultState: () => Promise<void>
-
-    e_vaults: EVaultWithMemberInfo[]
-    vaults: DecryptedVault[]
-}
+import { DecryptedVaultMetadata } from "@/models/data/interfaces/DecryptedVaultMetadata"
+import { VaultsState } from "@/models/data/interfaces/VaultsState"
 
 export const useVaultsState = create<VaultsState>((set) => ({
     e_vaults: [],
     vaults: [],
 
     initVaultState: async () => {
-        const { pk } = useGlobalState.getState()
+        const { privateKey } = useGlobalState.getState()
         try {
             const vaultsRespository = VaultRepository.getInstance()
             const e_vaults: EVaultWithMemberInfo[] = await vaultsRespository.getMyVaults()
@@ -34,18 +29,18 @@ export const useVaultsState = create<VaultsState>((set) => ({
                         ciphertext: e_vault.encryptedVaultMetadata.ciphertext,
                         nonce: e_vault.encryptedVaultMetadata.nonce
                     },
-                    privUserK: pk,
+                    privUserK: privateKey,
                     esvkPubKUser: e_vault.esvkPubKUser
                 }
 
                 const jsonArg: string = JSON.stringify(decryptVaultDTO)
                 const output: string = await invoke<string>('decrypt_vault_metadata', { arg: jsonArg })
-                const decryptedVaultMetadataList: DecryptedVault[] = JSON.parse(output)
+                const decryptedVaultMetadataList: DecryptedVaultMetadata = JSON.parse(output)
 
                 const decryptedVault: DecryptedVault = {
                     id: e_vault.id,
                     orgId: e_vault.orgId,
-                    decryptedVaultMetadata: decryptedVaultMetadataList[0].decryptedVaultMetadata,
+                    decryptedVaultMetadata: decryptedVaultMetadataList,
                     personalVault: e_vault.personalVault,
                     permission: e_vault.permission,
                     vaultCreatedBy: e_vault.vaultCreatedBy,
@@ -55,10 +50,8 @@ export const useVaultsState = create<VaultsState>((set) => ({
 
                 decryptedVaults.push(decryptedVault)
             }
-            console.log("decryptedVaults", decryptedVaults)
             set({ vaults: decryptedVaults })
         } catch (error) {
-            console.log("error", error)
             const { translations } = useLanguageState.getState()
             toast.warning(translations.dontHaveAVaultCreateOne)
         }

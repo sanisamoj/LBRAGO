@@ -134,7 +134,6 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 email: get().email,
                 verifier: minPasswordVerifier.hash
             }
-
             const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
             await useGlobalState.getState().saveUserResponse(userWithTokenResponse)
 

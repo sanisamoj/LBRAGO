@@ -116,11 +116,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.VAULTS && <VaultsScreen />}
 
-          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && (
-            <CreateVaultScreen
-              onSave={() => { }}
-            />
-          )}
+          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && <CreateVaultScreen /> }
 
           {getCurrentScreen() === NavigationScreen.ENVIRONMENTS && (
             <EnvironmentsScreen

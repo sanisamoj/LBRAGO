@@ -12,7 +12,7 @@ import { useLanguageState } from "@/store/useLanguageState"
 import { IconSelectorScreenProps } from "@/models/data/props/IconSelectorScreenProps"
 
 export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: IconSelectorScreenProps) {
-  
+
   const { translations } = useLanguageState()
   const [previewImage, setPreviewImage] = useState<string | undefined>(Config.FAVICON_URL)
   const [activeTab, setActiveTab] = useState<string>(Config.FAVICON_URL ? "upload" : "icons")
@@ -119,15 +119,14 @@ export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: I
               <TabsTrigger value={translations.upload} className="text-[10px]"> {translations.upload} </TabsTrigger>
             </TabsList>
 
-            <TabsContent value={translations.icons}className="mt-2">
+            <TabsContent value={translations.icons} className="mt-2">
               <ScrollArea className="custom-scroll-area max-h-60 overflow-y-auto space-y-3 pr-2">
                 {iconCategories.map((category) => (
                   <div key={category.name} className="space-y-1">
                     <h4 className="text-[10px] font-medium text-muted-foreground">{category.name}</h4>
                     <div className="grid grid-cols-6 gap-1">
                       {category.icons.map((iconIdentifier) => {
-                        const iconUrl = getIconUrl(iconIdentifier);
-                        console.log(iconUrl)
+                        const iconUrl: string = getIconUrl(iconIdentifier);
                         return (
                           <div
                             key={iconIdentifier}

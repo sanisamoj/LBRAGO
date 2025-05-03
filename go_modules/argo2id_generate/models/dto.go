@@ -21,3 +21,13 @@ type DecryptedVault struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
+
+type EncryptedVault struct {
+	EcryptedVaultMetadata AesGcmEncryptedData `json:"e_vaultmetadata"`
+	EncryptedPubKUser     string              `json:"esvk_pubK_user"`
+}
+
+type EncryptVaultMetadataDTO struct {
+	UserPubK string         `json:"userPubkey"`
+	Metadata DecryptedVault `json:"metadata"`
+}

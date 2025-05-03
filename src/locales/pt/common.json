@@ -93,5 +93,8 @@
     "decriptionCreateVaultPlaceholder": "Descreva o propósito deste cofre",
     "encryptingVault": "Encriptando cofre",
     "createVault": "Criar Cofre",
-    "users": "Usuários"
+    "users": "Usuários",
+    "isPersonalVaultLabel": "Este é um cofre pessoal (apenas para mim)?",
+    "errorGeneratingVault": "Error ao gerar um cofre, verifique as informações e tente novamente.",
+    "vaultCreatedSuccessfully": "Cofre criado com sucesso!"
 }

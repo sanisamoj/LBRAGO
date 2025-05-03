@@ -142,6 +142,6 @@ func RegenerateUserKeys(dto models.PVGenerateDTO, keys models.Keys) (*models.Dec
 	}
 
 	userPrivK_base64 := BytesToBase64(userPrivK)
-	
-	return &models.DecryptedUserKeys{ PrivateKey: userPrivK_base64 }, nil
+
+	return &models.DecryptedUserKeys{PrivateKey: userPrivK_base64}, nil
 }

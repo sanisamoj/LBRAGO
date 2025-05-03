@@ -93,7 +93,6 @@ export default function PasswordsScreen({
                                         {/* Corrigido VaultIcon props */}
                                         <VaultIcon
                                             icon={password.icon}
-                                            showLabel={password.icon === "triangle" ? "24" : undefined}
                                             className="h-5 w-5"
                                         />
                                     </div>

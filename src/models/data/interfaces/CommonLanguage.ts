@@ -94,4 +94,8 @@ export interface CommonLanguage {
     encryptingVault: string
     createVault: string
     users: string
+
+    isPersonalVaultLabel: string
+    errorGeneratingVault: string
+    vaultCreatedSuccessfully: string
 }

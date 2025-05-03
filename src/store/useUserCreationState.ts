@@ -94,7 +94,6 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
                 salt_ek: goCreateUserResponse.salt_ek,
                 keys: goCreateUserResponse.keys
             }
-
             const repository: LoginRepository = LoginRepository.getInstance()
             await repository.createUser(userCreate)
 
@@ -104,7 +103,6 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
             get().clearState()
             toast.success("Conta criada com sucesso!")
         } catch (error) {
-            console.log("error: ", error)
             toast.error("A conta não foi criada tente novamente.")
         }
         set({ isLoading: false })

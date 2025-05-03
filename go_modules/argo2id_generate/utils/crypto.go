@@ -157,7 +157,7 @@ func GenerateRsaKeys() (models.RsaKeyPair, error) {
 }
 
 func EncryptWithRsaPublicKey(data []byte, pubKeyBase64 string) (string, error) {
-	pubPemBytes, err := base64.RawStdEncoding.DecodeString(pubKeyBase64)
+	pubPemBytes, err := Base64ToBytes(pubKeyBase64)
 	if err != nil {
 		log.Printf("Error decoding base64 public key: %v\n", err)
 		return "", fmt.Errorf("failed to decode base64 public key: %w", err)
@@ -181,7 +181,6 @@ func EncryptWithRsaPublicKey(data []byte, pubKeyBase64 string) (string, error) {
 		return "", fmt.Errorf("key is not an RSA public key")
 	}
 
-	// Use OAEP for padding
 	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, rsaPubKey, data, nil)
 	if err != nil {
 		log.Printf("Error encrypting data with RSA public key: %v\n", err)
@@ -192,7 +191,7 @@ func EncryptWithRsaPublicKey(data []byte, pubKeyBase64 string) (string, error) {
 }
 
 func DecryptWithRsaPrivateKey(ciphertextBase64 string, privKeyBase64 string) ([]byte, error) {
-	privPemBytes, err := base64.RawStdEncoding.DecodeString(privKeyBase64)
+	privPemBytes, err := Base64ToBytes(privKeyBase64)
 	if err != nil {
 		log.Printf("Error decoding base64 private key: %v\n", err)
 		return nil, fmt.Errorf("failed to decode base64 private key: %w", err)
@@ -210,7 +209,7 @@ func DecryptWithRsaPrivateKey(ciphertextBase64 string, privKeyBase64 string) ([]
 		return nil, fmt.Errorf("failed to parse private key: %w", err)
 	}
 
-	ciphertext, err := base64.RawStdEncoding.DecodeString(ciphertextBase64)
+	ciphertext, err := Base64ToBytes(ciphertextBase64)
 	if err != nil {
 		log.Printf("Error decoding base64 ciphertext: %v\n", err)
 		return nil, fmt.Errorf("failed to decode base64 ciphertext: %w", err)

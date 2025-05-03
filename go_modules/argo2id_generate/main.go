@@ -14,7 +14,8 @@ func main() {
 	createUserF := flag.String("cn", "", "User passwords")
 	pvGenerateF := flag.String("pv", "", "Generate password verifier")
 	privKRegenerateF := flag.String("pk", "", "Regenerate private key")
-	vaultMetadataRegenerateF := flag.String("vm", "", "Regenerate vault metadata")
+	decryptVMetadataF := flag.String("dvm", "", "Regenerate vault metadata")
+	encryptVMetadataF := flag.String("evm", "", "Encrypt vault metadata")
 	flag.Parse()
 
 	actionTaken := false
@@ -83,9 +84,9 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *vaultMetadataRegenerateF != "" {
+	if *decryptVMetadataF != "" {
 		var dto models.DecryptVaultMetadataDTO
-		err := json.Unmarshal([]byte(*vaultMetadataRegenerateF), &dto)
+		err := json.Unmarshal([]byte(*decryptVMetadataF), &dto)
 		if err != nil {
 			log.Printf("Error unmarshalling json: %v\n", err)
 			os.Exit(1)
@@ -104,6 +105,32 @@ func main() {
 		}
 
 		jsonData, err := json.Marshal(decryptedVault)
+		if err != nil {
+			log.Printf("Error generating json: %v", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(jsonData))
+
+		actionTaken = true
+		os.Exit(0)
+	}
+
+	if *encryptVMetadataF != "" {
+		var dto models.EncryptVaultMetadataDTO
+		err := json.Unmarshal([]byte(*encryptVMetadataF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+
+		evmetada, err := utils.EncryptVaultMetadata(dto.UserPubK, dto.Metadata)
+		if err != nil {
+			log.Printf("Error encrypting vault metadata: %v\n", err)
+			os.Exit(1)
+		}
+
+		jsonData, err := json.Marshal(evmetada)
 		if err != nil {
 			log.Printf("Error generating json: %v", err)
 			os.Exit(1)

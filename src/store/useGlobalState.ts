@@ -17,7 +17,8 @@ import { toast } from "sonner"
 
 export const useGlobalState = create<GlobalState>((set) => ({
     store: null,
-    pk: "",
+    privateKey: "",
+    publicKey: "",
 
     loadStore: async () => {
         const store: Store = await load('store.json', { autoSave: false })
@@ -123,8 +124,8 @@ export const useGlobalState = create<GlobalState>((set) => ({
         try {
             const result: string = await invoke<string>('regenerate_user_private_key', { arg: jsonArg })
             const decryptedUserKeys: DecryptedUserKeys = JSON.parse(result)
-            set({ pk: decryptedUserKeys.privateKey })
-        } catch (_) {
+            set({ privateKey: decryptedUserKeys.privateKey, publicKey: userResponse.keys.publicKey })
+        } catch (error) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.errorToRegenerateUserPrivkey)
         }

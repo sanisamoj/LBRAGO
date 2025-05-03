@@ -4,7 +4,8 @@ import { UserWithTokenResponse } from "../interfaces/UserWithTokenResponse"
 
 export interface GlobalState {
     store: UserStore | null
-    pk: string
+    privateKey: string
+    publicKey: string
 
     loadStore (): Promise<void>
     saveStore (userStore: UserStore): Promise<void>
