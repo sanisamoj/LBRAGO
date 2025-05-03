@@ -26,8 +26,8 @@ const (
 
 const rsaKeySize = 4096
 
-func GeneratePasswordHash(password string) (*models.PasswordHashData, error) {
-	salt := make([]byte, SaltLenBytes)
+func GeneratePasswordHash(password string, parameters models.PasswordVerifierParameters) (*models.PasswordHashData, error) {
+	salt := make([]byte, parameters.SaltLength)
 	_, err := rand.Read(salt)
 	if err != nil {
 		log.Printf("Error generating random salt: %v\n", err)
@@ -37,10 +37,10 @@ func GeneratePasswordHash(password string) (*models.PasswordHashData, error) {
 	hashBytes := argon2.IDKey(
 		[]byte(password),
 		salt,
-		Argon2TimeCost,
-		Argon2MemCostKiB,
-		Argon2Parallelism,
-		HashLenBytes,
+		parameters.Time,
+		parameters.Memory,
+		parameters.Parallelism,
+		parameters.KeyLength,
 	)
 
 	saltBase64 := BytesToBase64(salt)

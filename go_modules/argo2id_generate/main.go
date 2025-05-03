@@ -19,7 +19,13 @@ func main() {
 	actionTaken := false
 
 	if *createUserF != "" {
-		utils.GenerateUser(*createUserF)
+		var dto models.CreateUserParameters
+		err := json.Unmarshal([]byte(*createUserF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+		utils.GenerateUser(dto)
 		actionTaken = true
 		os.Exit(0)
 	}
@@ -82,5 +88,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-
-

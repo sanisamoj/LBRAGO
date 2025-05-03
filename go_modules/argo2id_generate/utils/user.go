@@ -10,13 +10,13 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-func GenerateUser(password string) {
-	pvHash, err := GeneratePasswordHash(password)
+func GenerateUser(arg models.CreateUserParameters) {
+	pvHash, err := GeneratePasswordHash(arg.Password, arg.Parameters)
 	if err != nil {
 		log.Printf("Error generating password hash: %v\n", err)
 		os.Exit(1)
 	}
-	ekHash, err := GeneratePasswordHash(password)
+	ekHash, err := GeneratePasswordHash(arg.Password, arg.Parameters)
 	if err != nil {
 		log.Printf("Error generating password hash: %v\n", err)
 		os.Exit(1)

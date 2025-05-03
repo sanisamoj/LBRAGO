@@ -6,6 +6,11 @@ type User struct {
 	Keys             Keys             `json:"keys"`
 }
 
+type CreateUserParameters struct {
+	Password   string                     `json:"password"`
+	Parameters PasswordVerifierParameters `json:"parameters"`
+}
+
 type DecryptedUserKeys struct {
 	PrivateKey string `json:"privateKey"`
 }

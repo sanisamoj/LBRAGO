@@ -8,6 +8,7 @@ import { GoCreateUserRequest } from "@/models/data/interfaces/GoCreateUserRespon
 import { CreateUserRequest } from "@/models/data/interfaces/CreateUserRequest"
 import { toast } from "sonner"
 import { UserCreationState } from "@/models/data/states/UserCreationState"
+import { CreateUserParameters } from "@/models/data/interfaces/CreateUserParameters"
 
 export const useUserCreationState = create<UserCreationState>((set, get) => ({
     code: "",
@@ -68,7 +69,18 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
         }
         set({ isLoading: true })
         try {
-            const output: string = await invoke<string>('generate_user_credentials', { arg: get().password });
+            const parameter: CreateUserParameters = {
+                password: get().password,
+                parameters: {
+                    saltLength: 16,
+                    memory: 65536,
+                    time: 6,
+                    parallelism: 4,
+                    keyLength:  32
+                }
+            }
+            const jsonArg: string = JSON.stringify(parameter)
+            const output: string = await invoke<string>('generate_user_credentials', { arg: jsonArg });
             let goCreateUserResponse: GoCreateUserRequest = JSON.parse(output)
 
             const userCreate: CreateUserRequest = {
