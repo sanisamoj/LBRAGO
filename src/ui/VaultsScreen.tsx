@@ -24,12 +24,11 @@ export default function VaultsScreen({
                         <div
                             key={vault.id}
                             className="flex items-center py-2 px-3 border-b border-border last:border-b-0 cursor-pointer hover:bg-accent transition-colors"
-                            onClick={() => onVaultClick(vault)} // Chama callback do pai
+                            onClick={() => onVaultClick(vault)}
                         >
-                            <div className={`h-9 w-9 ${vault.iconBg} rounded-md flex items-center justify-center mr-3`}>
+                            <div className={`h-9 w-9 rounded-md flex items-center justify-center mr-3`}>
                                 <VaultIcon
-                                    icon={vault.icon}
-                                    // Lógica de cor pode ser simplificada ou movida para data.ts
+                                    icon={vault.imageUrl}
                                     iconColor={vault.id === "sales" ? "#E97B43" : "#4B7BE5"}
                                     className="h-5 w-5"
                                 />

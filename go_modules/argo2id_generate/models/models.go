@@ -7,11 +7,11 @@ type User struct {
 }
 
 type PasswordVerifierParameters struct {
-	Memory      uint32 `json:"Memory"`
-	Time        uint32 `json:"Time"`
-	Parallelism uint8  `json:"Parallelism"`
-	SaltLength  uint32 `json:"SaltLength"`
-	KeyLength   uint32 `json:"KeyLength"`
+	Memory      uint32 `json:"memory"`
+	Time        uint32 `json:"time"`
+	Parallelism uint8  `json:"parallelism"`
+	SaltLength  uint32 `json:"saltLength"`
+	KeyLength   uint32 `json:"keyLength"`
 }
 
 type Keys struct {

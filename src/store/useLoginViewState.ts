@@ -12,6 +12,8 @@ import { GeneratePasswordVerifierInfo } from "@/models/data/interfaces/GenerateP
 import { invoke } from "@tauri-apps/api/core"
 import { MinimalPasswordVerifier } from "@/models/data/interfaces/MinimalPasswordVerifier"
 import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLoginRequest"
+import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
+import { useGlobalState } from "./useGlobalState"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -127,8 +129,9 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 email: get().email,
                 verifier: minPasswordVerifier.hash
             }
-            await loginRepository.login(loginRequest)
 
+            const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
+            await useGlobalState.getState().saveUserResponse(userWithTokenResponse)
         } catch (_) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.acessDenied)

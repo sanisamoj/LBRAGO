@@ -21,7 +21,7 @@ interface NavigationState {
 }
 
 export const useNavigationState = create<NavigationState>((set, get) => ({
-    history: [NavigationScreen.LOGIN_EMAIL],
+    history: [NavigationScreen.APRESENTATION],
 
     showSearchToggle: false,
 

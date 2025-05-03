@@ -1,4 +1,5 @@
 export enum NavigationScreen {
+    APRESENTATION = "presentation",
     REGISTER_EMAIL = "registerEmail",
     LOGIN_EMAIL = "loginEmail",
     VERIFY_CODE = "verifyCode",

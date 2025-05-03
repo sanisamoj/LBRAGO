@@ -1,7 +1,7 @@
 export interface PasswordVerifierParameters {
-    Memory: number
-    Time: number
-    Parallelism: number
-    SaltLength: number
-    KeyLength: number
+    memory: number
+    time: number
+    parallelism: number
+    saltLength: number
+    keyLength: number
 }

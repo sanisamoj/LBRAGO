@@ -2,8 +2,7 @@ export interface Vault {
   id: string
   name: string
   description: string
-  icon: string
-  iconBg: string
+  imageUrl: string
   accessLevel: "Read" | "Admin" | "Write"
 }
 

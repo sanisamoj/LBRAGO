@@ -39,5 +39,11 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "tauri": {
+      "store": true
+    }
   }
+
 }

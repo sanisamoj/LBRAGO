@@ -6,6 +6,7 @@ import { CreateUserRequest } from "../data/interfaces/CreateUserRequest"
 import { CreateOrganizationRequest } from "../data/interfaces/CreateOrganizationRequest"
 import { OrganizationCreationResponse } from "../data/interfaces/OrganizationCreationResponse"
 import { EnvironmentLoginRequest } from "../data/interfaces/EnvironmentLoginRequest"
+import { UserWithTokenResponse } from "../data/interfaces/UserWithTokenResponse"
 
 export class LoginRepository {
     private static instance: LoginRepository | null = null
@@ -46,8 +47,9 @@ export class LoginRepository {
         return response.data
     }
 
-    public async login(request: EnvironmentLoginRequest): Promise<void> {
-        await this.api.post("/environment/login", request)
+    public async login(request: EnvironmentLoginRequest): Promise<UserWithTokenResponse> {
+        const response = await this.api.post("/environment/login", request)
+        return response.data
     }
 
     public async codeProcessLogin(email: string): Promise<void> {
