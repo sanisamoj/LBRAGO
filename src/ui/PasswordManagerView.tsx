@@ -172,21 +172,15 @@ export default function PasswordManagerView() {
               editingPassword={editingPassword}
               editedPasswordData={editedPasswordData}
               showPassword={showPassword}
-              minimizeOnCopy={minimizeOnCopy} // Passa a configuração
 
-              // Callbacks / Funções
-              onNavigateBack={navigateBack}
               onPasswordClick={handlePasswordClick}
               onStartEditing={startEditing} // Passa a função de iniciar edição
               onCancelEditing={cancelEditing}
               onSavePassword={savePasswordChanges} // Passa a função de salvar
               onEditChange={handleEditChange} // Passa a função de mudança de edição
               onShowPasswordToggle={setShowPassword}
-              onOpenSettings={openSettings}
               copyToClipboard={copyToClipboard} // Passa a função de copiar
-              toggleTheme={toggleTheme}
               formatDate={formatDate} // Passa a função de formatar data
-              mounted={mounted}
             />
           )}
 

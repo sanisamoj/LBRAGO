@@ -78,14 +78,6 @@ export default function SettingsScreen({
                     </TabsContent>
 
                     <TabsContent value="vaults" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
-                        {/* Configurações de Cofres */}
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-sm font-medium">Mostrar favoritos primeiro</h3>
-                                <p className="text-xs text-muted-foreground">Exibir cofres favoritos no topo</p>
-                            </div>
-                            <Switch checked={showFavoritesFirst} onCheckedChange={onShowFavoritesFirstChange} />
-                        </div>
                         {/* Gerenciar Cofres */}
                         <div className="rounded-lg border border-border overflow-hidden">
                             <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">Gerenciar Cofres</h3></div>
