@@ -41,7 +41,7 @@ A segurança e a privacidade são a base deste projeto.
 
 ## 🖼️ Screenshots
 
-*(Ex: Tela de Login, Visão Principal do Cofre, Detalhes do Item, Diálogo de Compartilhamento)*
+![Login](https://www.sanisamojrepository.com/image-repo/media?media=zkxSnD1DzY4sjzrfKk56Ym6wNpYwA74NDCnP-Captura%20de%20tela%202025-05-03%20170226.png)
 
 ## 🚀 Instalação
 
@@ -78,47 +78,27 @@ Interessado em contribuir? Ótimo!
 
 **Pré-requisitos:**
 
-* [Node.js](https://nodejs.org/) (versão X.Y.Z ou superior)
+* [Node.js](https://nodejs.org/) (versão 22.14.0 ou superior)
 * [Rust](https://www.rust-lang.org/tools/install) e Cargo
 * Dependências do sistema para Tauri (veja a [documentação do Tauri](https://tauri.app/v1/guides/getting-started/prerequisites))
-* [Gerenciador de Pacotes: npm ou yarn]
+* [Gerenciador de Pacotes: pnpm]
 
 **Passos:**
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu_usuario/seu_repo.git](https://github.com/seu_usuario/seu_repo.git)
+    git clone [https://github.com/sanisamoj/LBRAGO](https://github.com/sanisamoj/LBRAGO)
     cd seu_repo
     ```
 2.  **Instale as dependências do frontend:**
     ```bash
-    npm install
-    # ou
-    yarn install
+    pnpm install
     ```
 3.  **Execute em modo de desenvolvimento:**
     ```bash
-    npm run tauri dev
-    # ou
-    yarn tauri dev
+    pnpm run tdev
     ```
 4.  **Build da aplicação:**
     ```bash
-    npm run tauri build
-    # ou
-    yarn tauri build
+    pnpm run tauri build
     ```
-
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Leia nosso arquivo `CONTRIBUTING.md` (se existir) para diretrizes sobre como propor correções e novas funcionalidades.
-
-Use a seção [Issues](https://github.com/seu_usuario/seu_repo/issues) para reportar bugs ou sugerir ideias.
-
-## 📄 Licença
-
-Este projeto é licenciado sob a Licença [Nome da Sua Licença, ex: MIT] - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 📞 Suporte
-
-Se encontrar problemas ou tiver dúvidas, por favor, abra uma [Issue](https://github.com/seu_usuario/seu_repo/issues).
