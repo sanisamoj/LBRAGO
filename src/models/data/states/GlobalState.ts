@@ -1,6 +1,5 @@
 import { UserResponse } from "../interfaces/UserResponse"
 import { UserStore } from "../interfaces/UserStore"
-import { UserWithTokenResponse } from "../interfaces/UserWithTokenResponse"
 
 export interface GlobalState {
     store: UserStore | null
@@ -10,7 +9,7 @@ export interface GlobalState {
     loadStore (): Promise<void>
     saveStore (userStore: UserStore): Promise<void>
     clearStore (): Promise<void>
-    saveUserResponse(userResponse: UserWithTokenResponse): Promise<void>
+    saveUserSession(userResponse: UserStore): Promise<void>
 
     regenerateUserPrivK: (userResponse: UserResponse, password: string) => Promise<void>
 

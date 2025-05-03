@@ -5,7 +5,6 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { GlobalState } from "@/models/data/states/GlobalState"
 import { load, Store } from '@tauri-apps/plugin-store'
 import { UserStore } from "@/models/data/interfaces/UserStore"
-import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { usePreferencesState } from "./usePreferencesState"
 import { PreferencesStore } from "@/models/data/interfaces/PreferenceStore"
 import { UserResponse } from "@/models/data/interfaces/UserResponse"
@@ -14,36 +13,45 @@ import { invoke } from "@tauri-apps/api/core"
 import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
+import { VaultRepository } from "@/models/repository/VaultRepository"
+import { useVaultsState } from "./useVaultsState"
+import { useLoginViewState } from "./useLoginViewState"
 
-export const useGlobalState = create<GlobalState>((set) => ({
+export const useGlobalState = create<GlobalState>((set, get) => ({
     store: null,
     privateKey: "",
     publicKey: "",
 
     loadStore: async () => {
         const store: Store = await load('store.json', { autoSave: false })
+        const { resetNavigation } = useNavigationState.getState()
 
         const preferencesStore: PreferencesStore | undefined = await store.get<PreferencesStore>('preferencesStore')
+        const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
+        if (!userStore && !preferencesStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
+
         if (preferencesStore) {
-            const { setDarkTheme, setMinimizeOnCopy, setClearClipboardTimeout } = usePreferencesState.getState()
+            const { setDarkTheme, setMinimizeOnCopy, setClearClipboardTimeout, setSavePassword } = usePreferencesState.getState()
             setDarkTheme(preferencesStore.isDarkTheme)
             setMinimizeOnCopy(preferencesStore.minimizeOnCopy)
             setClearClipboardTimeout(preferencesStore.clearClipboardTimeout)
+            setSavePassword(preferencesStore.savePassword)
+
+            if(preferencesStore.savePassword) {
+                useLoginViewState.getState().setRememberPassword(true)
+            }
         }
 
-        const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-        const { resetNavigation } = useNavigationState.getState()
+        if (preferencesStore?.savePassword && userStore?.password) {
+            await get().regenerateUserPrivK(userStore.user, userStore.password)
+            VaultRepository.setToken(userStore.token)
+            await useVaultsState.getState().initVaultState()
 
-        if (!userStore) {
-            resetNavigation(NavigationScreen.LOGIN_EMAIL)
-            return
+            set({ store: userStore })
+            return resetNavigation(NavigationScreen.VAULTS)
         }
 
-        // Executar função para retornar cofres, caso não dê certo
-        // Token está inválido, caso dê certo preencher o store 
-
-        set({ store: userStore })
-        resetNavigation(NavigationScreen.VAULTS)
+        resetNavigation(NavigationScreen.LOGIN_EMAIL)
     },
 
     saveStore: async (userStore: UserStore) => {
@@ -60,52 +68,67 @@ export const useGlobalState = create<GlobalState>((set) => ({
         set({ store: null })
     },
 
-    saveUserResponse: async (userResponse: UserWithTokenResponse) => {
+    saveUserSession: async (userResponse: UserStore) => {
         const store: Store = await load('store.json', { autoSave: false })
         let userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         let preferencesStore: PreferencesStore | undefined = await store.get<PreferencesStore>('preferencesStore')
         const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout } = usePreferencesState.getState()
 
         if (!userStore) {
-            const userStore: UserStore = {
+            const store: UserStore = {
                 user: userResponse.user,
                 token: userResponse.token,
+                password: userResponse.password
             }
-            await store.set('userStore', userStore)
-            await store.save()
-            set({ store: userStore })
-            return
+            userStore = store
+        } else {
+            userStore.user = userResponse.user
+            userStore.token = userResponse.token
+            userStore.password = userResponse.password
         }
 
         if (!preferencesStore) {
-            const preferencesStore: PreferencesStore = {
+            const store: PreferencesStore = {
                 isDarkTheme: isDarkTheme,
                 minimizeOnCopy: minimizeOnCopy,
-                clearClipboardTimeout: clearClipboardTimeout
+                clearClipboardTimeout: clearClipboardTimeout,
+                savePassword: true
             }
-            await store.set('preferencesStore', preferencesStore)
-            await store.save()
-            return
+            preferencesStore = store
+        } else {
+            preferencesStore.isDarkTheme = isDarkTheme
+            preferencesStore.minimizeOnCopy = minimizeOnCopy
+            preferencesStore.clearClipboardTimeout = clearClipboardTimeout
+            preferencesStore.savePassword = true
         }
 
-        userStore.user = userResponse.user
-        userStore.token = userResponse.token
-
         await store.set('userStore', userStore)
+        await store.set('preferencesStore', preferencesStore)
         await store.save()
+
         set({ store: userStore })
     },
 
     updatePreferences: async () => {
         const store: Store = await load('store.json', { autoSave: false })
-        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout } = usePreferencesState.getState()
+        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout, savePassword } = usePreferencesState.getState()
 
         const preferencesStore: PreferencesStore = {
             isDarkTheme: isDarkTheme,
             minimizeOnCopy: minimizeOnCopy,
-            clearClipboardTimeout: clearClipboardTimeout
+            clearClipboardTimeout: clearClipboardTimeout,
+            savePassword: savePassword
         }
         await store.set('preferencesStore', preferencesStore)
+
+        if (!savePassword) {
+            let userStore: UserStore | undefined = await store.get<UserStore>('userStore')
+            if (userStore) {
+                userStore.password = undefined
+                await store.set('userStore', userStore)
+            }
+        }
+
         await store.save()
         return
     },

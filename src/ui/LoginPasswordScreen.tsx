@@ -1,17 +1,16 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { Eye, EyeOff, Lock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useLoginViewState } from "@/store/useLoginViewState"
 import { useLanguageState } from "@/store/useLanguageState"
 
 export default function LoginPasswordScreen() {
   const { translations } = useLanguageState()
-  const { selectedOrganization, password, setPassword, isLoading, environnmentAuth, isError, errorMessage } = useLoginViewState()
+  const { selectedOrganization, password, setPassword, isLoading, environnmentAuth, isError, errorMessage, rememberPassword, setRememberPassword } = useLoginViewState()
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -75,12 +74,28 @@ export default function LoginPasswordScreen() {
             </div>
             {isError && <p className="text-[10px] text-red-500 mt-2">{errorMessage}</p>}
           </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="save-login"
+              checked={rememberPassword}
+              onCheckedChange={(checked) => setRememberPassword(Boolean(checked))}
+              disabled={isLoading}
+            />
+            <Label
+              htmlFor="save-login"
+              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              {translations.rememberMe}
+            </Label>
+          </div>
+
+
           <Button type="submit" className="w-full h-8 text-xs" disabled={isLoading}>
             {isLoading ? translations.authenticating : translations.authenticate}
           </Button>
         </form>
       </div>
     </div>
-
   )
 }

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import IconSelectorScreen from "./IconSelectScreen"
-import UserSelector from "./UserSelector"
+import UserSelector, { UserType } from "./UserSelector"
 import { useLanguageState } from "@/store/useLanguageState"
 import { useCreateVaultState } from "@/store/useCreateVaultState"
 
@@ -17,11 +17,17 @@ export default function CreateVaultScreen() {
     setImageUrl, createVault, setPersonalVault
   } = useCreateVaultState()
 
-  const [users, setUsers] = useState<{ id: string; email: string; name: string; avatar?: string }[]>([
-    { id: "default", email: "usuario@acmecorp.com", name: "João Silva", avatar: "/placeholder.svg?height=32&width=32" },
+  const [users, setUsers] = useState<UserType[]>([
+    {
+      id: "1",
+      email: "joao.silva@acmecorp.com",
+      name: "João Silva",
+      imageUrl: "/placeholder.svg?height=40&width=40",
+      permission: "write"
+    },
   ])
 
-  const handleAddUser = (user: { id: string; email: string; name: string; avatar?: string }) => {
+  const handleAddUser = (user: any) => {
     setUsers([...users, user])
   }
 
@@ -81,7 +87,7 @@ export default function CreateVaultScreen() {
         {!personalVault && (
           <div className="space-y-2">
             <Label className="text-xs font-medium">{translations.users}</Label>
-            <UserSelector selectedUsers={users} onAddUser={handleAddUser} onRemoveUser={handleRemoveUser} />
+            <UserSelector selectedUsers={users} onAddUser={handleAddUser} onRemoveUser={handleRemoveUser} onUpdateUserPermission={() => { }} />
           </div>
         )}
 

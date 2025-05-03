@@ -102,4 +102,6 @@ export interface CommonLanguage {
     userCreatedSuccessfully: string
     accountDontCreated: string
     fillAllFields: string
+
+    rememberMe: string
 }

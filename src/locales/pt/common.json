@@ -100,6 +100,8 @@
 
     "userCreatedSuccessfully": "Usuário criado com sucesso!",
     "accountDontCreated": "A conta ainda não foi criada. Verifique as informações e tente novamente.",
-    "fillAllFields": "Preencha todos os campos."
+    "fillAllFields": "Preencha todos os campos.",
+
+    "rememberMe": "Lembrar meu login?"
 
 }

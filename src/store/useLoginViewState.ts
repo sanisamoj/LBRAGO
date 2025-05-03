@@ -15,6 +15,7 @@ import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLog
 import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { useGlobalState } from "./useGlobalState"
 import { useVaultsState } from "./useVaultsState"
+import { UserStore } from "@/models/data/interfaces/UserStore"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -23,6 +24,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
     errorMessage: "",
     userLoginInfo: [],
     selectedOrganization: null,
+    rememberPassword: false,
 
     verificationCodeInput: "",
 
@@ -109,6 +111,8 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
 
     setPassword: (password: string) => set({ password }),
 
+    setRememberPassword: (rememberPassword: boolean) => set({ rememberPassword }),
+
     environnmentAuth: async () => {
         set({ isLoading: true })
         const passwordVerifier: PasswordVerifierLoginResponse | undefined = get().selectedOrganization?.passwordVerifier
@@ -135,7 +139,15 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 verifier: minPasswordVerifier.hash
             }
             const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
-            await useGlobalState.getState().saveUserResponse(userWithTokenResponse)
+
+            if (get().rememberPassword) {
+                const userStore: UserStore = {
+                    user: userWithTokenResponse.user,
+                    token: userWithTokenResponse.token,
+                    password: get().password
+                }
+                await useGlobalState.getState().saveUserSession(userStore)
+            }
 
             const { regenerateUserPrivK } = useGlobalState.getState()
             await regenerateUserPrivK(userWithTokenResponse.user, get().password)
@@ -143,6 +155,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
         } catch (_) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.acessDenied)
+            set({ isLoading: false })
             return
         }
 

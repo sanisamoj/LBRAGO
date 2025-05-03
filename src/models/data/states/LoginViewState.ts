@@ -8,6 +8,7 @@ export interface LoginViewState {
     userLoginInfo: LoginInfoResponse[]
     selectedOrganization: LoginInfoResponse | null
     password: string
+    rememberPassword: boolean
 
     verificationCodeInput: string
     setVerificationCodeInput: (code: string) => void
@@ -19,6 +20,7 @@ export interface LoginViewState {
     verifyEmail: () => Promise<void>
     selectOrganization: (organization: LoginInfoResponse) => void
     setPassword: (password: string) => void
+    setRememberPassword: (rememberPassword: boolean) => void
     environnmentAuth: () => Promise<void>
 
     clearState: () => void

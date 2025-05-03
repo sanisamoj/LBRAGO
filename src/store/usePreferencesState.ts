@@ -7,6 +7,7 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
     isDarkTheme: false,
     minimizeOnCopy: false,
     clearClipboardTimeout: 0,
+    savePassword: false,
 
     setDarkTheme: async (isDarkTheme: boolean) => {
         set({ isDarkTheme })
@@ -21,14 +22,20 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
         get().updatePreferencesStore()
     },
 
+    setSavePassword: async (savePassword: boolean) => {
+        set({ savePassword })
+        await get().updatePreferencesStore()
+    },
+
     updatePreferencesStore: async () => {
         const store: Store = await load('store.json', { autoSave: false })
-        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout } = usePreferencesState.getState()
+        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout, savePassword } = usePreferencesState.getState()
 
         const preferencesStore: PreferencesStore = {
             isDarkTheme: isDarkTheme,
             minimizeOnCopy: minimizeOnCopy,
-            clearClipboardTimeout: clearClipboardTimeout
+            clearClipboardTimeout: clearClipboardTimeout,
+            savePassword: savePassword
         }
         await store.set('preferencesStore', preferencesStore)
         await store.save()
