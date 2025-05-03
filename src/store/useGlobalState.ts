@@ -24,10 +24,10 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         }
 
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-        const { navigateTo } = useNavigationState.getState()
+        const { resetNavigation } = useNavigationState.getState()
 
         if (!userStore) {    
-            navigateTo(NavigationScreen.LOGIN_EMAIL)
+            resetNavigation(NavigationScreen.LOGIN_EMAIL)
             return
         }
 
@@ -35,7 +35,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         // Token está inválido, caso dê certo preencher o store 
 
         set({ store: userStore })
-        navigateTo(NavigationScreen.VAULTS)
+        resetNavigation(NavigationScreen.VAULTS)
     },
 
     saveStore: async (userStore: UserStore) => {

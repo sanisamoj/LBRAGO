@@ -3,13 +3,10 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Plus, User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { VaultIcon } from "@/vault-icon"
 import IconSelectorScreen from "./IconSelectScreen"
 import { useNavigationState } from "@/store/useNavigationState"
 import UserSelector from "./UserSelector"
@@ -38,7 +35,6 @@ export default function CreateVaultScreen({
   const [users, setUsers] = useState<{ id: string; email: string; name: string; avatar?: string }[]>([
     { id: "default", email: "usuario@acmecorp.com", name: "João Silva", avatar: "/placeholder.svg?height=32&width=32" },
   ])
-  const [customImage, setCustomImage] = useState<string | undefined>(undefined)
 
   const handleAddUser = (user: { id: string; email: string; name: string; avatar?: string }) => {
     setUsers([...users, user])
@@ -67,30 +63,11 @@ export default function CreateVaultScreen({
     }, 1000)
   }
 
-  const [selectedIconUrl, setSelectedIconUrl] = useState<string | undefined>(undefined);
-  const [customImageUrl, setCustomImageUrl] = useState<string | undefined>(undefined);
-
-  // Funções de callback para atualizar o estado quando o IconSelectorScreen notificar uma mudança
-  const handleIconSelect = (url: string | undefined) => {
-    setSelectedIconUrl(url);
-    // O componente filho já lida com a limpeza do customImageUrl via onSelectCustomImage(undefined)
-  };
-
-  const handleCustomImageSelect = (url: string | undefined) => {
-    setCustomImageUrl(url);
-    // O componente filho já lida com a limpeza do selectedIconUrl via onSelectIcon(undefined)
-  };
-
   return (
     <div className="flex flex-col h-full p-4">
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <IconSelectorScreen
-          selectedIconUrl={selectedIconUrl}
-          customImage={customImageUrl}
-          onSelectIcon={handleIconSelect}
-          onSelectCustomImage={handleCustomImageSelect}
-        />
+        <IconSelectorScreen imageUrl={undefined} setFile={() => { }} setImageUrl={() => { }} />
 
         {/* Name and Description */}
         <div className="space-y-1">

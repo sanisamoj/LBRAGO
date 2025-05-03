@@ -52,7 +52,7 @@ export default function SettingsScreen({
                     </TabsList>
 
                     {/* Abas de Conteúdo */}
-                    <TabsContent value="general" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 p-2">
+                    <TabsContent value="general" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
                         {/* Configurações Gerais */}
                         <div className="flex items-center justify-between">
                             <div>
@@ -77,7 +77,7 @@ export default function SettingsScreen({
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="vaults" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2">
+                    <TabsContent value="vaults" className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
                         {/* Configurações de Cofres */}
                         <div className="flex items-center justify-between">
                             <div>

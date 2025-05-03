@@ -130,11 +130,11 @@ export default function PasswordManagerView() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-white dark:bg-zinc-900" data-tauri-drag-region>
+    <div className="flex items-center justify-center h-screen w-full bg-white dark:bg-zinc-900" data-tauri-drag-region>
       <div className="w-full h-full bg-card flex flex-col overflow-hidden">
         <HeaderNavigation />
 
-        <div key={getCurrentScreen()} className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-invisible">
+        <div key={getCurrentScreen()} className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-invisible">
 
           {getCurrentScreen() === NavigationScreen.LOGIN_EMAIL && <LoginEmailScreen />}
 

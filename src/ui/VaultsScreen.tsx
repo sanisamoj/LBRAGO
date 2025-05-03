@@ -18,8 +18,13 @@ export default function VaultsScreen({
 
     return (
         <>
-            <div className="px-2 pb-2 pt-1">
-                <div className="rounded-lg border border-border overflow-y-hidden">
+            <div className="px-2 pb-2">
+                <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.CREATE_VAULTS)}>
+                    <Plus className="h-3.5 w-3.5 mr-1" />
+                    Adicionar Novo Cofre
+                </Button>
+
+                <div className="rounded-lg border border-border mt-2 overflow-y-hidden">
                     {vaults.map((vault) => (
                         <div
                             key={vault.id}
@@ -44,12 +49,7 @@ export default function VaultsScreen({
                         </div>
                     ))}
                 </div>
-                {vaults.length > 0 && (
-                    <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.CREATE_VAULTS)}>
-                        <Plus className="h-3.5 w-3.5 mr-1" />
-                        Adicionar Novo Cofre
-                    </Button>
-                )}
+
             </div>
         </>
     )
