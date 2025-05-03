@@ -111,6 +111,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         await store.save()
 
         useNavigationState.getState()
-            .navigateReplace(NavigationScreen.LOGIN_EMAIL)
+            .resetNavigation(NavigationScreen.LOGIN_EMAIL)
     }
 }))

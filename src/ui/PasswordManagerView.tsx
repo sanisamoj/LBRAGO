@@ -194,17 +194,11 @@ export default function PasswordManagerView() {
             <SettingsScreen
               // Estados das configurações
               settingsTab={settingsTab}
-              autoLockTimeout={autoLockTimeout}
-              clipboardClearTimeout={clipboardClearTimeout}
               showFavoritesFirst={showFavoritesFirst}
-              minimizeOnCopy={minimizeOnCopy} // Usado na UI de settings
 
               // Callbacks para alterar configurações
               onSettingsTabChange={setSettingsTab}
-              onAutoLockTimeoutChange={setAutoLockTimeout}
-              onClipboardClearTimeoutChange={setClipboardClearTimeout}
               onShowFavoritesFirstChange={setShowFavoritesFirst}
-              onMinimizeOnCopyChange={setMinimizeOnCopy}
               vaults={allVaults} // Para a lista de Gerenciar Cofres
             />
           )}

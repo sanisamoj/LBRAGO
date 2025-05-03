@@ -12,18 +12,12 @@ import { usePreferencesState } from "@/store/usePreferencesState"
 import { useGlobalState } from "@/store/useGlobalState"
 
 interface SettingsScreenProps {
-    settingsTab: string;
-    autoLockTimeout: number;
-    clipboardClearTimeout: number;
-    showFavoritesFirst: boolean;
-    minimizeOnCopy: boolean;
-    vaults: Vault[];
+    settingsTab: string
+    showFavoritesFirst: boolean
+    vaults: Vault[]
 
-    onSettingsTabChange: (tab: string) => void;
-    onAutoLockTimeoutChange: (value: number) => void;
-    onClipboardClearTimeoutChange: (value: number) => void;
-    onShowFavoritesFirstChange: (value: boolean) => void;
-    onMinimizeOnCopyChange: (value: boolean) => void;
+    onSettingsTabChange: (tab: string) => void
+    onShowFavoritesFirstChange: (value: boolean) => void
 
     // Funções para editar/excluir cofres/orgs (precisariam ser passadas do pai se implementadas)
     // onEditVault?: (vaultId: string) => void;
@@ -35,14 +29,17 @@ interface SettingsScreenProps {
 
 
 export default function SettingsScreen({
-    settingsTab, autoLockTimeout, clipboardClearTimeout, showFavoritesFirst,
-    minimizeOnCopy, vaults,
-    onSettingsTabChange, onAutoLockTimeoutChange, onClipboardClearTimeoutChange,
-    onShowFavoritesFirstChange, onMinimizeOnCopyChange
+    settingsTab, showFavoritesFirst, vaults,
+    onSettingsTabChange,
+    onShowFavoritesFirstChange
 }: SettingsScreenProps) {
     const { signout } = useGlobalState()
-    const { isDarkTheme, setDarkTheme } = usePreferencesState()
-    const { resetNavigation, navigateTo } = useNavigationState()
+    const { navigateTo } = useNavigationState()
+    const {
+        isDarkTheme, minimizeOnCopy, clearClipboardTimeout, setDarkTheme,
+        setMinimizeOnCopy, setClearClipboardTimeout
+    } = usePreferencesState()
+
 
     return (
         <>
@@ -69,20 +66,13 @@ export default function SettingsScreen({
                                 <h3 className="text-sm font-medium">Minimizar ao copiar</h3>
                                 <p className="text-xs text-muted-foreground">Minimizar após copiar senha</p>
                             </div>
-                            <Switch checked={minimizeOnCopy} onCheckedChange={onMinimizeOnCopyChange} />
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor="auto-lock" className="text-sm font-medium">Bloqueio automático (minutos)</Label>
-                            <p className="text-xs text-muted-foreground pb-1">Bloquear automaticamente após inatividade</p>
-                            <Input id="auto-lock" type="number" min="1" max="60" value={autoLockTimeout}
-                                onChange={(e) => onAutoLockTimeoutChange(Math.max(1, Number.parseInt(e.target.value) || 1))}
-                                className="h-7 text-xs" />
+                            <Switch checked={minimizeOnCopy} onCheckedChange={setMinimizeOnCopy} />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="clipboard-clear" className="text-sm font-medium">Limpar área de transferência (segundos)</Label>
                             <p className="text-xs text-muted-foreground pb-1">0 = não limpar automaticamente</p>
-                            <Input id="clipboard-clear" type="number" min="0" max="300" value={clipboardClearTimeout}
-                                onChange={(e) => onClipboardClearTimeoutChange(Math.max(0, Number.parseInt(e.target.value) || 0))}
+                            <Input id="clipboard-clear" type="number" min="0" max="300" value={clearClipboardTimeout}
+                                onChange={(e) => setClearClipboardTimeout(Math.max(0, Number.parseInt(e.target.value) || 0))}
                                 className="h-7 text-xs" />
                         </div>
                     </TabsContent>
@@ -102,7 +92,7 @@ export default function SettingsScreen({
                             <div className="max-h-[150px] overflow-y-auto">
                                 {vaults.map((vault) => (
                                     <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0">
-                                        <div className={`h-7 w-7 ${vault.iconBg} rounded-md flex items-center justify-center mr-2`}> <VaultIcon icon={""} /* ... */ /> </div>
+                                        <VaultIcon icon={""} />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-xs font-bold truncate">{vault.name}</h4>
                                             <p className="text-xs text-muted-foreground truncate">{vault.accessLevel}</p>
