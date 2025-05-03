@@ -8,9 +8,16 @@ import { UserStore } from "@/models/data/interfaces/UserStore"
 import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { usePreferencesState } from "./usePreferencesState"
 import { PreferencesStore } from "@/models/data/interfaces/PreferenceStore"
+import { UserResponse } from "@/models/data/interfaces/UserResponse"
+import { RegenerateUserKeysDTO } from "@/models/data/interfaces/RegenerateUserKeysDTO"
+import { invoke } from "@tauri-apps/api/core"
+import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
+import { useLanguageState } from "./useLanguageState"
+import { toast } from "sonner"
 
-export const useGlobalState = create<GlobalState>((set, get) => ({
+export const useGlobalState = create<GlobalState>((set) => ({
     store: null,
+    pk: "",
 
     loadStore: async () => {
         const store: Store = await load('store.json', { autoSave: false })
@@ -26,7 +33,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
 
-        if (!userStore) {    
+        if (!userStore) {
             resetNavigation(NavigationScreen.LOGIN_EMAIL)
             return
         }
@@ -100,6 +107,28 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         await store.set('preferencesStore', preferencesStore)
         await store.save()
         return
+    },
+
+    regenerateUserPrivK: async (userResponse: UserResponse, password: string) => {
+        const regUserKeysDTO: RegenerateUserKeysDTO = {
+            pVGenerateDTO: {
+                salt: userResponse.salt_ek,
+                parameters: userResponse.passwordVerifier.parameters,
+                password: password
+            },
+            keys: userResponse.keys
+        }
+        const jsonArg: string = JSON.stringify(regUserKeysDTO)
+
+        try {
+            const result: string = await invoke<string>('regenerate_user_private_key', { arg: jsonArg })
+            const decryptedUserKeys: DecryptedUserKeys = JSON.parse(result)
+            set({ pk: decryptedUserKeys.privateKey })
+        } catch (_) {
+            const { translations } = useLanguageState.getState()
+            toast.error(translations.errorToRegenerateUserPrivkey)
+        }
+
     },
 
     signout: async () => {

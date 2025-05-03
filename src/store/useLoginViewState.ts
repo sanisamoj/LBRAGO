@@ -14,6 +14,7 @@ import { MinimalPasswordVerifier } from "@/models/data/interfaces/MinimalPasswor
 import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLoginRequest"
 import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { useGlobalState } from "./useGlobalState"
+import { useVaultsState } from "./useVaultsState"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -109,8 +110,12 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
     setPassword: (password: string) => set({ password }),
 
     environnmentAuth: async () => {
+        set({ isLoading: true })
         const passwordVerifier: PasswordVerifierLoginResponse | undefined = get().selectedOrganization?.passwordVerifier
-        if (!passwordVerifier) return
+        if (!passwordVerifier) {
+            set({ isLoading: false })
+            return
+        }
 
         const generatePVInfo: GeneratePasswordVerifierInfo = {
             salt: passwordVerifier.salt,
@@ -132,6 +137,10 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
 
             const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
             await useGlobalState.getState().saveUserResponse(userWithTokenResponse)
+
+            const { regenerateUserPrivK } = useGlobalState.getState()
+            await regenerateUserPrivK(userWithTokenResponse.user, get().password)
+            await useVaultsState.getState().initVaultState()
         } catch (_) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.acessDenied)
@@ -140,6 +149,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
 
         const { resetNavigation } = useNavigationState.getState()
         resetNavigation(NavigationScreen.VAULTS)
+        set({ isLoading: false })
     },
 
     getOrganizationInfoByCreationCode: async (code: string) => {

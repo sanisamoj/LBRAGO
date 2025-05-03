@@ -82,4 +82,7 @@ export interface CommonLanguage {
     authenticate: string
 
     acessDenied: string
+    errorToFindVaults: string
+    errorToFindPasswords: string
+    errorToRegenerateUserPrivkey: string
 }

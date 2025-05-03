@@ -6,6 +6,10 @@ type User struct {
 	Keys             Keys             `json:"keys"`
 }
 
+type DecryptedUserKeys struct {
+	PrivateKey string `json:"privateKey"`
+}
+
 type PasswordVerifierParameters struct {
 	Memory      uint32 `json:"memory"`
 	Time        uint32 `json:"time"`
@@ -50,4 +54,9 @@ type PVGenerateDTO struct {
 	Salt       string                     `json:"salt"`
 	Parameters PasswordVerifierParameters `json:"parameters"`
 	Password   string                     `json:"password"`
+}
+
+type RegenerateUserKeysDTO struct {
+	PVGenerateDTO PVGenerateDTO `json:"pvGenerateDTO"`
+	Keys          Keys          `json:"keys"`
 }

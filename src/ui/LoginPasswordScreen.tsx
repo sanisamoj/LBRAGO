@@ -55,6 +55,7 @@ export default function LoginPasswordScreen() {
                 onChange={(e) => setPassword(e.target.value)}
                 className={`h-8 pl-8 pr-8 text-xs ${isError ? "border-red-500" : ""}`}
                 placeholder={translations.masterPassword}
+                disabled={isLoading}
                 required
                 autoFocus
               />

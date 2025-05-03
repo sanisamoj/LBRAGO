@@ -7,6 +7,7 @@ import { CreateOrganizationRequest } from "../data/interfaces/CreateOrganization
 import { OrganizationCreationResponse } from "../data/interfaces/OrganizationCreationResponse"
 import { EnvironmentLoginRequest } from "../data/interfaces/EnvironmentLoginRequest"
 import { UserWithTokenResponse } from "../data/interfaces/UserWithTokenResponse"
+import { VaultRepository } from "./VaultRepository"
 
 export class LoginRepository {
     private static instance: LoginRepository | null = null
@@ -34,21 +35,17 @@ export class LoginRepository {
         this.token = token
     }
 
-    public static getToken(): string {
-        return this.token
-    }
-
     public async getLoginInfo(email: string, code: string): Promise<LoginInfoResponse[]> {
         const response = await this.api.post("/login", {
             email: email,
             code: code
         })
-
         return response.data
     }
 
     public async login(request: EnvironmentLoginRequest): Promise<UserWithTokenResponse> {
         const response = await this.api.post("/environment/login", request)
+        VaultRepository.setToken(response.data.token)
         return response.data
     }
 
