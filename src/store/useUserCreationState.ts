@@ -9,6 +9,7 @@ import { CreateUserRequest } from "@/models/data/interfaces/CreateUserRequest"
 import { toast } from "sonner"
 import { UserCreationState } from "@/models/data/states/UserCreationState"
 import { CreateUserParameters } from "@/models/data/interfaces/CreateUserParameters"
+import { useLanguageState } from "./useLanguageState"
 
 export const useUserCreationState = create<UserCreationState>((set, get) => ({
     code: "",
@@ -63,11 +64,14 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
     },
 
     createUser: async () => {
+        const { translations } = useLanguageState()
+
         if (get().password === "" || get().confirmPassword === "" || get().nickname === "") {
-            toast.error("Preencha todos os campos.")
+            toast.error(translations.fillAllFields)
             return
         }
         set({ isLoading: true })
+
         try {
             const parameter: CreateUserParameters = {
                 password: get().password,
@@ -76,7 +80,7 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
                     memory: 65536,
                     time: 6,
                     parallelism: 4,
-                    keyLength:  32
+                    keyLength: 32
                 }
             }
             const jsonArg: string = JSON.stringify(parameter)
@@ -101,9 +105,9 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
                 .navigateReplace(NavigationScreen.LOGIN_EMAIL)
 
             get().clearState()
-            toast.success("Conta criada com sucesso!")
+            toast.success(translations.userCreatedSuccessfully)
         } catch (error) {
-            toast.error("A conta não foi criada tente novamente.")
+            toast.error(translations.accountDontCreated)
         }
         set({ isLoading: false })
     },
@@ -113,6 +117,6 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
     },
 
     clearState: () => {
-        set({ code: "", organizationName: "", imageUrl: "", password: "", confirmPassword: "", nickname: "" })
+        set({ code: "", organizationName: "", imageUrl: "", password: "", confirmPassword: "", nickname: "", isCodeError: false, isPasswordError: false })
     }
 }))

@@ -96,5 +96,10 @@
     "users": "Usuários",
     "isPersonalVaultLabel": "Este é um cofre pessoal (apenas para mim)?",
     "errorGeneratingVault": "Error ao gerar um cofre, verifique as informações e tente novamente.",
-    "vaultCreatedSuccessfully": "Cofre criado com sucesso!"
+    "vaultCreatedSuccessfully": "Cofre criado com sucesso!",
+
+    "userCreatedSuccessfully": "Usuário criado com sucesso!",
+    "accountDontCreated": "A conta ainda não foi criada. Verifique as informações e tente novamente.",
+    "fillAllFields": "Preencha todos os campos."
+
 }

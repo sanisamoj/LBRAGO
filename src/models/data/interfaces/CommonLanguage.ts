@@ -98,4 +98,8 @@ export interface CommonLanguage {
     isPersonalVaultLabel: string
     errorGeneratingVault: string
     vaultCreatedSuccessfully: string
+
+    userCreatedSuccessfully: string
+    accountDontCreated: string
+    fillAllFields: string
 }
