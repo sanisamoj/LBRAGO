@@ -9,6 +9,12 @@ import { CreateVaultRequest } from "@/models/data/interfaces/CreateVaultRequest"
 import { VaultRepository } from "@/models/repository/VaultRepository"
 import { Config } from "@/Config"
 import { CreateVaultState } from "@/models/data/interfaces/CreateVaultState"
+import { useNavigationState } from "./useNavigationState"
+import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
+import { EVaultResponse } from "@/models/data/interfaces/EVaultResponse"
+import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
+import { decryptVaultWithMemberResponse } from "@/utils/ED_vaults"
+import { useVaultsState } from "./useVaultsState"
 
 export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     name: "",
@@ -26,8 +32,9 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     createVault: async () => {
         set({ isLoading: true })
 
-        const { publicKey } = useGlobalState.getState()
+        const { publicKey, privateKey } = useGlobalState.getState()
         const { translations } = useLanguageState.getState()
+        const { navigateReplace } = useNavigationState.getState()
 
         const dto: EncryptVaultMetadataDTO = {
             userPubkey: publicKey,
@@ -49,9 +56,13 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
             }
 
             const vaultsRepository = VaultRepository.getInstance()
-            const response = await vaultsRepository.createVault(request)
+            const response: EVaultResponse = await vaultsRepository.createVault(request)
+
+            const decryptedVault: DecryptedVault = await decryptVaultWithMemberResponse(response, privateKey)
+            useVaultsState.getState().addVault(decryptedVault)
 
             toast.success(translations.vaultCreatedSuccessfully)
+            navigateReplace(NavigationScreen.VAULTS)
         } catch (error) {
             toast.error(translations.errorGeneratingVault)
         }

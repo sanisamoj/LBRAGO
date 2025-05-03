@@ -9,4 +9,6 @@ export interface DecryptedVault {
     vaultCreatedBy: string
     vaultUpdatedAt: string
     vaultCreatedAt: string
+    addedBy: string
+    addAt: string
 }

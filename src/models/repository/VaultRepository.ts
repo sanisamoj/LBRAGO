@@ -2,6 +2,7 @@ import { Config } from "@/Config"
 import axios, { AxiosInstance } from "axios"
 import { EVaultWithMemberInfo } from "../data/interfaces/EVaultWithMemberInfo"
 import { CreateVaultRequest } from "../data/interfaces/CreateVaultRequest"
+import { EVaultResponse } from "../data/interfaces/EVaultResponse"
 
 export class VaultRepository {
     private static instance: VaultRepository | null = null
@@ -38,7 +39,7 @@ export class VaultRepository {
         return response.data
     }
 
-    public async createVault(request: CreateVaultRequest): Promise<any> {
+    public async createVault(request: CreateVaultRequest): Promise<EVaultResponse> {
         const response = await this.api.post("/vaults", request, {
             headers: {
                 Authorization: `Bearer ${VaultRepository.token}`

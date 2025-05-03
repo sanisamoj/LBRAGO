@@ -3,6 +3,7 @@ import { EVaultWithMemberInfo } from "./EVaultWithMemberInfo"
 
 export interface VaultsState {
     initVaultState: () => Promise<void>
+    addVault: (vault: DecryptedVault) => void
 
     e_vaults: EVaultWithMemberInfo[]
     vaults: DecryptedVault[]

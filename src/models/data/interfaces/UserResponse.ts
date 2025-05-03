@@ -6,6 +6,7 @@ export interface UserResponse {
     email: string
     orgId: string
     username: string
+    role: "admin" | "member"
     passwordVerifier: PasswordVerifierLoginResponse
     salt_ek: string
     keys: Keys
