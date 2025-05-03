@@ -199,12 +199,12 @@ func DecryptWithRsaPrivateKey(ciphertextBase64 string, privKeyBase64 string) ([]
 	}
 
 	block, _ := pem.Decode(privPemBytes)
-	if block == nil || block.Type != "RSA PRIVATE KEY" { // Adjust type if you used PKCS8
+	if block == nil || block.Type != "RSA PRIVATE KEY" {
 		log.Println("Failed to decode PEM block containing private key")
 		return nil, fmt.Errorf("failed to decode PEM block containing private key")
 	}
 
-	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes) // Or ParsePKCS8PrivateKey
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		log.Printf("Error parsing private key: %v\n", err)
 		return nil, fmt.Errorf("failed to parse private key: %w", err)
@@ -216,7 +216,6 @@ func DecryptWithRsaPrivateKey(ciphertextBase64 string, privKeyBase64 string) ([]
 		return nil, fmt.Errorf("failed to decode base64 ciphertext: %w", err)
 	}
 
-	// Use OAEP for padding
 	plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, priv, ciphertext, nil)
 	if err != nil {
 		log.Printf("Error decrypting data with RSA private key: %v\n", err)

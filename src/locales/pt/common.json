@@ -84,5 +84,6 @@
     "acessDenied": "Acesso negado",
     "errorToFindVaults": "Erro ao encontrar cofres.",
     "errorToFindPasswords": "Erro ao encontrar senhas.",
-    "errorToRegenerateUserPrivkey": "Erro ao regenerar chave privada do usuário. Contate o suporte."
+    "errorToRegenerateUserPrivkey": "Erro ao regenerar chave privada do usuário. Contate o suporte.",
+    "dontHaveAVaultCreateOne": "Você ainda não tem cofres, Crie um!"
 }

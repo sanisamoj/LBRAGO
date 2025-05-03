@@ -29,10 +29,8 @@ export default function CreateEnvironmentScreen() {
         <div className="flex flex-col h-full">
             <div className="p-4">
                 <form onSubmit={(e) => { e.preventDefault(); createEnvironment() }} className="space-y-3">
-                    {/* Icon Selector */}
                     <IconSelectorScreen imageUrl={imageUrl} setFile={setFile} setImageUrl={setImageUrl} />
 
-                    {/* Environment Name */}
                     <div className="space-y-1">
                         <Label htmlFor="name" className="text-xs font-medium">
                             {translations.environmentName}
@@ -48,11 +46,9 @@ export default function CreateEnvironmentScreen() {
                         />
                     </div>
 
-                    {/* User Information Section */}
                     <div className="space-y-3 pt-2">
                         <h3 className="text-sm font-medium">{translations.accessInfomartions}</h3>
 
-                        {/* User Email */}
                         <div className="space-y-1">
                             <Label htmlFor="userEmail" className="text-xs font-medium">
                                 {translations.emailUser}
@@ -72,7 +68,6 @@ export default function CreateEnvironmentScreen() {
                             </div>
                         </div>
 
-                        {/* User Name */}
                         <div className="space-y-1">
                             <Label htmlFor="userName" className="text-xs font-medium">
                                 {translations.user}
@@ -90,8 +85,7 @@ export default function CreateEnvironmentScreen() {
                                 />
                             </div>
                         </div>
-
-                        {/* User Password */}
+                        
                         <div className="space-y-1">
                             <Label htmlFor="password" className="text-xs font-medium">
                                 {translations.masterPassword}

@@ -3,26 +3,60 @@ import { VaultRepository } from "@/models/repository/VaultRepository"
 import { create } from "zustand"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
+import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
+import { DecryptVaultMetadataDTO } from "@/models/data/interfaces/DecryptVaultMetadataDTO"
+import { useGlobalState } from "./useGlobalState"
+import { invoke } from "@tauri-apps/api/core"
 
 export interface VaultsState {
     initVaultState: () => Promise<void>
 
     e_vaults: EVaultWithMemberInfo[]
+    vault: DecryptedVault[]
 }
 
 export const useVaultsState = create<VaultsState>((set) => ({
     e_vaults: [],
+    vault: [],
 
     initVaultState: async () => {
+        const { pk } = useGlobalState.getState()
         try {
             const vaultsRespository = VaultRepository.getInstance()
             const e_vaults: EVaultWithMemberInfo[] = await vaultsRespository.getMyVaults()
-            console.log(e_vaults)
             set({ e_vaults })
+
+            let decryptedVaults: DecryptedVault[] = []
+            
+            for (const e_vault of e_vaults) {
+                const decryptVaultDTO: DecryptVaultMetadataDTO = {
+                    encryptedVaultMetadata: {
+                        ciphertext: e_vault.encryptedVaultMetadata.ciphertext,
+                        nonce: e_vault.encryptedVaultMetadata.nonce
+                    },
+                    privUserK: pk,
+                    esvkPubKUser: e_vault.esvkPubKUser
+                }
+
+                const jsonArg: string = JSON.stringify(decryptVaultDTO)
+                const output: string = await invoke<string>('decrypt_vault_metadata', { arg: jsonArg })
+                const decryptedVaultMetadataList: DecryptedVault[] = JSON.parse(output)
+
+                const decryptedVault: DecryptedVault = {
+                    id: e_vault.id,
+                    orgId: e_vault.orgId,
+                    decryptedVaultMetadata: decryptedVaultMetadataList[0].decryptedVaultMetadata,
+                    personalVault: e_vault.personalVault,
+                    vaultCreatedBy: e_vault.vaultCreatedBy,
+                    vaultUpdatedAt: e_vault.vaultUpdatedAt,
+                    vaultCreatedAt: e_vault.vaultCreatedAt
+                }
+
+                decryptedVaults.push(decryptedVault)
+            }
         } catch (_) {
             const { translations } = useLanguageState.getState()
-            toast.error(translations.errorToFindVaults)
-            return
+            toast.warning(translations.dontHaveAVaultCreateOne)
         }
     }
 }))

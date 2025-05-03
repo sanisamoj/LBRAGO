@@ -85,4 +85,5 @@ export interface CommonLanguage {
     errorToFindVaults: string
     errorToFindPasswords: string
     errorToRegenerateUserPrivkey: string
+    dontHaveAVaultCreateOne: string
 }

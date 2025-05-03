@@ -9,6 +9,7 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { AxiosError } from "axios"
 import { useLanguageState } from "./useLanguageState"
 import { Config } from "@/Config"
+import { CreateUserParameters } from "@/models/data/interfaces/CreateUserParameters"
 
 export interface EnvironmentCreationState {
     environmentName: string
@@ -81,7 +82,18 @@ export const useEnvironmentCreationState = create<EnvironmentCreationState>((set
 
         set({ isLoading: true })
         try {
-            const output: string = await invoke<string>('generate_user_credentials', { arg: get().password })
+            const parameter: CreateUserParameters = {
+                password: get().password,
+                parameters: {
+                    saltLength: 16,
+                    memory: 65536,
+                    time: 6,
+                    parallelism: 4,
+                    keyLength: 32
+                }
+            }
+            const jsonArg: string = JSON.stringify(parameter)
+            const output: string = await invoke<string>('generate_user_credentials', { arg: jsonArg })
             let goCreateUserResponse: GoCreateUserRequest = JSON.parse(output)
 
             const organizationCreate: CreateOrganizationRequest = {
@@ -110,7 +122,7 @@ export const useEnvironmentCreationState = create<EnvironmentCreationState>((set
             get().clearState()
             toast.success(translations.environmentCreatedSuccess)
         } catch (error: AxiosError | any) {
-            if (error.response.status === 409) {
+            if (error?.response.status === 409) {
                 toast.error(translations.environmentExistsEmailError)
                 set({ isLoading: false })
                 return

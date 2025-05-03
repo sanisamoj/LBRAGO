@@ -54,14 +54,3 @@ type RsaKeyPair struct {
 	PublicKey  string // Base64 encoded PEM
 	PrivateKey string // Base64 encoded PEM
 }
-
-type PVGenerateDTO struct {
-	Salt       string                     `json:"salt"`
-	Parameters PasswordVerifierParameters `json:"parameters"`
-	Password   string                     `json:"password"`
-}
-
-type RegenerateUserKeysDTO struct {
-	PVGenerateDTO PVGenerateDTO `json:"pvGenerateDTO"`
-	Keys          Keys          `json:"keys"`
-}
