@@ -119,4 +119,5 @@ export interface CommonLanguage {
     changeMasterPassword: string
     endSession: string
     addNewUser: string
+    errorToGetAllUser: string
 }

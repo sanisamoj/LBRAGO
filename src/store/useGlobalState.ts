@@ -2,7 +2,7 @@ import { LoginRepository } from "@/models/repository/LoginRepository"
 import { create } from "zustand"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
-import { GlobalState } from "@/models/data/states/GlobalState"
+import { GlobalState, InitGlobalStateData } from "@/models/data/states/GlobalState"
 import { load, Store } from '@tauri-apps/plugin-store'
 import { UserStore } from "@/models/data/interfaces/UserStore"
 import { usePreferencesState } from "./usePreferencesState"
@@ -16,6 +16,7 @@ import { toast } from "sonner"
 import { VaultRepository } from "@/models/repository/VaultRepository"
 import { useVaultsState } from "./useVaultsState"
 import { useLoginViewState } from "./useLoginViewState"
+import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     store: null,
@@ -37,7 +38,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             setClearClipboardTimeout(preferencesStore.clearClipboardTimeout)
             setSavePassword(preferencesStore.savePassword)
 
-            if(preferencesStore.savePassword) {
+            if (preferencesStore.savePassword) {
                 useLoginViewState.getState().setRememberPassword(true)
             }
         }
@@ -165,5 +166,20 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
         useNavigationState.getState()
             .resetNavigation(NavigationScreen.LOGIN_EMAIL)
+    },
+
+    initGlobalState: async (config: InitGlobalStateData) => {
+        await get().regenerateUserPrivK(config.user, config.password)
+        await useVaultsState.getState().initVaultState()
+        EnvironmentRepository.setToken(config.token)
+
+        if (config.savePassword) {
+            const userStore: UserStore = {
+                user: config.user,
+                token: config.token,
+                password: config.password
+            }
+            await get().saveUserSession(userStore)
+        }
     }
 }))

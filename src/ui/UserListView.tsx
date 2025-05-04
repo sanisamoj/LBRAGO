@@ -1,10 +1,10 @@
-import { User, X, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { User, X, Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useNavigationState } from "@/store/useNavigationState";
-import { NavigationScreen } from "@/models/data/enums/NavigationScreen";
-import { useLanguageState } from "@/store/useLanguageState";
+import { useNavigationState } from "@/store/useNavigationState"
+import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
+import { useLanguageState } from "@/store/useLanguageState"
 
 export function UserListView() {
     const { translations } = useLanguageState()
@@ -58,7 +58,7 @@ export function UserListView() {
                                 <Button
                                     type="button" variant="ghost" size="sm"
                                     className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                                    onClick={undefined} // Chama a função do pai
+                                    onClick={undefined}
                                     title={`Remover ${user.name}`}
                                 >
                                     <X className="h-4 w-4" />

@@ -16,6 +16,8 @@ import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenRes
 import { useGlobalState } from "./useGlobalState"
 import { useVaultsState } from "./useVaultsState"
 import { UserStore } from "@/models/data/interfaces/UserStore"
+import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
+import { InitGlobalStateData } from "@/models/data/states/GlobalState"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -140,18 +142,14 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
             }
             const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
 
-            if (get().rememberPassword) {
-                const userStore: UserStore = {
-                    user: userWithTokenResponse.user,
-                    token: userWithTokenResponse.token,
-                    password: get().password
-                }
-                await useGlobalState.getState().saveUserSession(userStore)
+            const init: InitGlobalStateData = {
+                user: userWithTokenResponse.user,
+                password: get().password,
+                token: userWithTokenResponse.token,
+                savePassword: get().rememberPassword
             }
 
-            const { regenerateUserPrivK } = useGlobalState.getState()
-            await regenerateUserPrivK(userWithTokenResponse.user, get().password)
-            await useVaultsState.getState().initVaultState()
+            await useGlobalState.getState().initGlobalState(init)
         } catch (_) {
             const { translations } = useLanguageState.getState()
             toast.error(translations.acessDenied)

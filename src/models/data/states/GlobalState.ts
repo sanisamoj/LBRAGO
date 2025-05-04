@@ -14,5 +14,14 @@ export interface GlobalState {
     regenerateUserPrivK: (userResponse: UserResponse, password: string) => Promise<void>
 
     signout: () => Promise<void>
+
+    initGlobalState: (config: InitGlobalStateData) => Promise<void>
+}
+
+export interface InitGlobalStateData {
+    user: UserResponse,
+    password: string
+    token: string
+    savePassword?: boolean
 }
 

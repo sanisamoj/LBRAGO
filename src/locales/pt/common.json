@@ -117,5 +117,6 @@
     "accountSecurity": "Segurança da Conta",
     "changeMasterPassword": "Alterar Senha Mestra",
     "endSession": "Encerrar Sessão e retornar aos ambientes",
-    "addNewUser": "Adicionar novo usuário"
+    "addNewUser": "Adicionar novo usuário",
+    "errorToGetAllUser": "Erro ao obter todos os usuários."
 }
