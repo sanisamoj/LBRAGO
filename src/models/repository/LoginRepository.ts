@@ -87,7 +87,7 @@ export class LoginRepository {
 
     public async signOut(): Promise<void> {
         try {
-            await this.api.post("/signout", {}, {
+            await this.api.delete("/signout", {
                 headers: {
                     Authorization: `Bearer ${LoginRepository.token}`
                 }

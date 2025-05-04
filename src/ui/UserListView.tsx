@@ -5,16 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useLanguageState } from "@/store/useLanguageState"
+import { useAdminState } from "@/store/useAdminState"
 
 export function UserListView() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
-
-    const users: any[] = [
-        { id: "1", email: "joao.silva@acmecorp.com", name: "João Silva", imageUrl: "/placeholder.svg?height=40&width=40" },
-        { id: "2", email: "maria.santos@acmecorp.com", name: "Maria Santos", imageUrl: "/placeholder.svg?height=40&width=40" },
-        { id: "3", email: "pedro.oliveira@acmecorp.com", name: "Pedro Oliveira", imageUrl: "/placeholder.svg?height=40&width=40" },
-    ]
+    const { users } = useAdminState()
 
     return (
         <div className="p-4">
@@ -40,35 +36,35 @@ export function UserListView() {
                 {users.length > 0 ? (
                     users.map((user) => (
                         <div key={user.id} className="flex items-center justify-between py-2 px-3 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors duration-150">
-                            {/* Coluna de Informações do Usuário */}
                             <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                                 <Avatar className="h-8 w-8 flex-shrink-0">
-                                    <AvatarImage src={user.imageUrl || undefined} alt={user.name} />
+                                    <AvatarImage src={undefined} alt={user.username} />
                                     <AvatarFallback className="text-xs">
-                                        {user.name.split(" ").map((n: any) => n[0]).slice(0, 2).join("")}
+                                        {user.username.split(" ").map((n: any) => n[0]).slice(0, 2).join("")}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium truncate" title={user.name}>{user.name}</p>
+                                    <p className="text-sm font-medium truncate" title={user.username}>{user.username}</p>
                                     <p className="text-xs text-muted-foreground truncate" title={user.email}>{user.email}</p>
                                 </div>
                             </div>
-                            {/* Coluna de Ação (Remover) */}
-                            <div className="flex-shrink-0 ml-2">
-                                <Button
-                                    type="button" variant="ghost" size="sm"
-                                    className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                                    onClick={undefined}
-                                    title={`Remover ${user.name}`}
-                                >
-                                    <X className="h-4 w-4" />
-                                </Button>
-                            </div>
+                            {user.id !== user.orgId && (
+                                <div className="flex-shrink-0 ml-2">
+                                    <Button
+                                        type="button" variant="ghost" size="sm"
+                                        className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                        onClick={undefined}
+                                        title={`${translations.remove} ${user.username}`}
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (
                     <div className="py-4 px-3 text-center text-sm text-muted-foreground">
-                        {users.length > 0 ? "Nenhum usuário encontrado com este termo." : "Nenhum usuário cadastrado."}
+                        {users.length > 0 ? translations.notFoundUsers : translations.noRegisteredUsers}
                     </div>
                 )}
             </div>

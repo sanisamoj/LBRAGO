@@ -17,6 +17,7 @@ import { useVaultsState } from "./useVaultsState"
 import { useLoginViewState } from "./useLoginViewState"
 import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 import { useAdminState } from "./useAdminState"
+import { VaultRepository } from "@/models/repository/VaultRepository"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     store: null,
@@ -173,6 +174,8 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
     initGlobalState: async (config: InitGlobalStateData) => {
         await get().regenerateUserPrivK(config.user, config.password)
+
+        VaultRepository.setToken(config.token)
         await useVaultsState.getState().initVaultState()
 
         if (config.user.role === "admin") {

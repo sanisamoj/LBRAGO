@@ -17,7 +17,7 @@ import { useLanguageState } from "@/store/useLanguageState"
 export default function SettingsScreen() {
     const { translations } = useLanguageState()
     const { vaults } = useVaultsState()
-    const { signout } = useGlobalState()
+    const { store, signout } = useGlobalState()
     const { navigateTo } = useNavigationState()
     const {
         isDarkTheme, minimizeOnCopy, clearClipboardTimeout, setDarkTheme,
@@ -61,6 +61,13 @@ export default function SettingsScreen() {
                     </TabsContent>
 
                     <TabsContent value={translations.environment} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
+                        {store?.user.role === "admin" && (
+                            <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
+                                <Plus className="h-3.5 w-3.5 mr-1" />
+                                {translations.inviteUser}
+                            </Button>
+                        )}
+
                         <div className="rounded-lg border border-border overflow-hidden">
                             <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">{translations.manageVaults}</h3></div>
                             <div className="max-h-[150px] overflow-y-auto">
@@ -88,16 +95,6 @@ export default function SettingsScreen() {
                                 {translations.addNewVault}
                             </Button>
                         </div>
-
-                        <Button
-                            onClick={() => navigateTo(NavigationScreen.ALL_USERS)}
-                            variant="ghost"
-                            size="sm"
-                            className="w-full h-8 text-xs rounded-t-none border-t border-border"
-                        >
-                            <Plus className="h-3 w-3 mr-1" />
-                            {translations.addNewVault}
-                        </Button>
                     </TabsContent>
 
                     <TabsContent value={translations.security} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2">

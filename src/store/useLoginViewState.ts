@@ -14,9 +14,6 @@ import { MinimalPasswordVerifier } from "@/models/data/interfaces/MinimalPasswor
 import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLoginRequest"
 import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { useGlobalState } from "./useGlobalState"
-import { useVaultsState } from "./useVaultsState"
-import { UserStore } from "@/models/data/interfaces/UserStore"
-import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 import { InitGlobalStateData } from "@/models/data/states/GlobalState"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({

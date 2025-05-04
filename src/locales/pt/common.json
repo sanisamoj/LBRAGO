@@ -123,5 +123,9 @@
     "changeMasterPassword": "Alterar Senha Mestra",
     "endSession": "Encerrar Sessão e retornar aos ambientes",
     "addNewUser": "Adicionar novo usuário",
-    "errorToGetAllUser": "Erro ao obter todos os usuários."
+    "errorToGetAllUser": "Erro ao obter todos os usuários.",
+
+    "noRegisteredUsers": "Nenhum usuário registrado.",
+    "notFoundUsers": "Nenhum usuário encontrado.",
+    "inviteUser": "Convidar um usuário"
 }

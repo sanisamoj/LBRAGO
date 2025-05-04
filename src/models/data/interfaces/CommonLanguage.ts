@@ -124,4 +124,8 @@ export interface CommonLanguage {
     endSession: string
     addNewUser: string
     errorToGetAllUser: string
+
+    noRegisteredUsers: string
+    notFoundUsers: string
+    inviteUser: string
 }
