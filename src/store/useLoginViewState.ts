@@ -45,8 +45,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
             set({ isLoading: false, isError: false, errorMessage: "" })
             toast.success(translations.sentCodeSuccess)
         } catch (error: AxiosError | any) {
-            if (error.response.status === 429) {
-
+            if (error?.response?.status === 429) {
                 set({
                     isLoading: false,
                     isError: true,
@@ -56,11 +55,22 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 return
             }
 
+            if (error?.response?.status === 404) {
+                set({
+                    isLoading: false,
+                    isError: true,
+                    errorMessage: translations.userNotFoundWithThisEmail
+                })
+                toast.error(translations.userNotFoundWithThisEmail)
+                return
+            }
+
             set({
                 isLoading: false,
                 isError: true,
-                errorMessage: translations.userNotFoundWithThisEmail
+                errorMessage: translations.internalErrorTryAgain
             })
+            toast.error(translations.internalErrorTryAgain)
         }
     },
 

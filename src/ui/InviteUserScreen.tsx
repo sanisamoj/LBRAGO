@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -6,12 +6,15 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Mail, Key, Copy, Loader2 } from 'lucide-react'
 import { useLanguageState } from '@/store/useLanguageState'
 import { useInviteUserState } from '@/store/useInviteUserState'
+import { useNavigationState } from '@/store/useNavigationState'
 
 export default function InviteUserScreen() {
     const { translations } = useLanguageState()
-    const { email, role, isLoading, code, setEmail, setRole, generateCode } = useInviteUserState()
+    const { getCurrentScreen } = useNavigationState()
+    const { email, role, isLoading, code, setEmail, setRole, generateCode, clearState } = useInviteUserState()
 
     const [copied, setCopied] = useState(false)
+    const codeSectionRef = useRef<HTMLDivElement>(null)
 
     const handleCopyCode = () => {
         if (code) {
@@ -21,6 +24,21 @@ export default function InviteUserScreen() {
             })
         }
     }
+
+    useEffect(() => {
+        if (code && codeSectionRef.current) {
+            codeSectionRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end'
+            })
+        }
+    }, [code])
+
+    useEffect(() => {
+        return () => {
+            clearState()
+        }
+    }, [getCurrentScreen])
 
     return (
         <div className="space-y-4">
@@ -39,7 +57,7 @@ export default function InviteUserScreen() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="h-8 pl-8 text-xs"
                                 placeholder={translations.emailPlaceHolder}
-                                disabled={isLoading}
+                                disabled={isLoading || code !== undefined}
                                 required
                                 autoFocus
                             />
@@ -98,7 +116,7 @@ export default function InviteUserScreen() {
                 )}
 
                 {code && (
-                    <div className="pt-4 border-t mt-4 space-y-2">
+                    <div ref={codeSectionRef} className="pt-4 border-t mt-4 space-y-2">
                         <p className="text-sm font-medium text-green-600">{translations.inviteCode} ({role === 'admin' ? translations.admin : translations.member}) {translations.generatedSuccessfully}</p>
                         <div className="flex flex-col sm:flex-row items-center gap-2 p-3 rounded-md bg-muted border">
                             <Key className="h-5 w-5 text-primary flex-shrink-0" />

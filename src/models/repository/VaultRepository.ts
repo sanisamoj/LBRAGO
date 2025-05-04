@@ -10,7 +10,7 @@ export class VaultRepository {
 
     private api: AxiosInstance = axios.create({
         baseURL: Config.API_URL,
-        timeout: 10000,
+        timeout: 4000,
         headers: {
             'Content-Type': 'application/json',
         }

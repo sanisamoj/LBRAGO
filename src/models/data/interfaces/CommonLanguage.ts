@@ -161,4 +161,6 @@ export interface CommonLanguage {
     noPasswordsInVault: string
     addPassword: string
     addMember: string
+
+    internalErrorTryAgain: string
 }

@@ -12,6 +12,8 @@ export interface InviteUserState {
     setEmail: (email: string) => void
     setRole: (role: "admin" | "member") => void
     generateCode: () => Promise<void>
+
+    clearState: () => void
 }
 
 export const useInviteUserState = create<InviteUserState>((set, get) => ({
@@ -43,5 +45,7 @@ export const useInviteUserState = create<InviteUserState>((set, get) => ({
         }
 
         set({ isLoading: false })
-    }
+    },
+
+    clearState: () => set({ email: "", role: "member", code: undefined })
 }))

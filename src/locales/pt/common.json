@@ -160,5 +160,7 @@
     "noPasswordsFoundFor": "Nenhuma senha encontrada para",
     "noPasswordsInVault": "Nenhuma senha neste cofre",
     "addPassword": "Adicionar Senha",
-    "addMember": "Adicionar Membro"
+    "addMember": "Adicionar Membro",
+
+    "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente."
 }

@@ -76,3 +76,4 @@ release/
 .qodo
 
 go_modules/argo2id_generate/lembrago.exe
+go_modules/argo2id_generate/lembrago-x86_64-unknown-linux-gnu
