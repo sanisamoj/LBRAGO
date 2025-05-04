@@ -127,5 +127,6 @@
 
     "noRegisteredUsers": "Nenhum usuário registrado.",
     "notFoundUsers": "Nenhum usuário encontrado.",
-    "inviteUser": "Convidar um usuário"
+    "inviteUser": "Convidar um usuário",
+    "userSearch": "Buscar um usuário"
 }

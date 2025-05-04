@@ -6,11 +6,18 @@ import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useLanguageState } from "@/store/useLanguageState"
 import { useAdminState } from "@/store/useAdminState"
+import { useState } from "react"
 
 export function UserListView() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
     const { users } = useAdminState()
+
+    const [usersVirtual, setUsersVirtual] = useState(users)
+
+    const search = (value: string) => {
+        setUsersVirtual(users.filter((user) => user.email.toLowerCase().includes(value.toLowerCase())))
+    }
 
     return (
         <div className="p-4">
@@ -20,9 +27,9 @@ export function UserListView() {
                     <Input
                         type="search"
                         value={undefined}
-                        onChange={undefined}
+                        onChange={(e) => search(e.target.value)}
                         className="h-8 pl-8 text-xs"
-                        placeholder="Add user by email"
+                        placeholder={translations.userSearch}
                         onClick={undefined}
                     />
                 </div>
@@ -33,14 +40,14 @@ export function UserListView() {
             </div>
 
             <div className="rounded-lg border border-border overflow-hidden">
-                {users.length > 0 ? (
-                    users.map((user) => (
+                {usersVirtual.length > 0 ? (
+                    usersVirtual.map((user) => (
                         <div key={user.id} className="flex items-center justify-between py-2 px-3 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors duration-150">
                             <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                                 <Avatar className="h-8 w-8 flex-shrink-0">
                                     <AvatarImage src={undefined} alt={user.username} />
                                     <AvatarFallback className="text-xs">
-                                        {user.username.split(" ").map((n: any) => n[0]).slice(0, 2).join("")}
+                                        {user.username.split(" ").map((n: string) => n[0]).slice(0, 2).join("")}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
@@ -64,7 +71,7 @@ export function UserListView() {
                     ))
                 ) : (
                     <div className="py-4 px-3 text-center text-sm text-muted-foreground">
-                        {users.length > 0 ? translations.notFoundUsers : translations.noRegisteredUsers}
+                        {usersVirtual.length > 0 ? translations.notFoundUsers : translations.noRegisteredUsers}
                     </div>
                 )}
             </div>

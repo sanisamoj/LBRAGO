@@ -60,7 +60,7 @@ export default function SettingsScreen() {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value={translations.environment} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
+                    <TabsContent value={translations.environment} className="space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
                         {store?.user.role === "admin" && (
                             <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
                                 <Plus className="h-3.5 w-3.5 mr-1" />
@@ -70,16 +70,15 @@ export default function SettingsScreen() {
 
                         <div className="rounded-lg border border-border overflow-hidden">
                             <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">{translations.manageVaults}</h3></div>
-                            <div className="max-h-[150px] overflow-y-auto">
+                            <div className="max-h-[150px] overflow-y-auto scrollbar-invisible">
                                 {vaults.map((vault) => (
-                                    <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0">
-                                        <VaultIcon icon={""} />
+                                    <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0 gap-3 cursor-pointer">
+                                        <VaultIcon icon={vault.decryptedVaultMetadata.imageUrl} />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-xs font-bold truncate">{vault.decryptedVaultMetadata.name}</h4>
                                             <p className="text-xs text-muted-foreground truncate">{vault.permission}</p>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0" title="Editar cofre"><Edit2 className="h-3 w-3" /></Button>
                                             <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" title="Excluir cofre"><Trash2 className="h-3 w-3" /></Button>
                                         </div>
                                     </div>
