@@ -9,7 +9,7 @@ export interface AdminState {
     initAdminState: () => Promise<void>
 }
 
-export const useAdminState = create<AdminState>((set, get) => ({
+export const useAdminState = create<AdminState>((set) => ({
     users: [],
     initAdminState: async () => {
         try {

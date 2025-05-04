@@ -4,7 +4,7 @@
 [![Última Release](https://img.shields.io/github/v/release/sanisamoj/LBRAGO.git)](https://github.com/sanisamoj/LBRAGO.git/releases/latest)
 [![Licença](https://img.shields.io/github/license/sanisamoj/LBRAGO.git)](LICENSE)
 
-**Um gerenciador de senhas seguro, de código aberto, com arquitetura Zero-Knowledge e Criptografia de Ponta-a-Ponta (E2EE), agora no seu desktop.**
+**Um gerenciador de senhas seguro, de código aberto, com arquitetura Zero-Knowledge e Criptografia de Ponta-a-Ponta (E2EE), no seu desktop.**
 
 ## Introdução
 
@@ -17,13 +17,13 @@ Esta aplicação sincroniza seus dados criptografados com nosso servidor seguro 
 * **Segurança Zero-Knowledge:** Seus dados mais sensíveis são inacessíveis para o servidor.
 * **Criptografia de Ponta-a-Ponta (E2EE):** Toda criptografia/descriptografia ocorre localmente no seu dispositivo.
 * **Senha Mestra Forte:** Única chave que você precisa memorizar, usada para derivar suas chaves de criptografia (via Argon2id).
-* **Cofres Seguros:** Organize suas senhas e segredos em cofres individuais.
+* **Cofres Seguros:** Organize suas senhas e segredos em cofres coletivos ou individuais.
 * **Compartilhamento Seguro:** Compartilhe cofres com outros usuários da sua organização de forma segura, usando criptografia assimétrica (ECC/Curve25519).
-* **Multiplataforma:** Disponível para Windows, macOS e Linux (graças ao Tauri).
-* **Gerador de Senhas Fortes:** Crie senhas complexas e únicas facilmente.
-* **Acesso Offline:** Acesse seus dados armazenados localmente mesmo sem conexão com a internet (após o primeiro login/sincronização). // Verificar possível implementação
-* **(Opcional) Preenchimento Automático:** Integração com navegadores para preenchimento automático (se implementado).
-* **(Opcional) Suporte a Organizações:** Gerencie usuários e acessos dentro de uma estrutura organizacional (dependendo do plano).
+* **Multiplataforma:** Disponível para Windows, e Linux (graças ao Tauri).
+* **Gerador de Senhas Fortes:** Crie senhas complexas e únicas facilmente ( Caso tenha preguiça de criar algo forte ).
+* **Acesso Offline:** Acesse seus dados armazenados localmente mesmo sem conexão com a internet (após o primeiro login/sincronização). // Vericando se será implementado
+* **(Opcional) Preenchimento Automático:** Integração com navegadores para preenchimento automático (se implementado). // Vericando se será implementado
+* **(Opcional) Suporte a Organizações:** Gerencie usuários e acessos dentro de uma estrutura organizacional (dependendo do plano). // Vericando se será implementado
 
 ## 🔐 Modelo de Segurança
 
@@ -48,7 +48,6 @@ A segurança e a privacidade são a base deste projeto.
 Você pode baixar a versão mais recente para o seu sistema operacional na nossa [**Página de Releases**](https://github.com/seu_usuario/seu_repo/releases/latest).
 
 * **Windows:** Baixe o arquivo `.msi` e siga o instalador.
-* **macOS:** Baixe o arquivo `.dmg`, abra-o e arraste o aplicativo para a pasta "Aplicativos".
 * **Linux:** Baixe o arquivo `.deb` (para sistemas baseados em Debian/Ubuntu) ou `.AppImage`.
     * Para `.deb`: `sudo dpkg -i nome_do_arquivo.deb` (pode precisar de `sudo apt --fix-broken install`).
     * Para `.AppImage`: Dê permissão de execução (`chmod +x nome_do_arquivo.AppImage`) e execute (`./nome_do_arquivo.AppImage`).

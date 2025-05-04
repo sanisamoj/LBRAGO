@@ -12,7 +12,7 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 export default function EnvironmentsScreen() {
     const { navigateTo } = useNavigationState()
     const [searchQuery, setSearchQuery] = useState("")
-    const [showSearch, setShowSearch] = useState(false)
+    const [_, setShowSearch] = useState(false)
 
     const sampleEnvironments: Environment[] = [
         {

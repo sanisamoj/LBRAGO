@@ -1,15 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { User, X } from "lucide-react" // Icons needed for this screen
+import { User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { cn } from "@/lib/utils" // Assuming you have a utility for class names
 
-// --- Dados de Exemplo (em uma aplicação real, viriam de um estado global, API, etc.) ---
-
-// Definindo o tipo de usuário (sem a permissão, pois não é editável nesta tela)
 interface AdminUserType {
     id: string;
     email: string;

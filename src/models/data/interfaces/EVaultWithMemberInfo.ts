@@ -1,3 +1,4 @@
+import { MemberPermissionType } from "../enums/MemberPermissionType"
 import { EncryptedKey } from "./EncryptedKey"
 
 export interface EVaultWithMemberInfo {
@@ -9,7 +10,7 @@ export interface EVaultWithMemberInfo {
     vaultUpdatedAt: string
     vaultCreatedAt: string
     userId: string
-    permission: string
+    permission: MemberPermissionType
     esvkPubKUser: string
     addedBy: string
     addAt: string

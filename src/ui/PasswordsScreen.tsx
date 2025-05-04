@@ -19,7 +19,7 @@ export default function PasswordsScreen() {
     const { navigateTo } = useNavigationState()
     const { selectedVault } = useVaultsState()
 
-    const [searchQuery, setSearchQuery] = useState("")
+    const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [selectedPassword, setSelectedPassword] = useState<Password | null>(null)
     const [editingPassword, setEditingPassword] = useState<string | null>(null)

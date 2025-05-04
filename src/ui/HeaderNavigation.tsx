@@ -1,4 +1,4 @@
-import { ArrowLeft, Minimize2, Moon, Settings, Squirrel, Sun } from "lucide-react"
+import { ArrowLeft, Minimize2, Moon, Settings, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useNavigationState } from "@/store/useNavigationState"
 import { Window } from '@tauri-apps/api/window'

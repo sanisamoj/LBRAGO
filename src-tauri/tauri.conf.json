@@ -1,12 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "lembrago2",
+  "productName": "lembrago",
   "version": "0.1.0",
-  "identifier": "com.lembrago2.app",
+  "identifier": "com.lembrago.app",
   "build": {
-    "beforeDevCommand": "pnpm go:build:windows && pnpm dev",
+    "beforeDevCommand": "pnpm go:build:windows && pnpm go:build:linux && pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm go:build:windows && pnpm build",
+    "beforeBuildCommand": "pnpm go:build:windows && pnpm go:build:linux && pnpm build",
     "frontendDist": "../dist"
   },
   "app": {
@@ -38,7 +38,8 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "externalBin":["../go_modules/argo2id_generate/lembrago"]
   },
   "plugins": {
     "tauri": {
