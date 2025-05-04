@@ -1,4 +1,4 @@
-import { ArrowLeft, Minimize2, Moon, Settings, Sun } from "lucide-react"
+import { ArrowLeft, Minimize2, Moon, Settings, Squirrel, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useNavigationState } from "@/store/useNavigationState"
 import { Window } from '@tauri-apps/api/window'
@@ -37,6 +37,15 @@ export default function HeaderNavigation() {
 
     const RightButtons = () => (
         <div className="flex items-center gap-1 ml-auto" data-tauri-drag-region="no-drag">
+            {/* <Button
+                variant="ghost"
+                size="sm"
+                onClick={undefined}
+                className="h-7 w-7 p-0 animate-pulse"
+                title="Atualização disponível"
+            >
+                <Squirrel className="h-4 w-4" />
+            </Button> */}
             {!themeTogglePermission && (
                 <Button
                     variant="ghost"

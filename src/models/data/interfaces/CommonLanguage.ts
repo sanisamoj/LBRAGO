@@ -130,4 +130,19 @@ export interface CommonLanguage {
     inviteUser: string
 
     userSearch: string
+    sendingInvite: string
+    confirmEmailAndSendMail: string
+    confirmEmailDescription: string
+    userType: string
+    member: string
+    admin: string
+    selectPermissionDescription: string
+    inviteCodeGenerateTo: string
+    generatedSuccessfully: string
+    copy: string
+    copied: string
+    finalInviteSuccessDescriptionFirstPart: string
+    finalInviteSuccessDescriptionSecondPart: string
+    inviteCode: string
+    inviteCodeGeneratingTo: string
 }

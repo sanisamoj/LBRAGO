@@ -16,9 +16,8 @@ import AddPasswordScreen from "./AddPasswordScreen"
 import EnvironmentsScreen from "./EnvironmentsScreen"
 import CreateEnvironmentScreen from "./CreateEnvironmentScreen"
 import VerifyCodeScreen from "./VerifyCodeScreen"
-import AdminUserManagementScreen from "./AdminUserManagementScreen"
 import { UserListView } from "./UserListView"
-import { AddUserView } from "./AddUserView"
+import InviteUserScreen from "./InviteUserScreen"
 
 export default function PasswordManagerView() {
   const { getCurrentScreen } = useNavigationState()
@@ -155,7 +154,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.ALL_USERS && <UserListView />}
 
-          {getCurrentScreen() === NavigationScreen.ADD_USER && <AddUserView />}
+          {getCurrentScreen() === NavigationScreen.ADD_USER && <InviteUserScreen />}
 
 
         </div>

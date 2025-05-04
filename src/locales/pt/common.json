@@ -128,5 +128,21 @@
     "noRegisteredUsers": "Nenhum usuário registrado.",
     "notFoundUsers": "Nenhum usuário encontrado.",
     "inviteUser": "Convidar um usuário",
-    "userSearch": "Buscar um usuário"
+    "userSearch": "Buscar um usuário",
+
+    "sendingInvite": "Gerando e enviando convite",
+    "confirmEmailAndSendMail": "Confirmar Email e enviar um convite",
+    "confirmEmailDescription": "Confirme o email para gerar um código de convite único. Verifique se o email está correto.",
+    "userType": "Tipo do Usuário",
+    "member": "Membro",
+    "admin": "Admin",
+    "selectPermissionDescription": "Selecione o tipo de permissão que o usuário terá ao se cadastrar com o código.",
+    "inviteCodeGenerateTo": "Gerando código de convite para",
+    "generatedSuccessfully": "Código de convite gerado com sucesso!",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "finalInviteSuccessDescriptionFirstPart": "Um código foi enviado ao E-mail do usuário, caso ele ainda não tenha recebido, envie este código para",
+    "finalInviteSuccessDescriptionSecondPart": "Ele precisará inserir este código durante o cadastro para obter acesso como",
+    "inviteCode": "Código de Convite",
+    "inviteCodeGeneratingTo": "Gerando código de convite para"
 }
