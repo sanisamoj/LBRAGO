@@ -10,4 +10,6 @@ export interface PreferencesState {
     setSavePassword: (savePassword: boolean) => Promise<void>
 
     updatePreferencesStore: () => Promise<void>
+
+    initPreferencesState: () => Promise<void>
 }

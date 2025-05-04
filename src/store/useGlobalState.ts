@@ -13,7 +13,6 @@ import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { useVaultsState } from "./useVaultsState"
-import { useLoginViewState } from "./useLoginViewState"
 import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 import { useAdminState } from "./useAdminState"
 import { VaultRepository } from "@/models/repository/VaultRepository"
@@ -24,31 +23,20 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     publicKey: "",
 
     loadStore: async () => {
+        await usePreferencesState.getState().initPreferencesState()
+
         const store: Store = await load('store.json', { autoSave: false })
+        const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
 
-        const preferencesStore: PreferencesStore | undefined = await store.get<PreferencesStore>('preferencesStore')
-        const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-        if (!userStore && !preferencesStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
+        if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
 
-        if (preferencesStore) {
-            const { setDarkTheme, setMinimizeOnCopy, setClearClipboardTimeout, setSavePassword } = usePreferencesState.getState()
-            setDarkTheme(preferencesStore.isDarkTheme)
-            setMinimizeOnCopy(preferencesStore.minimizeOnCopy)
-            setClearClipboardTimeout(preferencesStore.clearClipboardTimeout)
-            setSavePassword(preferencesStore.savePassword)
-
-            if (preferencesStore.savePassword) {
-                useLoginViewState.getState().setRememberPassword(true)
-            }
-        }
-
-        if (preferencesStore && userStore) {
+        if (userStore) {
             const init: InitGlobalStateData = {
                 user: userStore.user,
                 password: userStore.password,
                 token: userStore.token,
-                savePassword: preferencesStore.savePassword
+                savePassword: true
             }
             await get().initGlobalState(init)
 
@@ -76,39 +64,23 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     saveUserSession: async (userResponse: UserStore) => {
         const store: Store = await load('store.json', { autoSave: false })
         let userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-        let preferencesStore: PreferencesStore | undefined = await store.get<PreferencesStore>('preferencesStore')
-        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout } = usePreferencesState.getState()
 
         if (!userStore) {
             const store: UserStore = {
                 user: userResponse.user,
                 token: userResponse.token,
-                password: userResponse.password
+                password: userResponse.password,
+                savePassword: userResponse.savePassword
             }
             userStore = store
         } else {
             userStore.user = userResponse.user
             userStore.token = userResponse.token
             userStore.password = userResponse.password
-        }
-
-        if (!preferencesStore) {
-            const store: PreferencesStore = {
-                isDarkTheme: isDarkTheme,
-                minimizeOnCopy: minimizeOnCopy,
-                clearClipboardTimeout: clearClipboardTimeout,
-                savePassword: true
-            }
-            preferencesStore = store
-        } else {
-            preferencesStore.isDarkTheme = isDarkTheme
-            preferencesStore.minimizeOnCopy = minimizeOnCopy
-            preferencesStore.clearClipboardTimeout = clearClipboardTimeout
-            preferencesStore.savePassword = true
+            userStore.savePassword = userResponse.savePassword
         }
 
         await store.set('userStore', userStore)
-        await store.set('preferencesStore', preferencesStore)
         await store.save()
 
         set({ store: userStore })
@@ -164,8 +136,11 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         await repository.signout()
 
         const store: Store = await load('store.json', { autoSave: false })
-        await store.delete('userStore')
-        await store.save()
+        const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
+        if (userStore && !userStore.savePassword) {
+            await store.delete('userStore')
+            await store.save()
+        }
 
         useNavigationState.getState()
             .resetNavigation(NavigationScreen.LOGIN_EMAIL)
@@ -186,7 +161,8 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             const userStore: UserStore = {
                 user: config.user,
                 token: config.token,
-                password: config.password
+                password: config.password,
+                savePassword: true
             }
             await get().saveUserSession(userStore)
         }

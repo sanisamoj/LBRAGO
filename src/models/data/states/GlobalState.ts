@@ -22,6 +22,6 @@ export interface InitGlobalStateData {
     user: UserResponse,
     password: string
     token: string
-    savePassword?: boolean
+    savePassword: boolean
 }
 

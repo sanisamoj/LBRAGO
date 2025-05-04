@@ -4,4 +4,5 @@ export interface UserStore {
     user: UserResponse
     password: string
     token: string
+    savePassword: boolean
 }
