@@ -9,32 +9,70 @@ import { VaultsState } from "@/models/data/interfaces/VaultsState"
 import { decryptVaults } from "@/utils/ED_vaults"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
+import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
+import { usePasswordsViewState } from "./usePasswordsViewState"
+import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
+import { decryptPasswords } from "@/utils/ED_passwords"
 
 export const useVaultsState = create<VaultsState>((set, get) => ({
-    e_vaults: [],
-    vaults: [],
-    selectedVault: null,
+  e_vaults: [],
+  vaults: [],
+  selectedVault: null,
+  e_passwords: new Map<string, EPasswordResponse[]>(),
+  passwords: new Map<string, DecryptedPassword[]>(),
 
-    initVaultState: async () => {
+  initVaultState: async () => {
+    const { privateKey } = useGlobalState.getState()
+    try {
+      const vaultsRespository = VaultRepository.getInstance()
+      const e_vaults: EVaultWithMemberInfo[] = await vaultsRespository.getMyVaults()
+      set({ e_vaults })
+
+      let decryptedVaults: DecryptedVault[] = await decryptVaults(e_vaults, privateKey)
+      set({ vaults: decryptedVaults })
+
+      await get().getAllPasswords(e_vaults)
+      
+    } catch (_) {
+      const { translations } = useLanguageState.getState()
+      toast.warning(translations.dontHaveAVaultCreateOne)
+    }
+  },
+
+  addVault: (vault: DecryptedVault) => set({ vaults: [...get().vaults, vault] }),
+
+  getAllPasswords: async (e_vaults: EVaultWithMemberInfo[]) => {
+    const vaultsRespository = VaultRepository.getInstance()
+    e_vaults.forEach(async (e_vault: EVaultWithMemberInfo) => {
+      const e_passwords: EPasswordResponse[] = await vaultsRespository.getPasswords(e_vault.id)
+      get().e_passwords.set(e_vault.id, e_passwords)
+    })
+  },
+
+  selectVault: async (vault: DecryptedVault) => {
+    set({ selectedVault: vault })
+    console.log("vault", vault)
+
+    if (get().passwords.has(vault.id)) {
+      usePasswordsViewState.getState().setPasswords(get().passwords.get(vault.id) ?? [])
+      useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
+
+    } else {
+      try {
+        const vaultsRespository = VaultRepository.getInstance()
+        const e_passwords: EPasswordResponse[] = await vaultsRespository.getPasswords(vault.id)
         const { privateKey } = useGlobalState.getState()
-        try {
-            const vaultsRespository = VaultRepository.getInstance()
-            const e_vaults: EVaultWithMemberInfo[] = await vaultsRespository.getMyVaults()
-            set({ e_vaults })
+        const passwords: DecryptedPassword[] = await decryptPasswords(e_passwords, vault.esvkPubKUser, privateKey, vault.permission)
+        usePasswordsViewState.getState().setPasswords(passwords)
+      } catch (error) {
+        const { translations } = useLanguageState.getState()
+        toast.warning(translations.noPasswordsFoundFor)
+        usePasswordsViewState.getState().setPasswords([])
+      }
 
-            let decryptedVaults: DecryptedVault[] = await decryptVaults(e_vaults, privateKey)
-            set({ vaults: decryptedVaults })
-        } catch (error) {
-            const { translations } = useLanguageState.getState()
-            toast.warning(translations.dontHaveAVaultCreateOne)
-        }
-    },
+      useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
+    }
 
-    addVault: (vault: DecryptedVault) => set({ vaults: [...get().vaults, vault] }),
-
-    selectVault: (vault: DecryptedVault) => {
-        set({ selectedVault: vault })
-        useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
-    },
+  },
 }))
 

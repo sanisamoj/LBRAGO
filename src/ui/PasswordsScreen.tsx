@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react"
-import { Circle, Copy, Edit2, Eye, EyeOff, Info, LinkIcon, RectangleEllipsis, Save, UserRoundPlus } from "lucide-react"
+import { Copy, Crown, Edit2, Eye, EyeOff, Info, LinkIcon, RectangleEllipsis, Save, UserRoundPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,18 +12,20 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useVaultsState } from "@/store/useVaultsState"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { useLanguageState } from "@/store/useLanguageState"
-import { passwords } from "@/data"
+import { usePasswordsViewState } from "@/store/usePasswordsViewState"
+import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 
 export default function PasswordsScreen() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
     const { selectedVault } = useVaultsState()
+    const { passwords, addPassword } = usePasswordsViewState()
 
     const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
-    const [selectedPassword, setSelectedPassword] = useState<Password | null>(null)
+    const [selectedPassword, setSelectedPassword] = useState<DecryptedPassword | null>(null)
     const [editingPassword, setEditingPassword] = useState<string | null>(null)
-    const [editedPasswordData, setEditedPasswordData] = useState<Partial<Password>>({})
+    const [editedPasswordData, setEditedPasswordData] = useState<Partial<DecryptedPassword>>({})
 
     const containerRef = useRef<HTMLDivElement>(null);
     const passwordListRef = useRef<HTMLDivElement>(null);
@@ -39,8 +41,8 @@ export default function PasswordsScreen() {
     const copyToClipboard = (text: string | undefined | null) => {
         if (text) {
             navigator.clipboard.writeText(text)
-                .then(() => {})
-        } 
+                .then(() => { })
+        }
     }
 
     const formatDate = (dateString: string | Date): string => {
@@ -64,7 +66,7 @@ export default function PasswordsScreen() {
         MemberPermissionType.WRITE
     ].includes(selectedVault.permission) : false
 
-    const handlePasswordClick = (password: Password) => {
+    const handlePasswordClick = (password: DecryptedPassword) => {
         if (editingPassword === password.id) return; // Do nothing if already editing this one
 
         if (password.id === selectedPassword?.id) {
@@ -78,64 +80,64 @@ export default function PasswordsScreen() {
             setEditedPasswordData({}); // Clear any previous edit data
             setShowPassword(false); // Ensure password is hidden initially
         }
-    };
+    }
 
-    const startEditing = (password: Password) => {
-        if (!editPermission) return; // Prevent editing without permission
-        setEditingPassword(password.id);
-        setSelectedPassword(password); // Ensure the item being edited is also the selected one
+    const startEditing = (password: DecryptedPassword) => {
+        if (!editPermission) return // Prevent editing without permission
+        setEditingPassword(password.id)
+        setSelectedPassword(password) // Ensure the item being edited is also the selected one
         setEditedPasswordData({
             username: password.username,
             password: password.password,
             url: password.url,
             notes: password.notes,
             // Include other editable fields if necessary
-        });
-        setShowPassword(false); // Keep password hidden by default when starting edit
-    };
+        })
+        setShowPassword(false) // Keep password hidden by default when starting edit
+    }
 
     const cancelEditing = () => {
-        setEditingPassword(null);
-        setEditedPasswordData({});
+        setEditingPassword(null)
+        setEditedPasswordData({})
         // Optional: revert selectedPassword if needed, or keep it selected
-        setShowPassword(false); // Ensure password is hidden on cancel
-    };
+        setShowPassword(false) // Ensure password is hidden on cancel
+    }
 
     const savePasswordChanges = (passwordId: string) => {
-        if (!editPermission) return; // Prevent saving without permission
+        if (!editPermission) return // Prevent saving without permission
 
-        console.log("Simulando salvar senha ID:", passwordId, "com dados:", editedPasswordData);
+        console.log("Simulando salvar senha ID:", passwordId, "com dados:", editedPasswordData)
         // **Zustand Integration Point:**
         // Replace console.log with actual Zustand action call:
-        // updatePassword(passwordId, editedPasswordData);
+        // updatePassword(passwordId, editedPasswordData)
 
         // After successful update (handle async):
-        setEditingPassword(null);
-        setEditedPasswordData({});
-        setShowPassword(false); // Hide password after saving
+        setEditingPassword(null)
+        setEditedPasswordData({})
+        setShowPassword(false) // Hide password after saving
 
         // Refresh selected password data if necessary, Zustand might handle this reactively
-        const updatedPassword = filteredPasswords.find(p => p.id === passwordId);
+        const updatedPassword = filteredPasswords.find(p => p.id === passwordId)
         if (updatedPassword) {
             // Update the selected password state locally *if* Zustand doesn't automatically update the component
             // This might involve merging editedPasswordData with the original password data
             // Example (needs refinement based on actual data structure):
-            const mergedData = { ...updatedPassword, ...editedPasswordData };
-            setSelectedPassword(mergedData);
+            const mergedData = { ...updatedPassword, ...editedPasswordData }
+            setSelectedPassword(mergedData)
         }
 
-    };
+    }
 
     const handleEditChange = (field: keyof Password, value: string) => {
         setEditedPasswordData((prev) => ({
             ...prev,
             [field]: value,
-        }));
-    };
+        }))
+    }
 
     const handleShowPasswordToggle = (newState: boolean) => {
-        setShowPassword(newState);
-    };
+        setShowPassword(newState)
+    }
 
     // Effect to scroll the details into view when a password is selected
     useEffect(() => {
@@ -186,9 +188,9 @@ export default function PasswordsScreen() {
                                     onClick={() => handlePasswordClick(password)}
                                     id={`password-item-${password.id}`}
                                 >
-                                    <div className={`h-9 w-9 ${password.iconBg || 'bg-muted'} rounded-md flex items-center justify-center mr-3 flex-shrink-0`}>
+                                    <div className={`h-9 w-9 bg-primaryrounded-md flex items-center justify-center mr-3 flex-shrink-0`}>
                                         <VaultIcon
-                                            icon={password.icon}
+                                            icon={password.imageUrl}
                                             className="h-5 w-5"
                                         />
                                     </div>
@@ -200,7 +202,7 @@ export default function PasswordsScreen() {
                                     </div>
                                     <div className="flex items-center gap-1 ml-2 flex-shrink-0">
                                         <div className="text-muted-foreground">
-                                            {password.accessIndicator === 'dot' ? <Circle className="h-2 w-2 fill-current" /> : <span className="text-xs">{password.accessIndicator}</span>}
+                                            {password.permission === MemberPermissionType.ADMIN ? <Crown className="h-3 w-3 fill-current" /> : <span className="text-xs">{password.permission}</span>}
                                         </div>
                                         <Info
                                             className={cn(
@@ -357,18 +359,16 @@ export default function PasswordsScreen() {
                             </div>
                         ))
                     ) : (
-                        // Message when no passwords match search or vault is empty
-                        <div className="p-6 text-center text-sm text-muted-foreground">
+                        <div className="p-6 text-center text-xs text-muted-foreground flex flex-col w-full h-full gap-2 justify-center">
                             {searchQuery
                                 ? `${translations.noPasswordsFoundFor || "Nenhuma senha encontrada para"} "${searchQuery}".`
                                 : (translations.noPasswordsInVault || "Nenhuma senha neste cofre.")
                             }
-                            {/* Optionally add a button to create the first password if empty and no search */}
                             {!searchQuery && (
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    className="mt-4"
+                                    className="w-full h-8 text-xs"
                                     onClick={() => navigateTo(NavigationScreen.CREATE_PASSWORDS)}
                                 >
                                     {translations.addPassword || "Adicionar Senha"}
@@ -379,17 +379,14 @@ export default function PasswordsScreen() {
                 </div>
             </div>
 
-            {/* Footer Area: Sticky at the bottom inside the scroll container */}
-            {/* `mt-auto` is removed as `flex-1` on content pushes it down. Added background for visibility */}
             <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t bg-background z-10">
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword || "Adicionar senha"} onClick={() => navigateTo(NavigationScreen.CREATE_PASSWORDS)}>
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { addPassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
                     <RectangleEllipsis className="h-4 w-4" />
                 </Button>
-                {/* Assuming adding members might be related to vault settings, adjust navigation target if needed */}
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addMember || "Adicionar membro"} onClick={() => { }}>
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addMember} onClick={() => { }}>
                     <UserRoundPlus className="h-4 w-4" />
                 </Button>
             </div>
         </div>
-    );
+    )
 }

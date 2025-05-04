@@ -3,6 +3,8 @@ import axios, { AxiosInstance } from "axios"
 import { EVaultWithMemberInfo } from "../data/interfaces/EVaultWithMemberInfo"
 import { CreateVaultRequest } from "../data/interfaces/CreateVaultRequest"
 import { EVaultResponse } from "../data/interfaces/EVaultResponse"
+import { EPasswordResponse } from "../data/interfaces/EPasswordResponse"
+import { CreatePasswordRequest } from "../data/interfaces/CreatePasswordRequest"
 
 export class VaultRepository {
     private static instance: VaultRepository | null = null
@@ -47,5 +49,30 @@ export class VaultRepository {
         })
 
         return response.data
+    }
+
+    public async deleteVault(vaultId: string): Promise<void> {
+        await this.api.delete(`/vaults/${vaultId}`, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
+    }
+
+    public async getPasswords(vaultId: string): Promise<EPasswordResponse[]> {
+        const response = await this.api.get(`/vaults/passwords?vaultId=${vaultId}`, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
+        return response.data
+    }
+
+    public async createPassword(request: CreatePasswordRequest): Promise<void> {
+        await this.api.post("/vaults/passwords", request, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
     }
 }

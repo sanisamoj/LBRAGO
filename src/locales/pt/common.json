@@ -162,5 +162,7 @@
     "addPassword": "Adicionar Senha",
     "addMember": "Adicionar Membro",
 
-    "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente."
+    "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente.",
+
+    "passwordCreatedSuccessfully": "Senha criada com sucesso!"
 }

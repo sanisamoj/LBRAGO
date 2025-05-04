@@ -22,6 +22,16 @@ type DecryptedVault struct {
 	Description string `json:"description"`
 }
 
+type DecryptedPasswordMetadata struct {
+	Name        string `json:"name"`
+	ImageUrl    string `json:"imageUrl"`
+	Username    string `json:"username"`
+	Description string `json:"description"`
+	Url         string `json:"url"`
+	Password    string `json:"password"`
+	Notes       string `json:"notes"`
+}
+
 type EncryptedVault struct {
 	EcryptedVaultMetadata AesGcmEncryptedData `json:"e_vaultmetadata"`
 	EncryptedPubKUser     string              `json:"esvk_pubK_user"`
@@ -30,4 +40,16 @@ type EncryptedVault struct {
 type EncryptVaultMetadataDTO struct {
 	UserPubK string         `json:"userPubkey"`
 	Metadata DecryptedVault `json:"metadata"`
+}
+
+type EncryptPasswordMetadataDTO struct {
+	PasswordMetadata DecryptedPasswordMetadata `json:"encryptedPasswordMetadata"`
+	PrivUserK        string                    `json:"privUserK"`
+	ESVKPubUserK     string                    `json:"esvkPubKUser"`
+}
+
+type DecryptPasswordMetadataDTO struct {
+	EncryptedPasswordMetadata AesGcmEncryptedData `json:"encryptedPasswordMetadata"`
+	PrivUserK                 string              `json:"privUserK"`
+	ESVKPubUserK              string              `json:"esvkPubKUser"`
 }

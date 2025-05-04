@@ -75,6 +75,36 @@ async fn encrypt_vault_metadata(arg: String) -> Result<String, String> {
     }
 }
 
+#[tauri::command]
+async fn encrypt_password_metadata(arg: String) -> Result<String, String> {
+    let output = Command::new("lembrago")
+        .arg("--epm")
+        .arg(arg)
+        .output()
+        .map_err(|e| format!("Failed to execute script: {}", e))?;
+
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+    } else {
+        Err(String::from_utf8_lossy(&output.stderr).to_string())
+    }
+}
+
+#[tauri::command]
+async fn decrypt_password_metadata(arg: String) -> Result<String, String> {
+    let output = Command::new("lembrago")
+        .arg("--dpm")
+        .arg(arg)
+        .output()
+        .map_err(|e| format!("Failed to execute script: {}", e))?;
+
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+    } else {
+        Err(String::from_utf8_lossy(&output.stderr).to_string())
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -85,7 +115,9 @@ pub fn run() {
             generate_user_credentials_with_param,
             regenerate_user_private_key,
             decrypt_vault_metadata,
-            encrypt_vault_metadata
+            encrypt_vault_metadata,
+            encrypt_password_metadata,
+            decrypt_password_metadata
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

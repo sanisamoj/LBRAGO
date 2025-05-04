@@ -14,8 +14,12 @@ func main() {
 	createUserF := flag.String("cn", "", "User passwords")
 	pvGenerateF := flag.String("pv", "", "Generate password verifier")
 	privKRegenerateF := flag.String("pk", "", "Regenerate private key")
+
 	decryptVMetadataF := flag.String("dvm", "", "Regenerate vault metadata")
 	encryptVMetadataF := flag.String("evm", "", "Encrypt vault metadata")
+
+	decryptPMetadataF := flag.String("dpm", "", "Regenerate password metadata")
+	encryptPMetadataF := flag.String("epm", "", "Encrypt password metadata")
 	flag.Parse()
 
 	actionTaken := false
@@ -131,6 +135,58 @@ func main() {
 		}
 
 		jsonData, err := json.Marshal(evmetada)
+		if err != nil {
+			log.Printf("Error generating json: %v", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(jsonData))
+
+		actionTaken = true
+		os.Exit(0)
+	}
+
+	if *encryptPMetadataF != "" {
+		var dto models.EncryptPasswordMetadataDTO
+		err := json.Unmarshal([]byte(*encryptPMetadataF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+
+		encryptedPasswordMetadata, err := utils.EncryptPasswordMetadata(dto.ESVKPubUserK, dto.PrivUserK, dto.PasswordMetadata)
+		if err != nil {
+			log.Printf("Error encrypting password metadata: %v\n", err)
+			os.Exit(1)
+		}
+
+		jsonData, err := json.Marshal(encryptedPasswordMetadata)
+		if err != nil {
+			log.Printf("Error generating json: %v", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(jsonData))
+
+		actionTaken = true
+		os.Exit(0)
+	}
+
+	if *decryptPMetadataF != "" {
+		var dto models.DecryptPasswordMetadataDTO
+		err := json.Unmarshal([]byte(*decryptPMetadataF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+
+		decryptedPasswordMetadata, err := utils.DecryptPasswordMetadata(dto.ESVKPubUserK, dto.PrivUserK, dto.EncryptedPasswordMetadata)
+		if err != nil {
+			log.Printf("Error decrypting password metadata: %v\n", err)
+			os.Exit(1)
+		}
+
+		jsonData, err := json.Marshal(decryptedPasswordMetadata)
 		if err != nil {
 			log.Printf("Error generating json: %v", err)
 			os.Exit(1)

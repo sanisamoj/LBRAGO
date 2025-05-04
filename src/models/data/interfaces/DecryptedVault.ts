@@ -7,6 +7,7 @@ export interface DecryptedVault {
     decryptedVaultMetadata: DecryptedVaultMetadata
     personalVault: boolean
     permission: MemberPermissionType
+    esvkPubKUser: string
     vaultCreatedBy: string
     vaultUpdatedAt: string
     vaultCreatedAt: string

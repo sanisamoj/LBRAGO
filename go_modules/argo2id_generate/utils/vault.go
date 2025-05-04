@@ -68,3 +68,52 @@ func EncryptVaultMetadata(pubUserKB64 string, mdt models.DecryptedVault) (*model
 		EncryptedPubKUser: esvk_pubK_user,
 	}, nil
 }
+
+func EncryptPasswordMetadata(eskvPubKUser, privKeyBase64 string, password models.DecryptedPasswordMetadata) (*models.AesGcmEncryptedData, error) {
+	svk, err := DecryptWithRsaPrivateKey(eskvPubKUser, privKeyBase64)
+	if err != nil {
+		return nil, err
+	}
+
+	passwordBytes, err := json.Marshal(password)
+	if err != nil {
+		return nil, err
+	}
+
+	encryptedPmetadata, err := AesGcmEncrypt(passwordBytes, svk)
+	if err != nil {
+		return nil, err
+	}
+
+	return &encryptedPmetadata, nil
+}
+
+func DecryptPasswordMetadata(eskvPubKUser, privKeyBase64 string, parameters models.AesGcmEncryptedData) (*models.DecryptedPasswordMetadata, error) {
+	svk, err := DecryptWithRsaPrivateKey(eskvPubKUser, privKeyBase64)
+	if err != nil {
+		return nil, err
+	}
+
+	cipherBytes, err := Base64ToBytes(parameters.Cipher)
+	if err != nil {
+		return nil, err
+	}
+
+	nonceBytes, err := Base64ToBytes(parameters.Nonce)
+	if err != nil {
+		return nil, err
+	}
+
+	metadataBytes, err := AesGcmDecrypt(svk, nonceBytes, cipherBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var decryptedData models.DecryptedPasswordMetadata
+	err = json.Unmarshal(metadataBytes, &decryptedData)
+	if err != nil {
+		return nil, err
+	}
+
+	return &decryptedData, nil
+}

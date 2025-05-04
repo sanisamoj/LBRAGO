@@ -9,24 +9,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import IconSelectorScreen from "./IconSelectScreen"
+import { usePasswordsCreationViewState } from "@/store/usePasswordCreationState"
 
 export default function AddPasswordScreen() {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [url, setUrl] = useState("")
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [notes, setNotes] = useState("")
+    const {
+        name, description, imageUrl, username, password, notes, url, setFile,
+        setName, setDescription, setImageUrl, setUsername, setPassword, setNotes, setUrl,
+        createPassword, isLoading
+    } = usePasswordsCreationViewState()
+
     const [showPassword, setShowPassword] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!name) return
-        setIsLoading(true)
-    }
-
-    // Generate a random password
     const generatePassword = () => {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+"
         let result = ""
@@ -39,9 +32,8 @@ export default function AddPasswordScreen() {
 
     return (
         <div className="flex flex-col h-full p-4">
-            <form onSubmit={handleSubmit} className="space-y-3">
-                {/* Icon Selector */}
-                <IconSelectorScreen setFile={() => {}} setImageUrl={() => {}} imageUrl={undefined}/>
+            <form onSubmit={(e) => { e.preventDefault(); createPassword() }} className="space-y-3">
+                <IconSelectorScreen setFile={setFile} setImageUrl={setImageUrl} imageUrl={imageUrl} />
 
                 {/* Name and Description */}
                 <div className="space-y-1">

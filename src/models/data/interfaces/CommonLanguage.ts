@@ -163,4 +163,6 @@ export interface CommonLanguage {
     addMember: string
 
     internalErrorTryAgain: string
+
+    passwordCreatedSuccessfully: string
 }
