@@ -14,7 +14,7 @@ export const decryptPasswords = async (e_passwords: EPasswordResponse[], esvkPub
             privUserK: privateKey,
             esvkPubKUser: esvkPubKUser
         }
-        
+
         const jsonArg: string = JSON.stringify(decryptPasswordDTO)
         const output: string = await invoke<string>('decrypt_password_metadata', { arg: jsonArg })
         const decryptedPasswordMetadata: DecryptedPasswordMetadataDTO = JSON.parse(output)
@@ -33,9 +33,38 @@ export const decryptPasswords = async (e_passwords: EPasswordResponse[], esvkPub
             addedAt: e_password.createdAt,
             updatedAt: e_password.updatedAt
         }
-        
+
         decryptedPasswords.push(decryptedPassword)
     }
 
     return decryptedPasswords
+}
+
+export const decryptPassword = async (e_password: EPasswordResponse, esvkPubKUser: string, privateKey: string, permission: MemberPermissionType): Promise<DecryptedPassword> => {
+    const decryptPasswordDTO: DecryptPasswordMetadataDTO = {
+        encryptedPasswordMetadata: e_password.encryptedItemData,
+        privUserK: privateKey,
+        esvkPubKUser: esvkPubKUser
+    }
+
+    const jsonArg: string = JSON.stringify(decryptPasswordDTO)
+    const output: string = await invoke<string>('decrypt_password_metadata', { arg: jsonArg })
+    const decryptedPasswordMetadata: DecryptedPasswordMetadataDTO = JSON.parse(output)
+
+    const decryptedPassword: DecryptedPassword = {
+        id: e_password.id,
+        name: decryptedPasswordMetadata.name,
+        imageUrl: decryptedPasswordMetadata.imageUrl,
+        username: decryptedPasswordMetadata.username,
+        description: decryptedPasswordMetadata.description,
+        url: decryptedPasswordMetadata.url,
+        esvkPubKUser: esvkPubKUser,
+        password: decryptedPasswordMetadata.password,
+        notes: decryptedPasswordMetadata.notes,
+        permission: permission,
+        addedAt: e_password.createdAt,
+        updatedAt: e_password.updatedAt
+    }
+
+    return decryptedPassword
 }

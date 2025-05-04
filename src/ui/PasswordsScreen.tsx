@@ -7,8 +7,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import type { Password } from "@/types"
 import { VaultIcon } from "@/vault-icon"
-import { useNavigationState } from "@/store/useNavigationState"
-import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useVaultsState } from "@/store/useVaultsState"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { useLanguageState } from "@/store/useLanguageState"
@@ -17,9 +15,8 @@ import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 
 export default function PasswordsScreen() {
     const { translations } = useLanguageState()
-    const { navigateTo } = useNavigationState()
     const { selectedVault } = useVaultsState()
-    const { passwords, addPassword } = usePasswordsViewState()
+    const { passwords, handleCreatePassword } = usePasswordsViewState()
 
     const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
@@ -369,7 +366,7 @@ export default function PasswordsScreen() {
                                     variant="outline"
                                     size="sm"
                                     className="w-full h-8 text-xs"
-                                    onClick={() => navigateTo(NavigationScreen.CREATE_PASSWORDS)}
+                                    onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}
                                 >
                                     {translations.addPassword || "Adicionar Senha"}
                                 </Button>
@@ -380,7 +377,7 @@ export default function PasswordsScreen() {
             </div>
 
             <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t bg-background z-10">
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { addPassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
                     <RectangleEllipsis className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addMember} onClick={() => { }}>

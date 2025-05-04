@@ -1,4 +1,3 @@
-import { LoginRepository } from "@/models/repository/LoginRepository"
 import { create } from "zustand"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
@@ -161,8 +160,8 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     },
 
     signout: async () => {
-        const repository: LoginRepository = LoginRepository.getInstance()
-        await repository.signOut()
+        const repository: EnvironmentRepository = EnvironmentRepository.getInstance()
+        await repository.signout()
 
         const store: Store = await load('store.json', { autoSave: false })
         await store.delete('userStore')

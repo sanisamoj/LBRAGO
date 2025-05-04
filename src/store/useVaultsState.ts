@@ -31,7 +31,7 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       let decryptedVaults: DecryptedVault[] = await decryptVaults(e_vaults, privateKey)
       set({ vaults: decryptedVaults })
 
-      await get().getAllPasswords(e_vaults)
+      // await get().getAllPasswords(e_vaults)
       
     } catch (_) {
       const { translations } = useLanguageState.getState()
@@ -51,13 +51,13 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
 
   selectVault: async (vault: DecryptedVault) => {
     set({ selectedVault: vault })
-    console.log("vault", vault)
 
     if (get().passwords.has(vault.id)) {
       usePasswordsViewState.getState().setPasswords(get().passwords.get(vault.id) ?? [])
       useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
 
     } else {
+      
       try {
         const vaultsRespository = VaultRepository.getInstance()
         const e_passwords: EPasswordResponse[] = await vaultsRespository.getPasswords(vault.id)

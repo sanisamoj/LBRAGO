@@ -7,7 +7,8 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 export interface PasswordsViewState {
     passwords: DecryptedPassword[]
     setPasswords: (passwords: DecryptedPassword[]) => void
-    addPassword: (vaultId: string, esvkPubKUser: string) => void
+    addPassword: (password: DecryptedPassword) => void
+    handleCreatePassword: (vaultId: string, esvkPubKUser: string) => void
 }
 
 export const usePasswordsViewState = create<PasswordsViewState>((set) => ({
@@ -17,7 +18,11 @@ export const usePasswordsViewState = create<PasswordsViewState>((set) => ({
         set({ passwords })
     },
 
-    addPassword: (vaultId: string, esvkPubKUser: string) => {
+    addPassword: (password: DecryptedPassword) => {
+        set((state) => ({ passwords: [...state.passwords, password] }))
+    },
+
+    handleCreatePassword: (vaultId: string, esvkPubKUser: string) => {
         usePasswordsCreationViewState.getState().initPasswordCreation(vaultId, esvkPubKUser)
         useNavigationState.getState().navigateTo(NavigationScreen.CREATE_PASSWORDS)
     },

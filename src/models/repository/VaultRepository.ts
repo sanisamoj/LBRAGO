@@ -68,11 +68,13 @@ export class VaultRepository {
         return response.data
     }
 
-    public async createPassword(request: CreatePasswordRequest): Promise<void> {
-        await this.api.post("/vaults/passwords", request, {
+    public async createPassword(request: CreatePasswordRequest): Promise<EPasswordResponse> {
+        const response = await this.api.post("/vaults/passwords", request, {
             headers: {
                 Authorization: `Bearer ${VaultRepository.token}`
             }
         })
+
+        return response.data
     }
 }

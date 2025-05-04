@@ -46,4 +46,15 @@ export class EnvironmentRepository {
         return response.data
     }
 
+    public async signout(): Promise<void> {
+        try {
+            await this.api.delete("/signout", {
+                headers: {
+                    Authorization: `Bearer ${EnvironmentRepository.token}`
+                }
+            })
+        } catch (_) { }
+        EnvironmentRepository.token = ""
+    }
+
 }

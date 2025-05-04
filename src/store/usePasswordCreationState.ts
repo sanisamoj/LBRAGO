@@ -11,35 +11,12 @@ import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { EncryptPasswordMetadataDTO } from "@/models/data/interfaces/EncryptPasswordMetadataDTO"
 import { useGlobalState } from "./useGlobalState"
+import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
-
-export interface PasswordCreationState {
-    vaultId: string
-    esvkPubKUser: string
-    name: string
-    description: string
-    imageUrl: string | undefined
-    file: File | undefined
-    username: string
-    password: string
-    notes: string
-    url: string
-
-    isLoading: boolean
-
-    initPasswordCreation: (vaultId: string, esvkPubKUser: string) => void
-    setName: (name: string) => void
-    setDescription: (description: string) => void
-    setImageUrl: (imageUrl: string | undefined) => void
-    setFile: (file: File | undefined) => void
-    setUsername: (username: string) => void
-    setPassword: (password: string) => void
-    setNotes: (notes: string) => void
-    setUrl: (url: string) => void
-
-    createPassword: () => Promise<void>
-    clearState: () => void
-}
+import { decryptPassword } from "@/utils/ED_passwords"
+import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
+import { usePasswordsViewState } from "./usePasswordsViewState"
+import { PasswordCreationState } from "@/models/data/states/PasswordCreationState"
 
 export const usePasswordsCreationViewState = create<PasswordCreationState>((set, get) => ({
     vaultId: "",
@@ -55,7 +32,9 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
     isLoading: false,
 
-    initPasswordCreation: (vaultId: string, esvkPubKUser: string) => set({ vaultId, esvkPubKUser }),
+    initPasswordCreation: (vaultId: string, esvkPubKUser: string) => {
+        set({ vaultId: vaultId, esvkPubKUser: esvkPubKUser })
+    },
     setName: (name: string) => set({ name }),
     setDescription: (description: string) => set({ description }),
     setImageUrl: (imageUrl: string | undefined) => set({ imageUrl }),
@@ -97,12 +76,14 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
             }
 
             const vaultsRepository = VaultRepository.getInstance()
-            await vaultsRepository.createPassword(request)
-            toast.success(translations.passwordCreatedSuccessfully)
+            const e_password: EPasswordResponse = await vaultsRepository.createPassword(request)
+            const decryptedPassword: DecryptedPassword = await decryptPassword(e_password, get().esvkPubKUser, privateKey, MemberPermissionType.ADMIN)
+            usePasswordsViewState.getState().addPassword(decryptedPassword)
 
+            toast.success(translations.passwordCreatedSuccessfully)
             useNavigationState.getState().navigateReplace(NavigationScreen.PASSWORDS)
+            get().clearState()
         } catch (error) {
-            console.log(error)
             toast.error(translations.internalErrorTryAgain)
         }
 
