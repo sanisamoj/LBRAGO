@@ -64,7 +64,7 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
     },
 
     createUser: async () => {
-        const { translations } = useLanguageState()
+        const { translations } = useLanguageState.getState()
 
         if (get().password === "" || get().confirmPassword === "" || get().nickname === "") {
             toast.error(translations.fillAllFields)

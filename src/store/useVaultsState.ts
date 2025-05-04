@@ -31,7 +31,7 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       let decryptedVaults: DecryptedVault[] = await decryptVaults(e_vaults, privateKey)
       set({ vaults: decryptedVaults })
 
-      // await get().getAllPasswords(e_vaults)
+      get().getAllPasswords(e_vaults)
       
     } catch (_) {
       const { translations } = useLanguageState.getState()
@@ -43,9 +43,11 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
 
   getAllPasswords: async (e_vaults: EVaultWithMemberInfo[]) => {
     const vaultsRespository = VaultRepository.getInstance()
+
     e_vaults.forEach(async (e_vault: EVaultWithMemberInfo) => {
       const e_passwords: EPasswordResponse[] = await vaultsRespository.getPasswords(e_vault.id)
-      get().e_passwords.set(e_vault.id, e_passwords)
+      const passwords: DecryptedPassword[] = await decryptPasswords(e_passwords, e_vault.esvkPubKUser, useGlobalState.getState().privateKey, e_vault.permission)
+      get().passwords.set(e_vault.id, passwords)
     })
   },
 
@@ -65,8 +67,6 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
         const passwords: DecryptedPassword[] = await decryptPasswords(e_passwords, vault.esvkPubKUser, privateKey, vault.permission)
         usePasswordsViewState.getState().setPasswords(passwords)
       } catch (error) {
-        const { translations } = useLanguageState.getState()
-        toast.warning(translations.noPasswordsFoundFor)
         usePasswordsViewState.getState().setPasswords([])
       }
 

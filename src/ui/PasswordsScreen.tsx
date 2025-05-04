@@ -358,8 +358,8 @@ export default function PasswordsScreen() {
                     ) : (
                         <div className="p-6 text-center text-xs text-muted-foreground flex flex-col w-full h-full gap-2 justify-center">
                             {searchQuery
-                                ? `${translations.noPasswordsFoundFor || "Nenhuma senha encontrada para"} "${searchQuery}".`
-                                : (translations.noPasswordsInVault || "Nenhuma senha neste cofre.")
+                                ? `${translations.noPasswordsFoundFor} "${searchQuery}".`
+                                : (translations.noPasswordsInVault)
                             }
                             {!searchQuery && (
                                 <Button
@@ -376,7 +376,7 @@ export default function PasswordsScreen() {
                 </div>
             </div>
 
-            <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t bg-background z-10">
+            <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10">
                 <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
                     <RectangleEllipsis className="h-4 w-4" />
                 </Button>
