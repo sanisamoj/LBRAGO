@@ -116,5 +116,6 @@
     "manageVaults": "Gerenciar cofres",
     "accountSecurity": "Segurança da Conta",
     "changeMasterPassword": "Alterar Senha Mestra",
-    "endSession": "Encerrar Sessão e retornar aos ambientes"
+    "endSession": "Encerrar Sessão e retornar aos ambientes",
+    "addNewUser": "Adicionar novo usuário"
 }

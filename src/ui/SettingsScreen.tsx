@@ -88,6 +88,16 @@ export default function SettingsScreen() {
                                 {translations.addNewVault}
                             </Button>
                         </div>
+
+                        <Button
+                            onClick={() => navigateTo(NavigationScreen.ALL_USERS)}
+                            variant="ghost"
+                            size="sm"
+                            className="w-full h-8 text-xs rounded-t-none border-t border-border"
+                        >
+                            <Plus className="h-3 w-3 mr-1" />
+                            {translations.addNewVault}
+                        </Button>
                     </TabsContent>
 
                     <TabsContent value={translations.security} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2">

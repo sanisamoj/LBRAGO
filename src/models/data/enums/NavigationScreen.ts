@@ -13,4 +13,6 @@ export enum NavigationScreen {
     CREATE_ENVIRONMENT = "environmentCreate",
     ENVIRONMENT_DETAILS = "environmentDetails",
     SETTINGS = "settings",
+    ALL_USERS = "allUsers",
+    ADD_USER = "addUser",
 }

@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useVaultsState } from "@/store/useVaultsState"
+import { useLanguageState } from "@/store/useLanguageState"
 
 export default function VaultsScreen() {
+    const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
     const { vaults } = useVaultsState()
 
@@ -14,7 +16,7 @@ export default function VaultsScreen() {
             <div className="px-2 pb-2">
                 <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.CREATE_VAULTS)}>
                     <Plus className="h-3.5 w-3.5 mr-1" />
-                    Adicionar Novo Cofre
+                    {translations.addNewVault}
                 </Button>
 
                 <div className="rounded-lg border border-border mt-2 overflow-y-hidden">
