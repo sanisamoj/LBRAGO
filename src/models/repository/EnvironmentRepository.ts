@@ -29,7 +29,7 @@ export class EnvironmentRepository {
     }
 
     public async getAllUsers(): Promise<MinimalUserInfoResponse[]> {
-        const response = await this.api.get("/users", {
+        const response = await this.api.get("/org/users", {
             headers: {
                 Authorization: `Bearer ${EnvironmentRepository.token}`
             }

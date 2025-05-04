@@ -13,10 +13,10 @@ import { invoke } from "@tauri-apps/api/core"
 import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
-import { VaultRepository } from "@/models/repository/VaultRepository"
 import { useVaultsState } from "./useVaultsState"
 import { useLoginViewState } from "./useLoginViewState"
 import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
+import { useAdminState } from "./useAdminState"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     store: null,
@@ -43,10 +43,14 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             }
         }
 
-        if (preferencesStore?.savePassword && userStore?.password) {
-            await get().regenerateUserPrivK(userStore.user, userStore.password)
-            VaultRepository.setToken(userStore.token)
-            await useVaultsState.getState().initVaultState()
+        if (preferencesStore && userStore) {
+            const init: InitGlobalStateData = {
+                user: userStore.user,
+                password: userStore.password,
+                token: userStore.token,
+                savePassword: preferencesStore.savePassword
+            }
+            await get().initGlobalState(init)
 
             set({ store: userStore })
             return resetNavigation(NavigationScreen.VAULTS)
@@ -125,8 +129,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         if (!savePassword) {
             let userStore: UserStore | undefined = await store.get<UserStore>('userStore')
             if (userStore) {
-                userStore.password = undefined
-                await store.set('userStore', userStore)
+                await store.delete('userStore')
             }
         }
 
@@ -171,7 +174,11 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     initGlobalState: async (config: InitGlobalStateData) => {
         await get().regenerateUserPrivK(config.user, config.password)
         await useVaultsState.getState().initVaultState()
-        EnvironmentRepository.setToken(config.token)
+
+        if (config.user.role === "admin") {
+            EnvironmentRepository.setToken(config.token)
+            await useAdminState.getState().initAdminState()
+        }
 
         if (config.savePassword) {
             const userStore: UserStore = {
