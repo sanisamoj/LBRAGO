@@ -9,13 +9,7 @@ import { VaultIcon } from "@/vault-icon"
 import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 
-interface EnvironmentsScreenProps {
-    onEnvironmentClick: (environment: Environment) => void
-}
-
-export default function EnvironmentsScreen({
-    onEnvironmentClick,
-}: EnvironmentsScreenProps) {
+export default function EnvironmentsScreen() {
     const { navigateTo } = useNavigationState()
     const [searchQuery, setSearchQuery] = useState("")
     const [showSearch, setShowSearch] = useState(false)
@@ -110,7 +104,7 @@ export default function EnvironmentsScreen({
                                 <div
                                     key={environment.id}
                                     className="flex items-center py-1.5 px-2 border-b border-border cursor-pointer hover:bg-accent transition-colors"
-                                    onClick={() => onEnvironmentClick(environment)}
+                                    onClick={() => {}}
                                 >
                                     <div className={`h-7 w-7 ${environment.iconBg} rounded-md flex items-center justify-center mr-2`}>
                                         {environment.customImage ? (

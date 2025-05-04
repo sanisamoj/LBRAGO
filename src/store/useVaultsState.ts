@@ -7,10 +7,13 @@ import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 import { useGlobalState } from "./useGlobalState"
 import { VaultsState } from "@/models/data/interfaces/VaultsState"
 import { decryptVaults } from "@/utils/ED_vaults"
+import { useNavigationState } from "./useNavigationState"
+import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 
 export const useVaultsState = create<VaultsState>((set, get) => ({
     e_vaults: [],
     vaults: [],
+    selectedVault: null,
 
     initVaultState: async () => {
         const { privateKey } = useGlobalState.getState()
@@ -27,6 +30,11 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
         }
     },
 
-    addVault: (vault: DecryptedVault) => set({ vaults: [...get().vaults, vault] })
+    addVault: (vault: DecryptedVault) => set({ vaults: [...get().vaults, vault] }),
+
+    selectVault: (vault: DecryptedVault) => {
+        set({ selectedVault: vault })
+        useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
+    },
 }))
 

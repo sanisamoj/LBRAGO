@@ -145,4 +145,20 @@ export interface CommonLanguage {
     finalInviteSuccessDescriptionSecondPart: string
     inviteCode: string
     inviteCodeGeneratingTo: string
+
+    cancel: string
+    save: string
+    edit: string
+    hidePassword: string
+    showPassword: string
+    copyPassword: string
+    copyUser: string
+    notes: string
+    copyUrl: string
+    added: string
+    updated: string
+    noPasswordsFoundFor: string
+    noPasswordsInVault: string
+    addPassword: string
+    addMember: string
 }

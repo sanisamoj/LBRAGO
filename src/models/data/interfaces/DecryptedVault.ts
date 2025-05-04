@@ -1,3 +1,4 @@
+import { MemberPermissionType } from "../enums/MemberPermissionType"
 import { DecryptedVaultMetadata } from "./DecryptedVaultMetadata"
 
 export interface DecryptedVault {
@@ -5,7 +6,7 @@ export interface DecryptedVault {
     orgId: string
     decryptedVaultMetadata: DecryptedVaultMetadata
     personalVault: boolean
-    permission: string
+    permission: MemberPermissionType
     vaultCreatedBy: string
     vaultUpdatedAt: string
     vaultCreatedAt: string

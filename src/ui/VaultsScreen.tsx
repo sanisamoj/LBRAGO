@@ -5,11 +5,12 @@ import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useVaultsState } from "@/store/useVaultsState"
 import { useLanguageState } from "@/store/useLanguageState"
+import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 
 export default function VaultsScreen() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
-    const { vaults } = useVaultsState()
+    const { vaults, selectVault } = useVaultsState()
 
     return (
         <>
@@ -20,11 +21,11 @@ export default function VaultsScreen() {
                 </Button>
 
                 <div className="rounded-lg border border-border mt-2 overflow-y-hidden">
-                    {vaults.map((vault) => (
+                    {vaults.map((vault: DecryptedVault) => (
                         <div
                             key={vault.id}
                             className="flex items-center py-2 px-3 border-b border-border last:border-b-0 cursor-pointer hover:bg-accent transition-colors"
-                            onClick={() => navigateTo(NavigationScreen.PASSWORDS)}
+                            onClick={() => selectVault(vault)}
                         >
                             <div className={`h-9 w-9 rounded-md flex items-center justify-center mr-3`}>
                                 <VaultIcon

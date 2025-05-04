@@ -144,5 +144,21 @@
     "finalInviteSuccessDescriptionFirstPart": "Um código foi enviado ao E-mail do usuário, caso ele ainda não tenha recebido, envie este código para",
     "finalInviteSuccessDescriptionSecondPart": "Ele precisará inserir este código durante o cadastro para obter acesso como",
     "inviteCode": "Código de Convite",
-    "inviteCodeGeneratingTo": "Gerando código de convite para"
+    "inviteCodeGeneratingTo": "Gerando código de convite para",
+
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "hidePassword": "Esconder Senha",
+    "showPassword": "Mostrar Senha",
+    "copyPassword": "Copiar Senha",
+    "copyUser": "Copiar Usuário",
+    "notes": "Notas",
+    "copyUrl": "Copiar URL",
+    "added": "Adicionado",
+    "updated": "Atualizado",
+    "noPasswordsFoundFor": "Nenhuma senha encontrada para",
+    "noPasswordsInVault": "Nenhuma senha neste cofre",
+    "addPassword": "Adicionar Senha",
+    "addMember": "Adicionar Membro"
 }
