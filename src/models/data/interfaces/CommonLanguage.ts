@@ -38,6 +38,10 @@ export interface CommonLanguage {
     screenTitleEnvironmentDetails: string
     screenTitleSettings: string
     screenTitleDefault: string
+    screenTitleAllUsers: string
+    screenTitleAddUser: string
+    screenTitlePresentation: string
+    screenTitleVerifyCode: string
 
     loginOrgScreenSelectEnvironmentTitle: string
     loginOrgScreenSelectEnvironmentSubtitle: string

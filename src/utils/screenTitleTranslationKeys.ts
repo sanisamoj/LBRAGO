@@ -14,4 +14,8 @@ export const screenTitleTranslationKeys: Record<NavigationScreen, keyof CommonLa
     [NavigationScreen.CREATE_ENVIRONMENT]: "screenTitleCreateEnvironment",
     [NavigationScreen.ENVIRONMENT_DETAILS]: "screenTitleEnvironmentDetails",
     [NavigationScreen.SETTINGS]: "screenTitleSettings",
+    [NavigationScreen.ALL_USERS]: "screenTitleAllUsers",
+    [NavigationScreen.ADD_USER]: "screenTitleAddUser",
+    [NavigationScreen.APRESENTATION]: "screenTitlePresentation",
+    [NavigationScreen.VERIFY_CODE]: "screenTitleVerifyCode",
 }

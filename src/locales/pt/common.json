@@ -38,6 +38,11 @@
     "screenTitleEnvironmentDetails": "Detalhes do Ambiente",
     "screenTitleSettings": "Configurações",
     "screenTitleDefault": "Tela",
+    "screenTitleAllUsers": "Todos os usuários",
+    "screenTitleAddUser": "Convide um usuário",
+    "screenTitlePresentation": "",
+    "screenTitleVerifyCode": "Verificação de código",
+
 
     "loginOrgScreenSelectEnvironmentTitle": "Selecione um ambiente",
     "loginOrgScreenSelectEnvironmentSubtitle": "Escolha a organização para",
