@@ -1,29 +1,4 @@
-import type { Password, Vault } from "./types"
-
-
-export const vaults: Vault[] = [
-  {
-    id: "marketing",
-    name: "Marketing",
-    description: "Social media accounts",
-    imageUrl: "megaphone",
-    accessLevel: "Read",
-  },
-  {
-    id: "sales",
-    name: "Sales",
-    description: "Sales-related passwords",
-    imageUrl: "bar-chart",
-    accessLevel: "Admin",
-  },
-  {
-    id: "engineering",
-    name: "Engineering",
-    description: "Developer tools",
-    imageUrl: "blocks",
-    accessLevel: "Read",
-  },
-]
+import type { Password } from "./types"
 
 export const passwords: Password[] = [
   {

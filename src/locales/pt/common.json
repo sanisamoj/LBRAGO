@@ -102,6 +102,19 @@
     "accountDontCreated": "A conta ainda não foi criada. Verifique as informações e tente novamente.",
     "fillAllFields": "Preencha todos os campos.",
 
-    "rememberMe": "Lembrar meu login?"
+    "rememberMe": "Lembrar meu login?",
 
+    "general": "Geral",
+    "environment": "Ambiente",
+    "security": "Segurança",
+    "darkTheme": "Tema escuro",
+    "useThemeInSystem": "Usar tema no sistema",
+    "minimizeOnCopy": "Minimizar ao copiar",
+    "minimizeOnCopyDescription": "Minimizar o cofre ao copiar a senha.",
+    "clearClipboardInSeconds": "Limpar área de transferência (segundos)",
+    "notClearAuto": "não limpar automaticamente",
+    "manageVaults": "Gerenciar cofres",
+    "accountSecurity": "Segurança da Conta",
+    "changeMasterPassword": "Alterar Senha Mestra",
+    "endSession": "Encerrar Sessão e retornar aos ambientes"
 }

@@ -104,4 +104,18 @@ export interface CommonLanguage {
     fillAllFields: string
 
     rememberMe: string
+
+    general: string
+    environment: string
+    security: string
+    darkTheme: string
+    useThemeInSystem: string
+    minimizeOnCopy: string
+    minimizeOnCopyDescription: string
+    clearClipboardInSeconds: string
+    notClearAuto: string
+    manageVaults: string
+    accountSecurity: string
+    changeMasterPassword: string
+    endSession: string
 }

@@ -1,11 +1,3 @@
-export interface Vault {
-  id: string
-  name: string
-  description: string
-  imageUrl: string
-  accessLevel: "Read" | "Admin" | "Write"
-}
-
 export interface Password {
   id: string
   vaultId: string

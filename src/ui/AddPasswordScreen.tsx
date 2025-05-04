@@ -8,28 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import type { Vault } from "../types"
 import IconSelectorScreen from "./IconSelectScreen"
 
-interface AddPasswordScreenProps {
-    vault: Vault
-    onSave: (passwordData: {
-        name: string
-        description: string
-        icon: string
-        iconBg: string
-        customImage?: string
-        url?: string
-        username?: string
-        password?: string
-        notes?: string
-    }) => void
-}
-
-export default function AddPasswordScreen({
-    vault,
-    onSave,
-}: AddPasswordScreenProps) {
+export default function AddPasswordScreen() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [url, setUrl] = useState("")
@@ -37,32 +18,12 @@ export default function AddPasswordScreen({
     const [password, setPassword] = useState("")
     const [notes, setNotes] = useState("")
     const [showPassword, setShowPassword] = useState(false)
-    const [selectedIcon, setSelectedIcon] = useState("triangle")
-    const [selectedBg, setSelectedBg] = useState("bg-green-100")
-    const [customImage, setCustomImage] = useState<string | undefined>(undefined)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (!name) return
-
         setIsLoading(true)
-
-        // Simulate API call delay
-        setTimeout(() => {
-            onSave({
-                name,
-                description,
-                icon: selectedIcon,
-                iconBg: selectedBg,
-                customImage,
-                url: url || undefined,
-                username: username || undefined,
-                password: password || undefined,
-                notes: notes || undefined,
-            })
-            setIsLoading(false)
-        }, 1000)
     }
 
     // Generate a random password

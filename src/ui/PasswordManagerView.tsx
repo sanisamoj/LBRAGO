@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import { passwords as allPasswords, vaults as allVaults } from "../data"
+import { passwords as allPasswords } from "../data"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useNavigationState } from "@/store/useNavigationState"
-import { Vault, Password } from "@/types"
+import { Password } from "@/types"
 import HeaderNavigation from "./HeaderNavigation"
 import LoginEmailScreen from "./LoginEmailScreen"
 import LoginOrganizationScreen from "./LoginOrganizationScreen"
@@ -18,9 +18,8 @@ import CreateEnvironmentScreen from "./CreateEnvironmentScreen"
 import VerifyCodeScreen from "./VerifyCodeScreen"
 
 export default function PasswordManagerView() {
-  const { getCurrentScreen, navigateTo } = useNavigationState()
+  const { getCurrentScreen } = useNavigationState()
 
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
   const [selectedPassword, setSelectedPassword] = useState<Password | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -28,9 +27,8 @@ export default function PasswordManagerView() {
   const [mounted, setMounted] = useState(false)
   const [editingPassword, setEditingPassword] = useState<string | null>(null) // Específico de PasswordsScreen
   const [editedPasswordData, setEditedPasswordData] = useState<Partial<Password>>({}) // Específico de PasswordsScreen
-  const [settingsTab, setSettingsTab] = useState("general") // Específico de SettingsScreen
+  // Específico de SettingsScreen
 
-  const [showFavoritesFirst, setShowFavoritesFirst] = useState(true)
   const [minimizeOnCopy, setMinimizeOnCopy] = useState(false)
 
   // --- Effects ---
@@ -116,7 +114,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.VAULTS && <VaultsScreen />}
 
-          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && <CreateVaultScreen /> }
+          {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && <CreateVaultScreen />}
 
           {getCurrentScreen() === NavigationScreen.ENVIRONMENTS && (
             <EnvironmentsScreen
@@ -126,13 +124,12 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.CREATE_ENVIRONMENT && (<CreateEnvironmentScreen />)}
 
-          
 
-          {getCurrentScreen() === NavigationScreen.PASSWORDS && selectedVault && ( // Garante que selectedVault não é null
+
+          {getCurrentScreen() === NavigationScreen.PASSWORDS && (
             <PasswordsScreen
-              // Dados necessários
-              selectedVault={selectedVault}
-              passwords={allPasswords.filter(p => p.vaultId === selectedVault.id)} // Filtra senhas aqui
+              selectedVault={undefined}
+              passwords={[]}
               selectedPassword={selectedPassword}
               editingPassword={editingPassword}
               editedPasswordData={editedPasswordData}
@@ -149,23 +146,9 @@ export default function PasswordManagerView() {
             />
           )}
 
-          {getCurrentScreen() === NavigationScreen.SETTINGS && (
-            <SettingsScreen
-              // Estados das configurações
-              settingsTab={settingsTab}
-              showFavoritesFirst={showFavoritesFirst}
+          {getCurrentScreen() === NavigationScreen.SETTINGS && <SettingsScreen />}
 
-              // Callbacks para alterar configurações
-              onSettingsTabChange={setSettingsTab}
-              onShowFavoritesFirstChange={setShowFavoritesFirst}
-              vaults={allVaults} // Para a lista de Gerenciar Cofres
-            />
-          )}
-
-          {getCurrentScreen() === NavigationScreen.CREATE_PASSWORDS && (
-            <AddPasswordScreen
-              onSave={() => { }} vault={selectedVault!} />
-          )}
+          {getCurrentScreen() === NavigationScreen.CREATE_PASSWORDS && <AddPasswordScreen />}
         </div>
       </div>
     </div>
