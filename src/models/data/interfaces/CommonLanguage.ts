@@ -88,8 +88,6 @@ export interface CommonLanguage {
     acessDenied: string
     errorToFindVaults: string
     errorToFindPasswords: string
-    errorToRegenerateUserPrivkey: string
-    dontHaveAVaultCreateOne: string
 
     addNewVault: string
     description: string
@@ -165,4 +163,5 @@ export interface CommonLanguage {
     internalErrorTryAgain: string
 
     passwordCreatedSuccessfully: string
+    networkError: string
 }

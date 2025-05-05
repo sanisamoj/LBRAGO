@@ -9,7 +9,7 @@ export class EnvironmentRepository {
 
     private api: AxiosInstance = axios.create({
         baseURL: Config.API_URL,
-        timeout: 4000,
+        timeout: 2500,
         headers: {
             'Content-Type': 'application/json',
         }

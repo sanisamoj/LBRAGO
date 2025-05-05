@@ -10,12 +10,12 @@ import { UserResponse } from "@/models/data/interfaces/UserResponse"
 import { RegenerateUserKeysDTO } from "@/models/data/interfaces/RegenerateUserKeysDTO"
 import { invoke } from "@tauri-apps/api/core"
 import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
-import { useLanguageState } from "./useLanguageState"
-import { toast } from "sonner"
 import { useVaultsState } from "./useVaultsState"
 import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 import { useAdminState } from "./useAdminState"
 import { VaultRepository } from "@/models/repository/VaultRepository"
+import { useLanguageState } from "./useLanguageState"
+import { toast } from "sonner"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     store: null,
@@ -32,16 +32,22 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
 
         if (userStore) {
-            const init: InitGlobalStateData = {
-                user: userStore.user,
-                password: userStore.password,
-                token: userStore.token,
-                savePassword: true
+            try {
+                const init: InitGlobalStateData = {
+                    user: userStore.user,
+                    password: userStore.password,
+                    token: userStore.token,
+                    savePassword: true
+                }
+                await get().initGlobalState(init)
+                return resetNavigation(NavigationScreen.VAULTS)
+            } catch (error: Error | any) {
+                const { translations } = useLanguageState.getState()
+                if (error instanceof Error && error.message === translations.networkError) {
+                    toast.warning(translations.networkError)
+                }
+                return useNavigationState.getState().resetNavigation(NavigationScreen.LOGIN_EMAIL)
             }
-            await get().initGlobalState(init)
-
-            set({ store: userStore })
-            return resetNavigation(NavigationScreen.VAULTS)
         }
 
         resetNavigation(NavigationScreen.LOGIN_EMAIL)
@@ -120,15 +126,9 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         }
         const jsonArg: string = JSON.stringify(regUserKeysDTO)
 
-        try {
-            const result: string = await invoke<string>('regenerate_user_private_key', { arg: jsonArg })
-            const decryptedUserKeys: DecryptedUserKeys = JSON.parse(result)
-            set({ privateKey: decryptedUserKeys.privateKey, publicKey: userResponse.keys.publicKey })
-        } catch (error) {
-            const { translations } = useLanguageState.getState()
-            toast.error(translations.errorToRegenerateUserPrivkey)
-        }
-
+        const result: string = await invoke<string>('regenerate_user_private_key', { arg: jsonArg })
+        const decryptedUserKeys: DecryptedUserKeys = JSON.parse(result)
+        set({ privateKey: decryptedUserKeys.privateKey, publicKey: userResponse.keys.publicKey })
     },
 
     signout: async () => {

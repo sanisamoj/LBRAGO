@@ -89,8 +89,6 @@
     "acessDenied": "Acesso negado",
     "errorToFindVaults": "Erro ao encontrar cofres.",
     "errorToFindPasswords": "Erro ao encontrar senhas.",
-    "errorToRegenerateUserPrivkey": "Erro ao regenerar chave privada do usuário. Contate o suporte.",
-    "dontHaveAVaultCreateOne": "Você ainda não tem cofres, Crie um!",
 
     "addNewVault": "Adicionar Novo Cofre",
     "description": "Descrição",
@@ -164,5 +162,6 @@
 
     "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente.",
 
-    "passwordCreatedSuccessfully": "Senha criada com sucesso!"
+    "passwordCreatedSuccessfully": "Senha criada com sucesso!",
+    "networkError": "Ocorreu um erro de rede!"
 }
