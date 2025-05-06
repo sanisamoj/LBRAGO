@@ -42,7 +42,7 @@
     "screenTitleAddUser": "Convide um usuário",
     "screenTitlePresentation": "LemBraGO",
     "screenTitleVerifyCode": "Verificação de código",
-
+    "screenTitleManageVaultMembers": "Gerenciar membros",
 
     "loginOrgScreenSelectEnvironmentTitle": "Selecione um ambiente",
     "loginOrgScreenSelectEnvironmentSubtitle": "Escolha a organização para",
@@ -167,5 +167,18 @@
     "passwordCreatedSuccessfully": "Senha criada com sucesso!",
     "networkError": "Ocorreu um erro de rede!",
     "tryInSomeTime": "Tente novamente em alguns instantes.",
-    "vaultRemovedSuccessfully": "Cofre removido com sucesso!"
+    "vaultRemovedSuccessfully": "Cofre removido com sucesso!",
+
+    "addUserToVault": "Adicionar Usuário ao Cofre",
+    "removeUser": "Remover Usuário",
+    "noUsersInVault": "Nenhum usuário neste cofre.",
+    "searchUsersToAdd": "Pesquisar usuários para adicionar...",
+    "noUsersFound": "Nenhum usuário encontrado.",
+    "addUserByEmail": "Adicionar usuário por email",
+    "userNotInList": "Usuário não está na lista",
+    "add": "Adicionar",
+    "addNewUserToVault": "Adicionar novo usuário ao cofre",
+    "userNotFound": "Usuário não encotrado",
+    "addUserByEmailPlaceholder": "Adicionar usuário por email",
+    "copyNotes": "Copiar Notas"
 }

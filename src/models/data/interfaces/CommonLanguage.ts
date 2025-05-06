@@ -42,6 +42,7 @@ export interface CommonLanguage {
     screenTitleAddUser: string
     screenTitlePresentation: string
     screenTitleVerifyCode: string
+    screenTitleManageVaultMembers: string
 
     loginOrgScreenSelectEnvironmentTitle: string
     loginOrgScreenSelectEnvironmentSubtitle: string
@@ -168,4 +169,17 @@ export interface CommonLanguage {
     removeVault: string
     tryInSomeTime: string
     vaultRemovedSuccessfully: string
+
+    addUserToVault: string
+    removeUser: string
+    noUsersInVault: string
+    searchUsersToAdd: string
+    noUsersFound: string
+    addUserByEmail: string
+    userNotInList: string
+    add: string
+    addNewUserToVault: string
+    userNotFound: string
+    addUserByEmailPlaceholder: string
+    copyNotes: string
 }

@@ -9,11 +9,11 @@ import { decryptVaults } from "@/utils/ED_vaults"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
-import { usePasswordsViewState } from "./usePasswordsViewState"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 import { decryptPasswords } from "@/utils/ED_passwords"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
+import { useSelectedVaultState } from "./useSelectedVaultState"
 
 export const useVaultsState = create<VaultsState>((set, get) => ({
   e_vaults: [],
@@ -77,26 +77,9 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
 
   selectVault: async (vault: DecryptedVault) => {
     set({ selectedVault: vault })
-
-    if (get().passwords.has(vault.id)) {
-      usePasswordsViewState.getState().setPasswords(get().passwords.get(vault.id) ?? [])
-      useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
-
-    } else {
-
-      try {
-        const vaultsRespository = VaultRepository.getInstance()
-        const e_passwords: EPasswordResponse[] = await vaultsRespository.getPasswords(vault.id)
-        const { privateKey } = useGlobalState.getState()
-        const passwords: DecryptedPassword[] = await decryptPasswords(e_passwords, vault.esvkPubKUser, privateKey, vault.permission)
-        usePasswordsViewState.getState().setPasswords(passwords)
-      } catch (error) {
-        usePasswordsViewState.getState().setPasswords([])
-      }
-
-      useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
-    }
-
+    const passwords: DecryptedPassword[] = get().passwords.get(vault.id) ?? []
+    useSelectedVaultState.getState().initState(vault, passwords)
+    useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
   },
 
   clearState: () => set({

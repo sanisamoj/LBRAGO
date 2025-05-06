@@ -15,8 +15,8 @@ import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 import { decryptPassword } from "@/utils/ED_passwords"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
-import { usePasswordsViewState } from "./usePasswordsViewState"
 import { PasswordCreationState } from "@/models/data/states/PasswordCreationState"
+import { useSelectedVaultState } from "./useSelectedVaultState"
 
 export const usePasswordsCreationViewState = create<PasswordCreationState>((set, get) => ({
     vaultId: "",
@@ -78,7 +78,7 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
             const vaultsRepository = VaultRepository.getInstance()
             const e_password: EPasswordResponse = await vaultsRepository.createPassword(request)
             const decryptedPassword: DecryptedPassword = await decryptPassword(e_password, get().esvkPubKUser, privateKey, MemberPermissionType.ADMIN)
-            usePasswordsViewState.getState().addPassword(decryptedPassword)
+            useSelectedVaultState.getState().addPassword(decryptedPassword)
 
             toast.success(translations.passwordCreatedSuccessfully)
             useNavigationState.getState().navigateReplace(NavigationScreen.PASSWORDS)

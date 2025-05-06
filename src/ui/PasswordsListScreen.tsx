@@ -10,17 +10,17 @@ import { VaultIcon } from "@/vault-icon"
 import { useVaultsState } from "@/store/useVaultsState"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { useLanguageState } from "@/store/useLanguageState"
-import { usePasswordsViewState } from "@/store/usePasswordsViewState"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 import { CommonDialog } from "./common/Dialog"
 import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
+import { useSelectedVaultState } from "@/store/useSelectedVaultState"
 
-export default function PasswordsScreen() {
+export default function PasswordsListScreen() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
-    const { passwords, handleCreatePassword } = usePasswordsViewState()
+    const { passwords, handleCreatePassword } = useSelectedVaultState()
 
     const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
@@ -215,16 +215,15 @@ export default function PasswordsScreen() {
                                     </div>
                                 </div>
 
-                                {/* Password Details (Accordion Content) */}
                                 {(selectedPassword?.id === password.id || editingPassword === password.id) && (
                                     <div
                                         id={`password-details-${password.id}`}
                                         className={cn(
                                             "p-3 border-t border-border space-y-3",
                                             editingPassword === password.id
-                                                ? "bg-blue-50 dark:bg-blue-900/10" // Edit mode background
-                                                : "bg-accent/50 dark:bg-accent/20", // View mode background (slightly different from hover/select)
-                                            "animate-in fade-in duration-200" // Shadcn animation utility
+                                                ? "bg-blue-50 dark:bg-blue-900/10"
+                                                : "bg-accent/50 dark:bg-accent/20",
+                                            "animate-in fade-in duration-200"
                                         )}
                                     >
                                         {/* Edit/Save Buttons */}
@@ -279,7 +278,7 @@ export default function PasswordsScreen() {
                                                             value={editingPassword === password.id ? editedPasswordData.password ?? '' : password.password ?? ''}
                                                             readOnly={editingPassword !== password.id}
                                                             onChange={(e) => handleEditChange("password", e.target.value)}
-                                                            className="h-7 text-xs pr-8" // Ensure padding for the button
+                                                            className="h-7 text-xs pr-8"
                                                             placeholder={editingPassword === password.id ? "Digite a senha" : ""}
                                                         />
                                                         <Button
@@ -287,7 +286,7 @@ export default function PasswordsScreen() {
                                                             className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-foreground" // Centered vertically
                                                             onClick={() => handleShowPasswordToggle(!showPassword)}
                                                             title={showPassword ? (translations.hidePassword || "Ocultar senha") : (translations.showPassword || "Mostrar senha")}
-                                                            type="button" // Prevent form submission if wrapped in a form later
+                                                            type="button"
                                                         >
                                                             {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                                                         </Button>
@@ -314,7 +313,7 @@ export default function PasswordsScreen() {
                                                             readOnly={editingPassword !== password.id}
                                                             onChange={(e) => handleEditChange("url", e.target.value)}
                                                             placeholder={editingPassword === password.id ? "https://exemplo.com" : ""}
-                                                            className="h-7 text-xs pl-6" // Padding left for the icon
+                                                            className="h-7 text-xs pl-6"
                                                         />
                                                     </div>
                                                     <Button variant="outline" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => copyToClipboard(editingPassword === password.id ? editedPasswordData.url : password.url)} title={translations.copyUrl || "Copiar URL"} disabled={!(editingPassword === password.id ? editedPasswordData.url : password.url)}>
@@ -336,8 +335,12 @@ export default function PasswordsScreen() {
                                                     placeholder={editingPassword === password.id ? "Digite suas notas..." : ""}
                                                     className="min-h-[60px] text-xs resize-none scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent"
                                                 />
-                                                {/* Optional Copy Button for Notes */}
-                                                {/* <Button variant="outline" size="sm" className="mt-1 h-6 text-xs px-2" onClick={() => copyToClipboard(editingPassword === password.id ? editedPasswordData.notes : password.notes)} disabled={!(editingPassword === password.id ? editedPasswordData.notes : password.notes)}>Copiar Notas</Button> */}
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="mt-1 h-6 text-xs px-2"
+                                                    onClick={() => copyToClipboard(editingPassword === password.id ? editedPasswordData.notes : password.notes)}
+                                                    disabled={!(editingPassword === password.id ? editedPasswordData.notes : password.notes)}>{translations.copyNotes}</Button>
                                             </div>
                                         )}
 
@@ -345,13 +348,13 @@ export default function PasswordsScreen() {
                                         <div className="space-y-1 pt-2 border-t border-border/50 mt-3">
                                             {password.addedAt && (
                                                 <div className="flex items-center text-xs text-muted-foreground">
-                                                    <span className="font-medium mr-1">{translations.added || "Adicionado"}:</span>
+                                                    <span className="font-medium mr-1">{translations.added}:</span>
                                                     <span>{formatDate(password.addedAt)}</span>
                                                 </div>
                                             )}
                                             {password.updatedAt && (
                                                 <div className="flex items-center text-xs text-muted-foreground">
-                                                    <span className="font-medium mr-1">{translations.updated || "Atualizado"}:</span>
+                                                    <span className="font-medium mr-1">{translations.updated}:</span>
                                                     <span>{formatDate(password.updatedAt)}</span>
                                                 </div>
                                             )}
@@ -373,7 +376,7 @@ export default function PasswordsScreen() {
                                     className="w-full h-8 text-xs"
                                     onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}
                                 >
-                                    {translations.addPassword || "Adicionar Senha"}
+                                    {translations.addPassword}
                                 </Button>
                             )}
                         </div>

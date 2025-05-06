@@ -4,10 +4,8 @@ import HeaderNavigation from "./HeaderNavigation"
 import LoginEmailScreen from "./LoginEmailScreen"
 import LoginOrganizationScreen from "./LoginOrganizationScreen"
 import LoginPasswordScreen from "./LoginPasswordScreen"
-import PasswordsScreen from "./PasswordsScreen"
 import RegisterScreen from "./RegisterScreen"
 import SettingsScreen from "./SettingsScreen"
-import VaultsScreen from "./VaultsScreen"
 import CreateVaultScreen from "./CreateVaultScreen"
 import AddPasswordScreen from "./AddPasswordScreen"
 import EnvironmentsScreen from "./EnvironmentsScreen"
@@ -18,8 +16,10 @@ import InviteUserScreen from "./InviteUserScreen"
 import { VaultUser } from "@/models/data/interfaces/VaultUser"
 import { useState } from "react"
 import { VaultUserListView } from "./VaultUserListView"
+import VaultsListScreen from "./VaultsListScreen"
+import PasswordsListScreen from "./PasswordsListScreen"
 
-export default function PasswordManagerView() {
+export default function LBragoApp() {
   const { getCurrentScreen } = useNavigationState()
 
   const allCompanyUsersExample: VaultUser[] = [
@@ -63,7 +63,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.LOGIN_PASSWORD && <LoginPasswordScreen />}
 
-          {getCurrentScreen() === NavigationScreen.VAULTS && <VaultsScreen />}
+          {getCurrentScreen() === NavigationScreen.VAULTS && <VaultsListScreen />}
 
           {getCurrentScreen() === NavigationScreen.CREATE_VAULTS && <CreateVaultScreen />}
 
@@ -71,7 +71,7 @@ export default function PasswordManagerView() {
 
           {getCurrentScreen() === NavigationScreen.CREATE_ENVIRONMENT && (<CreateEnvironmentScreen />)}
 
-          {getCurrentScreen() === NavigationScreen.PASSWORDS && <PasswordsScreen />}
+          {getCurrentScreen() === NavigationScreen.PASSWORDS && <PasswordsListScreen />}
 
           {getCurrentScreen() === NavigationScreen.MANAGE_VAULT_MEMBERS &&
             (

@@ -1,9 +1,9 @@
 import ThemeWatcher from "./hooks/ThemeWatcher"
-import PasswordManagerView from "./ui/PasswordManagerView"
-import "./App.css"
 import { Toaster } from "./components/ui/sonner"
 import { useGlobalState } from "./store/useGlobalState"
 import { useEffect } from "react"
+import LBragoApp from "./ui/LbragoApp"
+import "./App.css"
 
 function App() {
   const { loadStore } = useGlobalState()
@@ -13,7 +13,7 @@ function App() {
     <div>
       <Toaster />
       <ThemeWatcher />
-      <PasswordManagerView />
+      <LBragoApp />
     </div>
   )
 }

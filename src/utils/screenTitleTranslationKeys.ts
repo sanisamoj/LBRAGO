@@ -2,6 +2,7 @@ import { NavigationScreen } from '@/models/data/enums/NavigationScreen'
 import { CommonLanguage } from '@/models/data/interfaces/CommonLanguage'
 
 export const screenTitleTranslationKeys: Record<NavigationScreen, keyof CommonLanguage> = {
+    [NavigationScreen.APRESENTATION]: "screenTitlePresentation",
     [NavigationScreen.REGISTER_EMAIL]: "screenTitleRegisterEmail",
     [NavigationScreen.LOGIN_EMAIL]: "screenTitleLoginEmail",
     [NavigationScreen.LOGIN_ORGANIZATION]: "screenTitleLoginOrganization",
@@ -16,6 +17,6 @@ export const screenTitleTranslationKeys: Record<NavigationScreen, keyof CommonLa
     [NavigationScreen.SETTINGS]: "screenTitleSettings",
     [NavigationScreen.ALL_USERS]: "screenTitleAllUsers",
     [NavigationScreen.ADD_USER]: "screenTitleAddUser",
-    [NavigationScreen.APRESENTATION]: "screenTitlePresentation",
     [NavigationScreen.VERIFY_CODE]: "screenTitleVerifyCode",
+    [NavigationScreen.MANAGE_VAULT_MEMBERS]: "screenTitleManageVaultMembers"
 }

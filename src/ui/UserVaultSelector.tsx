@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Check, Plus, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,18 +5,16 @@ import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-
-interface UserVaultSelectorProps {
-    availableUsers: { id: string; email: string; name: string; avatar?: string }[]
-    onAddUser: (user: { id: string; email: string; name: string; avatar?: string }) => void
-}
+import { UserVaultSelectorProps } from "@/models/data/interfaces/UserVaultSelectorProps"
+import { VaultMemberResponse } from "@/models/data/interfaces/VaultMemberResponse"
+import { useLanguageState } from "@/store/useLanguageState"
 
 export default function UserVaultSelector({ availableUsers, onAddUser }: UserVaultSelectorProps) {
+    const { translations } = useLanguageState()
     const [open, setOpen] = useState(false)
     const [inputValue, setInputValue] = useState("")
 
-    // Filter out already selected users
-    const filteredUsers = availableUsers.filter(
+    const filteredUsers: VaultMemberResponse[] = availableUsers.filter(
         (user) => !availableUsers.some((selectedUser) => selectedUser.email === user.email),
     )
 
@@ -31,15 +27,6 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
     const handleAddCustomUser = () => {
         if (!inputValue || !inputValue.includes("@")) return
 
-        // Create a new user with the email
-        const newUser = {
-            id: `custom-${Date.now()}`,
-            email: inputValue,
-            name: inputValue.split("@")[0],
-            avatar: undefined,
-        }
-
-        onAddUser(newUser)
         setOpen(false)
         setInputValue("")
     }
@@ -56,7 +43,7 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 className="h-8 pl-8 text-xs"
-                                placeholder="Adicionar usuário por email"
+                                placeholder={translations.addUserByEmailPlaceholder}
                                 onClick={() => setOpen(true)}
                             />
                         </div>
@@ -76,7 +63,7 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
 
                     <Command>
                         <CommandInput
-                            placeholder="Buscar usuários..."
+                            placeholder={translations.userSearch}
                             value={inputValue}
                             onValueChange={setInputValue}
                             className="h-9"
@@ -85,7 +72,7 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                             <CommandEmpty>
                                 {inputValue && inputValue.includes("@") ? (
                                     <div className="py-3 px-2">
-                                        <p className="text-xs text-muted-foreground mb-1">Usuário não encontrado</p>
+                                        <p className="text-xs text-muted-foreground mb-1">{translations.userNotFound}</p>
                                         <Button
                                             type="button"
                                             variant="outline"
@@ -94,11 +81,11 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                                             onClick={handleAddCustomUser}
                                         >
                                             <Plus className="h-3 w-3 mr-1" />
-                                            Adicionar {inputValue}
+                                            {translations.add} {inputValue}
                                         </Button>
                                     </div>
                                 ) : (
-                                    <p className="py-6 text-center text-sm">Nenhum usuário encontrado.</p>
+                                    <p className="py-6 text-center text-sm">{translations.userNotFound}.</p>
                                 )}
                             </CommandEmpty>
                             <CommandGroup>
@@ -111,16 +98,16 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                                     >
                                         <div className="flex items-center gap-2 flex-1">
                                             <Avatar className="h-7 w-7">
-                                                <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                                                <AvatarImage src={"/placeholder.svg"} />
                                                 <AvatarFallback className="text-[10px]">
-                                                    {user.name
+                                                    {user.username
                                                         .split(" ")
                                                         .map((n) => n[0])
                                                         .join("")}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-xs font-medium truncate">{user.name}</p>
+                                                <p className="text-xs font-medium truncate">{user.username}</p>
                                                 <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
                                             </div>
                                         </div>

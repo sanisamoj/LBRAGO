@@ -39,18 +39,12 @@ export const useNavigationState = create<NavigationState>((set, get) => ({
         }
     },
 
-    /**
-     * Útil após login/autenticação, para não voltar para a tela de senha, por exemplo.
-     */
     navigateReplace: (screen: NavigationScreen) => {
         set((state) => ({
             history: [...state.history.slice(0, -1), screen] // Remove o último e adiciona o novo
         }))
     },
 
-    /**
-     * Útil para logout ou após completar um fluxo principal.
-     */
     resetNavigation: (initialScreen: NavigationScreen) => {
         set({ history: [initialScreen] })
     },

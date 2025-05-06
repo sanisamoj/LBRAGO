@@ -7,7 +7,7 @@ import { useVaultsState } from "@/store/useVaultsState"
 import { useLanguageState } from "@/store/useLanguageState"
 import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 
-export default function VaultsScreen() {
+export default function VaultsListScreen() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
     const { vaults, selectVault } = useVaultsState()
