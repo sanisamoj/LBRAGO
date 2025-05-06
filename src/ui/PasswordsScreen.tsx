@@ -13,9 +13,12 @@ import { useLanguageState } from "@/store/useLanguageState"
 import { usePasswordsViewState } from "@/store/usePasswordsViewState"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 import { CommonDialog } from "./common/Dialog"
+import { useNavigationState } from "@/store/useNavigationState"
+import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 
 export default function PasswordsScreen() {
     const { translations } = useLanguageState()
+    const { navigateTo } = useNavigationState()
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
     const { passwords, handleCreatePassword } = usePasswordsViewState()
 
@@ -383,7 +386,7 @@ export default function PasswordsScreen() {
                     <Trash2 className="h-4 w-4" />
                 </Button>
 
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.managerMembers} onClick={() => { }}>
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.managerMembers} onClick={() => { navigateTo(NavigationScreen.MANAGE_VAULT_MEMBERS) }}>
                     <UsersRound className="h-4 w-4" />
                 </Button>
 

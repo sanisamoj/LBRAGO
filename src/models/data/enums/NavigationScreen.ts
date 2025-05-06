@@ -7,6 +7,7 @@ export enum NavigationScreen {
     LOGIN_PASSWORD = "loginPassword",
     VAULTS = "vaults",
     CREATE_VAULTS = "createVaults",
+    MANAGE_VAULT_MEMBERS = "manageVaultMembers",
     PASSWORDS = "passwords",
     CREATE_PASSWORDS = "createPasswords",
     ENVIRONMENTS = "environments",
