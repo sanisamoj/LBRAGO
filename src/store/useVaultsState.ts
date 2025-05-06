@@ -13,6 +13,7 @@ import { usePasswordsViewState } from "./usePasswordsViewState"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
 import { decryptPasswords } from "@/utils/ED_passwords"
 import { AxiosError } from "axios"
+import { toast } from "sonner"
 
 export const useVaultsState = create<VaultsState>((set, get) => ({
   e_vaults: [],
@@ -20,6 +21,8 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
   selectedVault: null,
   e_passwords: new Map<string, EPasswordResponse[]>(),
   passwords: new Map<string, DecryptedPassword[]>(),
+
+  buttonIsLoading: false,
 
   initVaultState: async () => {
     const { privateKey } = useGlobalState.getState()
@@ -44,6 +47,23 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
   },
 
   addVault: (vault: DecryptedVault) => set({ vaults: [...get().vaults, vault] }),
+
+  deleteVault: async (vaultId: string) => {
+    set({ buttonIsLoading: true })
+    const { translations } = useLanguageState.getState()
+    try {
+      set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
+      const vaultsRespository = VaultRepository.getInstance()
+      await vaultsRespository.deleteVault(vaultId)
+      useNavigationState.getState().resetNavigation(NavigationScreen.VAULTS)
+      toast.success(translations.vaultRemovedSuccessfully)
+    } catch (error) {
+
+      toast.warning(translations.tryInSomeTime)
+    }
+
+    set({ buttonIsLoading: false })
+  },
 
   getAllPasswords: async (e_vaults: EVaultWithMemberInfo[]) => {
     const vaultsRespository = VaultRepository.getInstance()
@@ -78,5 +98,12 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
     }
 
   },
-}))
 
+  clearState: () => set({
+    e_vaults: [],
+    vaults: [],
+    selectedVault: null,
+    e_passwords: new Map<string, EPasswordResponse[]>(),
+    passwords: new Map<string, DecryptedPassword[]>()
+  })
+}))

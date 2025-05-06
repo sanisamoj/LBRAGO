@@ -17,7 +17,7 @@ import { useLanguageState } from "@/store/useLanguageState"
 export default function SettingsScreen() {
     const { translations } = useLanguageState()
     const { vaults } = useVaultsState()
-    const { store, signout } = useGlobalState()
+    const { user, signout } = useGlobalState()
     const { navigateTo } = useNavigationState()
     const {
         isDarkTheme, minimizeOnCopy, clearClipboardTimeout, setDarkTheme,
@@ -61,7 +61,7 @@ export default function SettingsScreen() {
                     </TabsContent>
 
                     <TabsContent value={translations.environment} className="space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
-                        {store?.user.role === "admin" && (
+                        {user?.role === "admin" && (
                             <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
                                 <Plus className="h-3.5 w-3.5 mr-1" />
                                 {translations.inviteUser}

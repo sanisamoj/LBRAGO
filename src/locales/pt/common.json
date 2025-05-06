@@ -159,9 +159,13 @@
     "noPasswordsInVault": "Nenhuma senha neste cofre",
     "addPassword": "Adicionar Senha",
     "addMember": "Adicionar Membro",
+    "managerMembers": "Gerenciar Membros",
+    "removeVault": "Remover Cofre",
 
     "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente.",
 
     "passwordCreatedSuccessfully": "Senha criada com sucesso!",
-    "networkError": "Ocorreu um erro de rede!"
+    "networkError": "Ocorreu um erro de rede!",
+    "tryInSomeTime": "Tente novamente em alguns instantes.",
+    "vaultRemovedSuccessfully": "Cofre removido com sucesso!"
 }

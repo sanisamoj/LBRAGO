@@ -6,6 +6,7 @@ import { EVaultWithMemberInfo } from "./EVaultWithMemberInfo"
 export interface VaultsState {
     initVaultState: () => Promise<void>
     addVault: (vault: DecryptedVault) => void
+    deleteVault: (vaultId: string) => Promise<void>
     selectVault: (vault: DecryptedVault) => Promise<void>
 
     getAllPasswords: (e_vaults: EVaultWithMemberInfo[]) => Promise<void>
@@ -16,4 +17,8 @@ export interface VaultsState {
 
     e_passwords: Map<string, EPasswordResponse[]>
     passwords: Map<string, DecryptedPassword[]>
+
+    buttonIsLoading: boolean
+
+    clearState: () => void
 }

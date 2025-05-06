@@ -2,6 +2,7 @@ import { UserResponse } from "../interfaces/UserResponse"
 import { UserStore } from "../interfaces/UserStore"
 
 export interface GlobalState {
+    user: UserResponse | null
     store: UserStore | null
     privateKey: string
     publicKey: string

@@ -6,6 +6,7 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 
 export interface PasswordsViewState {
     passwords: DecryptedPassword[]
+    
     setPasswords: (passwords: DecryptedPassword[]) => void
     addPassword: (password: DecryptedPassword) => void
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => void

@@ -159,9 +159,13 @@ export interface CommonLanguage {
     noPasswordsInVault: string
     addPassword: string
     addMember: string
+    managerMembers: string
 
     internalErrorTryAgain: string
 
     passwordCreatedSuccessfully: string
     networkError: string
+    removeVault: string
+    tryInSomeTime: string
+    vaultRemovedSuccessfully: string
 }

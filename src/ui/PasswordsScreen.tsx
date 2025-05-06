@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react"
-import { Copy, Crown, Edit2, Eye, EyeOff, Info, LinkIcon, RectangleEllipsis, Save, UserRoundPlus } from "lucide-react"
+import { Copy, Crown, Edit2, Eye, EyeOff, Info, LinkIcon, Plus, Save, Trash2, UsersRound } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,10 +12,11 @@ import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { useLanguageState } from "@/store/useLanguageState"
 import { usePasswordsViewState } from "@/store/usePasswordsViewState"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
+import { CommonDialog } from "./common/Dialog"
 
 export default function PasswordsScreen() {
     const { translations } = useLanguageState()
-    const { selectedVault } = useVaultsState()
+    const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
     const { passwords, handleCreatePassword } = usePasswordsViewState()
 
     const [searchQuery, _] = useState("")
@@ -23,6 +24,7 @@ export default function PasswordsScreen() {
     const [selectedPassword, setSelectedPassword] = useState<DecryptedPassword | null>(null)
     const [editingPassword, setEditingPassword] = useState<string | null>(null)
     const [editedPasswordData, setEditedPasswordData] = useState<Partial<DecryptedPassword>>({})
+    const [isOpen, setIsOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null);
     const passwordListRef = useRef<HTMLDivElement>(null);
@@ -377,13 +379,29 @@ export default function PasswordsScreen() {
             </div>
 
             <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10">
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
-                    <RectangleEllipsis className="h-4 w-4" />
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setIsOpen(true) }}>
+                    <Trash2 className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addMember} onClick={() => { }}>
-                    <UserRoundPlus className="h-4 w-4" />
+
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.managerMembers} onClick={() => { }}>
+                    <UsersRound className="h-4 w-4" />
+                </Button>
+
+                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
+                    <Plus className="h-4 w-4" />
                 </Button>
             </div>
+
+            <CommonDialog
+                isOpen={isOpen}
+                onOpenChange={setIsOpen}
+                title="Tem certeza que seja remover este cofre?"
+                description="Todas as informações relacionadas a este cofre serão perdidas permanentemente inclusive os acessos dos outros membros."
+                cancelButtonText="Cancelar"
+                confirmButtonText="Remover"
+                confirmButtonAction={async () => { deleteVault(selectedVault!.id) }}
+                isLoading={buttonIsLoading}
+            />
         </div>
     )
 }

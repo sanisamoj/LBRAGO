@@ -18,6 +18,7 @@ import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
+    user: null,
     store: null,
     privateKey: "",
     publicKey: "",
@@ -32,6 +33,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
 
         if (userStore) {
+            set({ user: userStore.user })
             try {
                 const init: InitGlobalStateData = {
                     user: userStore.user,
