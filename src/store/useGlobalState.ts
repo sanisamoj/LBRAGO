@@ -47,7 +47,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
                     savePassword: true
                 }
                 await get().initGlobalState(init)
-                return resetNavigation(NavigationScreen.APRESENTATION)
+                return resetNavigation(NavigationScreen.VAULTS)
             } catch (error: Error | any) {
                 const { translations } = useLanguageState.getState()
                 if (error instanceof Error && error.message === translations.networkError) {
