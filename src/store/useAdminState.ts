@@ -3,11 +3,7 @@ import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository
 import { create } from "zustand"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
-
-export interface AdminState {
-    users: MinimalUserInfoResponse[]
-    initAdminState: () => Promise<void>
-}
+import { AdminState } from "@/models/data/states/AdminState"
 
 export const useAdminState = create<AdminState>((set) => ({
     users: [],
@@ -20,5 +16,9 @@ export const useAdminState = create<AdminState>((set) => ({
             const { translations } = useLanguageState.getState()
             toast.warning(translations.errorToGetAllUser)
         }
+    },
+
+    clearState: () => {
+        set({ users: [] })
     }
 }))

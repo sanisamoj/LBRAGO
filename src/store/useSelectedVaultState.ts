@@ -70,5 +70,7 @@ export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
         } catch (error) {
             toast.warning(translations.tryInSomeTime)
         }
-    }
+    },
+
+    clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [] })
 }))

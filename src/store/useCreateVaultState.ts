@@ -68,5 +68,7 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
         }
 
         set({ isLoading: false })
-    }
+    },
+
+    clearState: () => set({ name: "", description: "", imageUrl: Config.FAVICON_URL, personalVault: false })
 }))

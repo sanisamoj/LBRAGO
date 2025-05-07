@@ -15,4 +15,6 @@ export interface SelectedVaultState {
 
     addMember: (user: MinimalUserInfoResponse) => Promise<void>
     removeMember: (memberId: string) => Promise<void>
+
+    clearState: () => void
 }

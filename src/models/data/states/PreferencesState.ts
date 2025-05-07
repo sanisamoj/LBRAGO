@@ -12,4 +12,5 @@ export interface PreferencesState {
     updatePreferencesStore: () => Promise<void>
 
     initPreferencesState: () => Promise<void>
+    clearState: () => void
 }

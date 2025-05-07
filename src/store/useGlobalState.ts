@@ -16,6 +16,11 @@ import { useAdminState } from "./useAdminState"
 import { VaultRepository } from "@/models/repository/VaultRepository"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
+import { useUserCreationState } from "./useUserCreationState"
+import { useSelectedVaultState } from "./useSelectedVaultState"
+import { usePasswordsCreationViewState } from "./usePasswordCreationState"
+import { useEnvironmentCreationState } from "./useEnvironmentCreationState"
+import { useCreateVaultState } from "./useCreateVaultState"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -144,6 +149,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             await store.save()
         }
 
+        get().clearAllStates()
         useNavigationState.getState()
             .resetNavigation(NavigationScreen.LOGIN_EMAIL)
     },
@@ -168,5 +174,15 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             }
             await get().saveUserSession(userStore)
         }
+    },
+
+    clearAllStates: () => {
+        useVaultsState.getState().clearState()
+        useUserCreationState.getState().clearState()
+        useSelectedVaultState.getState().clearState()
+        usePreferencesState.getState().clearState()
+        usePasswordsCreationViewState.getState().clearState()
+        useEnvironmentCreationState.getState().clearState()
+        useCreateVaultState.getState().clearState()
     }
 }))

@@ -86,6 +86,7 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
     e_vaults: [],
     vaults: [],
     selectedVault: null,
+    buttonIsLoading: false,
     e_passwords: new Map<string, EPasswordResponse[]>(),
     passwords: new Map<string, DecryptedPassword[]>()
   })

@@ -12,4 +12,6 @@ export interface CreateVaultState {
     setPersonalVault: (personalVault: boolean) => void
 
     createVault: () => Promise<void>
+
+    clearState: () => void
 }

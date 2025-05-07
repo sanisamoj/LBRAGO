@@ -117,6 +117,18 @@ export const useUserCreationState = create<UserCreationState>((set, get) => ({
     },
 
     clearState: () => {
-        set({ code: "", organizationName: "", imageUrl: "", password: "", confirmPassword: "", nickname: "", isCodeError: false, isPasswordError: false })
+        set(
+            {   
+                code: "",
+                organizationName: "",
+                imageUrl: "", 
+                password: "",
+                confirmPassword: "",
+                nickname: "",
+                isCodeError: false,
+                isPasswordError: false,
+                isLoading: false
+            }
+        )
     }
 }))

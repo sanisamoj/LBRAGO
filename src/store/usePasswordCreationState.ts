@@ -90,5 +90,5 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
         set({ isLoading: false })
     },
 
-    clearState: () => set({ name: "", description: "", imageUrl: undefined, username: "", password: "", notes: "", url: "" })
+    clearState: () => set({ name: "", description: "", imageUrl: undefined, username: "", password: "", notes: "", url: "", file: undefined })
 }))
