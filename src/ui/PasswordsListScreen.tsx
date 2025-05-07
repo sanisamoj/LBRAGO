@@ -384,7 +384,7 @@ export default function PasswordsListScreen() {
                 </div>
             </div>
 
-            <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10">
+            <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10 bg-white dark:bg-zinc-900">
                 <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setIsOpen(true) }}>
                     <Trash2 className="h-4 w-4" />
                 </Button>
