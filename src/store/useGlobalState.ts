@@ -177,6 +177,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     },
 
     clearAllStates: () => {
+        set({ user: null, store: null, privateKey: "", publicKey: "" })
         useVaultsState.getState().clearState()
         useUserCreationState.getState().clearState()
         useSelectedVaultState.getState().clearState()

@@ -12,6 +12,7 @@ import { useGlobalState } from "@/store/useGlobalState"
 import { useVaultsState } from "@/store/useVaultsState"
 import { useState } from "react"
 import { useLanguageState } from "@/store/useLanguageState"
+import { UserPermissionType } from "@/models/data/enums/UserPermissionType"
 
 
 export default function SettingsScreen() {
@@ -30,9 +31,9 @@ export default function SettingsScreen() {
         <>
             <div className="p-2 flex-1 overflow-y-auto">
                 <Tabs value={settingsTab} onValueChange={setSettingsTab} className="flex flex-col w-full h-full">
-                    <TabsList className="grid grid-cols-3 h-8 w-full">
+                    <TabsList className={`grid grid-cols-${user?.role === UserPermissionType.ADMIN ? 3 : 2} h-8 w-full`}>
                         <TabsTrigger value={translations.general} className="text-xs py-1">{translations.general}</TabsTrigger>
-                        <TabsTrigger value={translations.environment} className="text-xs py-1">{translations.environment}</TabsTrigger>
+                        {user?.role === UserPermissionType.ADMIN && <TabsTrigger value={translations.environment} className="text-xs py-1">{translations.environment}</TabsTrigger>}
                         <TabsTrigger value={translations.security} className="text-xs py-1">{translations.security}</TabsTrigger>
                     </TabsList>
 
@@ -60,41 +61,43 @@ export default function SettingsScreen() {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value={translations.environment} className="space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
-                        {user?.role === "admin" && (
-                            <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
-                                <Plus className="h-3.5 w-3.5 mr-1" />
-                                {translations.inviteUser}
-                            </Button>
-                        )}
+                    {user?.role && (
+                        <TabsContent value={translations.environment} className="space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
+                            {user?.role === "admin" && (
+                                <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
+                                    <Plus className="h-3.5 w-3.5 mr-1" />
+                                    {translations.inviteUser}
+                                </Button>
+                            )}
 
-                        <div className="rounded-lg border border-border overflow-hidden">
-                            <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">{translations.manageVaults}</h3></div>
-                            <div className="max-h-[150px] overflow-y-auto scrollbar-invisible">
-                                {vaults.map((vault) => (
-                                    <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0 gap-3 cursor-pointer">
-                                        <VaultIcon icon={vault.decryptedVaultMetadata.imageUrl} />
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="text-xs font-bold truncate">{vault.decryptedVaultMetadata.name}</h4>
-                                            <p className="text-xs text-muted-foreground truncate">{vault.permission}</p>
+                            <div className="rounded-lg border border-border overflow-hidden">
+                                <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">{translations.manageVaults}</h3></div>
+                                <div className="max-h-[150px] overflow-y-auto scrollbar-invisible">
+                                    {vaults.map((vault) => (
+                                        <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0 gap-3 cursor-pointer">
+                                            <VaultIcon icon={vault.decryptedVaultMetadata.imageUrl} />
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-xs font-bold truncate">{vault.decryptedVaultMetadata.name}</h4>
+                                                <p className="text-xs text-muted-foreground truncate">{vault.permission}</p>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" title="Excluir cofre"><Trash2 className="h-3 w-3" /></Button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" title="Excluir cofre"><Trash2 className="h-3 w-3" /></Button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                <Button
+                                    onClick={() => navigateTo(NavigationScreen.CREATE_VAULTS)}
+                                    variant="ghost"
+                                    size="sm"
+                                    className="w-full h-8 text-xs rounded-t-none border-t border-border"
+                                >
+                                    <Plus className="h-3 w-3 mr-1" />
+                                    {translations.addNewVault}
+                                </Button>
                             </div>
-                            <Button
-                                onClick={() => navigateTo(NavigationScreen.CREATE_VAULTS)}
-                                variant="ghost"
-                                size="sm"
-                                className="w-full h-8 text-xs rounded-t-none border-t border-border"
-                            >
-                                <Plus className="h-3 w-3 mr-1" />
-                                {translations.addNewVault}
-                            </Button>
-                        </div>
-                    </TabsContent>
+                        </TabsContent>
+                    )}
 
                     <TabsContent value={translations.security} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2">
                         <div className="rounded-lg border border-border overflow-hidden">
