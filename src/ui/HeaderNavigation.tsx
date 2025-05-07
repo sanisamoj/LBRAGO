@@ -8,6 +8,7 @@ import { usePreferencesState } from "@/store/usePreferencesState"
 export default function HeaderNavigation() {
     const { isDarkTheme, setDarkTheme } = usePreferencesState()
     const { canGoBack, navigateBack, getCurrentScreenTitle, getCurrentScreen, navigateTo } = useNavigationState()
+    const isApresenting: boolean = NavigationScreen.APRESENTATION === getCurrentScreen()
 
     const themeTogglePermission: boolean = [
         NavigationScreen.SETTINGS
@@ -89,11 +90,15 @@ export default function HeaderNavigation() {
 
     return (
         <div
-            className="py-2 px-3 border-t border-b border-border flex items-center justify-between gap-2"
-            data-tauri-drag-region
+            className={`py-2 px-3 ${isApresenting ? "" : "border-t border-b border-border"} flex items-center justify-between gap-2`}
+            data-tauri-drag-region={!isApresenting}
         >
-            <LeftContent />
-            <RightButtons />
+            {!isApresenting && (
+                <>
+                    <LeftContent />
+                    <RightButtons />
+                </>
+            )}
         </div>
     )
 }
