@@ -85,7 +85,7 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                                         </Button>
                                     </div>
                                 ) : (
-                                    <p className="py-6 text-center text-sm">{translations.userNotFound}.</p>
+                                    <p className="py-6 text-center text-sm">{translations.noUsersFound}.</p>
                                 )}
                             </CommandEmpty>
                             <CommandGroup>
