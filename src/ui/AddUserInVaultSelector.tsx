@@ -6,19 +6,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { UserVaultSelectorProps } from "@/models/data/interfaces/UserVaultSelectorProps"
-import { VaultMemberResponse } from "@/models/data/interfaces/VaultMemberResponse"
 import { useLanguageState } from "@/store/useLanguageState"
+import { MinimalUserInfoResponse } from "@/models/data/interfaces/MinimalUserInfoResponse"
+import { useGlobalState } from "@/store/useGlobalState"
 
-export default function UserVaultSelector({ availableUsers, onAddUser }: UserVaultSelectorProps) {
+export default function AddUserInVaultSelector({ availableUsers, onAddUser }: UserVaultSelectorProps) {
     const { translations } = useLanguageState()
+    const { user } = useGlobalState()
+
     const [open, setOpen] = useState(false)
     const [inputValue, setInputValue] = useState("")
 
-    const filteredUsers: VaultMemberResponse[] = availableUsers.filter(
-        (user) => !availableUsers.some((selectedUser) => selectedUser.email === user.email),
-    )
+    const filteredUsers: MinimalUserInfoResponse[] = availableUsers.filter((minUser: MinimalUserInfoResponse) => minUser.id !== user!.id)
 
-    const handleAddUser = (user: (typeof availableUsers)[0]) => {
+    const handleAddUser = (user: MinimalUserInfoResponse) => {
         onAddUser(user)
         setOpen(false)
         setInputValue("")
@@ -103,7 +104,8 @@ export default function UserVaultSelector({ availableUsers, onAddUser }: UserVau
                                                     {user.username
                                                         .split(" ")
                                                         .map((n) => n[0])
-                                                        .join("")}
+                                                        .join("")
+                                                        .slice(0, 2)}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="flex-1 min-w-0">

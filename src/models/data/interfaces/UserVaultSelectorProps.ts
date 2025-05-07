@@ -1,6 +1,6 @@
-import { VaultMemberResponse } from "./VaultMemberResponse"
+import { MinimalUserInfoResponse } from "./MinimalUserInfoResponse"
 
 export interface UserVaultSelectorProps {
-    availableUsers: VaultMemberResponse[]
-    onAddUser: (user: VaultMemberResponse) => void
+    availableUsers: MinimalUserInfoResponse[]
+    onAddUser: (user: MinimalUserInfoResponse) => void
 }

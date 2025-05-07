@@ -180,5 +180,7 @@
     "addNewUserToVault": "Adicionar novo usuário ao cofre",
     "userNotFound": "Usuário não encotrado",
     "addUserByEmailPlaceholder": "Adicionar usuário por email",
-    "copyNotes": "Copiar Notas"
+    "copyNotes": "Copiar Notas",
+    "memberRemovedSuccessfully": "Membro removido com sucesso!",
+    "memberAddedSuccessfully": "Membro adicionado com sucesso!"
 }

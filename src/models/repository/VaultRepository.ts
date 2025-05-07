@@ -6,6 +6,7 @@ import { EVaultResponse } from "../data/interfaces/EVaultResponse"
 import { EPasswordResponse } from "../data/interfaces/EPasswordResponse"
 import { CreatePasswordRequest } from "../data/interfaces/CreatePasswordRequest"
 import { VaultMemberResponse } from "../data/interfaces/VaultMemberResponse"
+import { UpdateMemberRequest } from "../data/interfaces/UpdateMemberRequest"
 
 export class VaultRepository {
     private static instance: VaultRepository | null = null
@@ -86,5 +87,21 @@ export class VaultRepository {
             }
         })
         return response.data
+    }
+
+    public async removeMember(userId: string): Promise<void> {
+        await this.api.delete(`/vaults/members?id=${userId}`, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
+    }
+
+    public async updateMember(request: UpdateMemberRequest): Promise<void> {
+        await this.api.put(`/vaults/members`, request, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
     }
 }

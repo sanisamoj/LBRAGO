@@ -1,24 +1,30 @@
-"use client"
-
 import { X, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { useState, useMemo } from "react"
-import UserVaultSelector from "./UserVaultSelector"
+import AddUserInVaultSelector from "./AddUserInVaultSelector"
 import { useSelectedVaultState } from "@/store/useSelectedVaultState"
 import { useLanguageState } from "@/store/useLanguageState"
 import { VaultMemberResponse } from "@/models/data/interfaces/VaultMemberResponse"
+import { MinimalUserInfoResponse } from "@/models/data/interfaces/MinimalUserInfoResponse"
+import { useAdminState } from "@/store/useAdminState"
+import { useGlobalState } from "@/store/useGlobalState"
 
 export function VaultUserListView() {
     const { translations } = useLanguageState()
-    const { vault, members } = useSelectedVaultState()
-    console.log('members', members)
+    const { user } = useGlobalState()
+    const { users } = useAdminState()
+    const { vault, members, addMember, removeMember } = useSelectedVaultState()
+
+    const filteredUsers: MinimalUserInfoResponse[] = users.filter(
+        (minUser: MinimalUserInfoResponse) => minUser.id !== user!.id && !members.find(member => member.id === minUser.id)
+    )
 
     const [mainSearchTerm, setMainSearchTerm] = useState("")
 
-    const filteredVaultUsers = useMemo(() => {
+    const filteredVaultUsers: VaultMemberResponse[] = useMemo(() => {
         if (!mainSearchTerm) return members
         return members.filter(user =>
             user.username.toLowerCase().includes(mainSearchTerm.toLowerCase()) ||
@@ -33,10 +39,7 @@ export function VaultUserListView() {
                     <Label htmlFor="user-selector-input" className="text-xs font-medium text-muted-foreground">
                         {translations.addUserToVault}
                     </Label>
-                    <UserVaultSelector
-                        availableUsers={members}
-                        onAddUser={() => { }}
-                    />
+                    <AddUserInVaultSelector availableUsers={filteredUsers} onAddUser={addMember} />
                 </div>
                 <div className="relative flex-grow w-full sm:w-auto">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -71,7 +74,7 @@ export function VaultUserListView() {
                                 <Button
                                     type="button" variant="ghost" size="sm"
                                     className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 flex-shrink-0"
-                                    onClick={() => { console.log("user removed", member) }}
+                                    onClick={() => { removeMember(member.id) }}
                                     title={`${translations.removeUser} ${member.username}`}
                                 >
                                     <X className="h-4 w-4" />

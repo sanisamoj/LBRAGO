@@ -182,4 +182,6 @@ export interface CommonLanguage {
     userNotFound: string
     addUserByEmailPlaceholder: string
     copyNotes: string
+    memberRemovedSuccessfully: string
+    memberAddedSuccessfully: string
 }

@@ -9,6 +9,10 @@ import { useGlobalState } from "./useGlobalState"
 import { UserPermissionType } from "@/models/data/enums/UserPermissionType"
 import { VaultRepository } from "@/models/repository/VaultRepository"
 import { SelectedVaultState } from "@/models/data/states/SelectedVaultState"
+import { useLanguageState } from "./useLanguageState"
+import { toast } from "sonner"
+import { MinimalUserInfoResponse } from "@/models/data/interfaces/MinimalUserInfoResponse"
+import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 
 export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
     vault: {} as DecryptedVault,
@@ -38,4 +42,33 @@ export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
         usePasswordsCreationViewState.getState().initPasswordCreation(vaultId, esvkPubKUser)
         useNavigationState.getState().navigateTo(NavigationScreen.CREATE_PASSWORDS)
     },
+
+    addMember: async (user: MinimalUserInfoResponse) => {
+        // Realizar chamada de API para adicionar membro
+        const memberCopy: VaultMemberResponse = {
+            ...user,
+            vaultId: "", // Provide appropriate value
+            userId: "", // Provide appropriate value
+            esvk_pubK_user: "", // Provide appropriate value
+            permission: MemberPermissionType.WRITE, // Adjust as needed
+            addedBy: "", // Provide appropriate value
+            addAt: "", // Provide appropriate value
+        }
+        set((state) => ({ members: [...state.members, memberCopy] }))
+        const { translations } = useLanguageState.getState()
+        toast.success(translations.memberAddedSuccessfully)
+    },
+
+    removeMember: async (memberId: string) => {
+        const { translations } = useLanguageState.getState()
+        try {
+            const vaultsRepository = VaultRepository.getInstance()
+            await vaultsRepository.removeMember(memberId)
+
+            set((state) => ({ members: state.members.filter(password => password.id !== memberId) }))
+            toast.warning(translations.memberRemovedSuccessfully)
+        } catch (error) {
+            toast.warning(translations.tryInSomeTime)
+        }
+    }
 }))
