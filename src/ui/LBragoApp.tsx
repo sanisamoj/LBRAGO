@@ -13,9 +13,9 @@ import CreateEnvironmentScreen from "./CreateEnvironmentScreen"
 import VerifyCodeScreen from "./VerifyCodeScreen"
 import { UserListView } from "./UserListView"
 import InviteUserScreen from "./InviteUserScreen"
-import { VaultUserListView } from "./VaultUserListView"
 import VaultsListScreen from "./VaultsListScreen"
 import PasswordsListScreen from "./PasswordsListScreen"
+import { VaultUserListView } from "./VaultUserListView"
 
 export default function LBragoApp() {
   const { getCurrentScreen } = useNavigationState()

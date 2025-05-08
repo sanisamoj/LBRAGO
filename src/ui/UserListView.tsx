@@ -7,10 +7,12 @@ import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useLanguageState } from "@/store/useLanguageState"
 import { useAdminState } from "@/store/useAdminState"
 import { useState } from "react"
+import { useGlobalState } from "@/store/useGlobalState"
 
 export function UserListView() {
     const { translations } = useLanguageState()
     const { navigateTo } = useNavigationState()
+    const { user: loggedUser } = useGlobalState()
     const { users } = useAdminState()
 
     const [usersVirtual, setUsersVirtual] = useState(users)
@@ -55,7 +57,7 @@ export function UserListView() {
                                     <p className="text-xs text-muted-foreground truncate" title={user.email}>{user.email}</p>
                                 </div>
                             </div>
-                            {user.id !== user.orgId && (
+                            {user.id !== loggedUser?.id && (
                                 <div className="flex-shrink-0 ml-2">
                                     <Button
                                         type="button" variant="ghost" size="sm"

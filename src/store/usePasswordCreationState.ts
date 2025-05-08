@@ -77,6 +77,7 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
             const vaultsRepository = VaultRepository.getInstance()
             const e_password: EPasswordResponse = await vaultsRepository.createPassword(request)
+            console.log(e_password)
             const decryptedPassword: DecryptedPassword = await decryptPassword(e_password, get().esvkPubKUser, privateKey, MemberPermissionType.ADMIN)
             useSelectedVaultState.getState().addPassword(decryptedPassword)
 

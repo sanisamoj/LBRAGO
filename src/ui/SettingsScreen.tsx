@@ -13,7 +13,7 @@ import { useVaultsState } from "@/store/useVaultsState"
 import { useState } from "react"
 import { useLanguageState } from "@/store/useLanguageState"
 import { UserPermissionType } from "@/models/data/enums/UserPermissionType"
-
+import clsx from "clsx"
 
 export default function SettingsScreen() {
     const { translations } = useLanguageState()
@@ -31,7 +31,10 @@ export default function SettingsScreen() {
         <>
             <div className="p-2 flex-1 overflow-y-auto">
                 <Tabs value={settingsTab} onValueChange={setSettingsTab} className="flex flex-col w-full h-full">
-                    <TabsList className={`grid grid-cols-${user?.role === UserPermissionType.ADMIN ? 3 : 2} h-8 w-full`}>
+                    <TabsList className={clsx(
+                        'grid h-8 w-full',
+                        user?.role === UserPermissionType.ADMIN ? 'grid-cols-3' : 'grid-cols-2'
+                    )}>
                         <TabsTrigger value={translations.general} className="text-xs py-1">{translations.general}</TabsTrigger>
                         {user?.role === UserPermissionType.ADMIN && <TabsTrigger value={translations.environment} className="text-xs py-1">{translations.environment}</TabsTrigger>}
                         <TabsTrigger value={translations.security} className="text-xs py-1">{translations.security}</TabsTrigger>

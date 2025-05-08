@@ -66,5 +66,5 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
         await store.save()
     },
 
-    clearState: () => set({ isDarkTheme: false, minimizeOnCopy: false, clearClipboardTimeout: 0, savePassword: false })
+    clearState: () => set({ minimizeOnCopy: false, clearClipboardTimeout: 0, savePassword: false })
 }))

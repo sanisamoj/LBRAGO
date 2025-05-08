@@ -72,5 +72,7 @@ export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
         }
     },
 
+    updateMemberVaultPermission: async (userId: string, newRole: MemberPermissionType) => {},
+
     clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [] })
 }))

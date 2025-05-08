@@ -1,3 +1,4 @@
+import { MemberPermissionType } from "../enums/MemberPermissionType"
 import { DecryptedPassword } from "../interfaces/DecryptedPassword"
 import { DecryptedVault } from "../interfaces/DecryptedVault"
 import { MinimalUserInfoResponse } from "../interfaces/MinimalUserInfoResponse"
@@ -15,6 +16,7 @@ export interface SelectedVaultState {
 
     addMember: (user: MinimalUserInfoResponse) => Promise<void>
     removeMember: (memberId: string) => Promise<void>
+    updateMemberVaultPermission: (userId: string, newRole: MemberPermissionType) => Promise<void>
 
     clearState: () => void
 }

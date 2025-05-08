@@ -160,7 +160,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
         if (config.user.role === "admin") {
             EnvironmentRepository.setToken(config.token)
-            await useAdminState.getState().initAdminState()
+            useAdminState.getState().initAdminState()
         }
 
         if (config.savePassword) {
@@ -170,7 +170,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
                 password: config.password,
                 savePassword: true
             }
-            await get().saveUserSession(userStore)
+            get().saveUserSession(userStore)
         }
     },
 
