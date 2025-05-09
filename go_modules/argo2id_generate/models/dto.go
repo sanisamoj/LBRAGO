@@ -53,3 +53,9 @@ type DecryptPasswordMetadataDTO struct {
 	PrivUserK                 string              `json:"privUserK"`
 	ESVKPubUserK              string              `json:"esvkPubKUser"`
 }
+
+type RegenerateSVKToMemberDTO struct {
+	ESVKPubUserK    string `json:"esvkPubKUser"`
+	PrivateKey     string `json:"privateKey"`
+	TargetUserPubK string `json:"targetUserPubK"`
+}

@@ -17,7 +17,7 @@ export default function AddUserInVaultSelector({ availableUsers, onAddUser }: Us
     const [open, setOpen] = useState(false)
     const [inputValue, setInputValue] = useState("")
 
-    const filteredUsers: MinimalUserInfoResponse[] = availableUsers.filter((minUser: MinimalUserInfoResponse) => minUser.id !== user!.id)
+    const filteredUsers: MinimalUserInfoResponse[] = availableUsers.filter((minUser: MinimalUserInfoResponse) => minUser.id !== user!.id && !availableUsers.find(member => member.id === minUser.id))
 
     const handleAddUser = (user: MinimalUserInfoResponse) => {
         onAddUser(user)

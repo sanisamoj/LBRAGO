@@ -161,12 +161,13 @@
     "addMember": "Adicionar Membro",
     "managerMembers": "Gerenciar Membros",
     "removeVault": "Remover Cofre",
+    "passwordCreatedSuccessfully": "Senha criada com sucesso!",
 
     "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente.",
-
-    "passwordCreatedSuccessfully": "Senha criada com sucesso!",
     "networkError": "Ocorreu um erro de rede!",
     "tryInSomeTime": "Tente novamente em alguns instantes.",
+    "someError": "Ocorreu um erro, tente novamente.",
+
     "vaultRemovedSuccessfully": "Cofre removido com sucesso!",
 
     "addUserToVault": "Adicionar Usuário ao Cofre",

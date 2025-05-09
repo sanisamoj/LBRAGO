@@ -162,12 +162,14 @@ export interface CommonLanguage {
     addMember: string
     managerMembers: string
 
-    internalErrorTryAgain: string
-
     passwordCreatedSuccessfully: string
+
     networkError: string
-    removeVault: string
+    internalErrorTryAgain: string
     tryInSomeTime: string
+    someError: string
+
+    removeVault: string
     vaultRemovedSuccessfully: string
 
     addUserToVault: string

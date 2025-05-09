@@ -19,7 +19,7 @@ export function VaultUserListView() {
     const { translations } = useLanguageState()
     const { user } = useGlobalState()
     const { users } = useAdminState()
-    const { vault, members, addMember, removeMember } = useSelectedVaultState()
+    const { vault, members, addMember, removeMember, updateMemberVaultPermission } = useSelectedVaultState()
 
     const filteredUsers: MinimalUserInfoResponse[] = users.filter(
         (minUser: MinimalUserInfoResponse) => minUser.id !== user!.id && !members.find(member => member.id === minUser.id)
@@ -40,7 +40,7 @@ export function VaultUserListView() {
         admin: <Shield className="mr-2 h-4 w-4" />,
         write: <Edit className="mr-2 h-4 w-4" />,
         read: <Eye className="mr-2 h-4 w-4" />,
-    };
+    }
 
     const getRoleTranslation = (role: MemberPermissionType) => {
         switch (role) {
@@ -49,10 +49,14 @@ export function VaultUserListView() {
             case "read": return "Leitor"
             default: return role
         }
-    };
+    }
 
-    const handleRoleChange = (memberId: string, newRole: MemberPermissionType) => {
-    };
+    const handleRoleChange = (memberId: string, permission: MemberPermissionType) => {
+        const member: VaultMemberResponse | undefined = members.find((m: VaultMemberResponse) => m.id === memberId)
+        if (member) {
+            updateMemberVaultPermission(member.userId, permission)
+        }
+    }
 
     return (
         <div className="p-4">
@@ -166,5 +170,5 @@ export function VaultUserListView() {
                 )}
             </div>
         </div>
-    );
+    )
 }

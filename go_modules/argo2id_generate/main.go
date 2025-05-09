@@ -20,6 +20,8 @@ func main() {
 
 	decryptPMetadataF := flag.String("dpm", "", "Regenerate password metadata")
 	encryptPMetadataF := flag.String("epm", "", "Encrypt password metadata")
+
+	regenerateSVKToMemberF := flag.String("rsvk", "", "Regenerate secret vault key to member")
 	flag.Parse()
 
 	actionTaken := false
@@ -193,6 +195,32 @@ func main() {
 		}
 
 		fmt.Println(string(jsonData))
+
+		actionTaken = true
+		os.Exit(0)
+	}
+
+	if *regenerateSVKToMemberF != "" {
+		var dto models.RegenerateSVKToMemberDTO
+		err := json.Unmarshal([]byte(*regenerateSVKToMemberF), &dto)
+		if err != nil {
+			log.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
+
+		svk, err := utils.RegenerateSVK(dto.ESVKPubUserK, dto.PrivateKey)
+		if err != nil {
+			log.Printf("Error generating RSA and Sk key pair: %v\n", err)
+			os.Exit(1)
+		}
+
+		esvkPubUserK, err := utils.EncryptWithRsaPublicKey(svk, dto.TargetUserPubK)
+		if err != nil {
+			log.Printf("Error encrypting with RSA public key: %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(esvkPubUserK)
 
 		actionTaken = true
 		os.Exit(0)

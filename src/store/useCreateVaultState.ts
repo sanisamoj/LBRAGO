@@ -64,7 +64,6 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
             toast.success(translations.vaultCreatedSuccessfully)
             navigateReplace(NavigationScreen.VAULTS)
         } catch (error) {
-            console.log("Error creating vault:", error)
             toast.error(translations.errorGeneratingVault)
         }
 

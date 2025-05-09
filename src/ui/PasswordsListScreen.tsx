@@ -15,9 +15,11 @@ import { CommonDialog } from "./common/Dialog"
 import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useSelectedVaultState } from "@/store/useSelectedVaultState"
+import { useGlobalState } from "@/store/useGlobalState"
 
 export default function PasswordsListScreen() {
     const { translations } = useLanguageState()
+    const { user } = useGlobalState()
     const { navigateTo } = useNavigationState()
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
     const { passwords, handleCreatePassword } = useSelectedVaultState()
@@ -385,17 +387,23 @@ export default function PasswordsListScreen() {
             </div>
 
             <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10 bg-white dark:bg-zinc-900">
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setIsOpen(true) }}>
-                    <Trash2 className="h-4 w-4" />
-                </Button>
+                {selectedVault?.vaultCreatedBy === user?.id && (
+                    <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setIsOpen(true) }}>
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                )}
 
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.managerMembers} onClick={() => { navigateTo(NavigationScreen.MANAGE_VAULT_MEMBERS) }}>
-                    <UsersRound className="h-4 w-4" />
-                </Button>
+                {selectedVault?.permission === MemberPermissionType.ADMIN && (
+                    <>
+                        <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.managerMembers} onClick={() => { navigateTo(NavigationScreen.MANAGE_VAULT_MEMBERS) }}>
+                            <UsersRound className="h-4 w-4" />
+                        </Button>
 
-                <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
-                    <Plus className="h-4 w-4" />
-                </Button>
+                        <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.addPassword} onClick={() => { handleCreatePassword(selectedVault!.id, selectedVault!.esvkPubKUser) }}>
+                            <Plus className="h-4 w-4" />
+                        </Button>
+                    </>
+                )}
             </div>
 
             <CommonDialog

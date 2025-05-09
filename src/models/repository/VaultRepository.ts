@@ -7,6 +7,7 @@ import { EPasswordResponse } from "../data/interfaces/EPasswordResponse"
 import { CreatePasswordRequest } from "../data/interfaces/CreatePasswordRequest"
 import { VaultMemberResponse } from "../data/interfaces/VaultMemberResponse"
 import { UpdateMemberRequest } from "../data/interfaces/UpdateMemberRequest"
+import { AddMemberRequest } from "../data/interfaces/AddMemberRequest"
 
 export class VaultRepository {
     private static instance: VaultRepository | null = null
@@ -86,6 +87,16 @@ export class VaultRepository {
                 Authorization: `Bearer ${VaultRepository.token}`
             }
         })
+        return response.data
+    }
+
+    public async addMember(request: AddMemberRequest): Promise<VaultMemberResponse> {
+        const response = await this.api.post("/vaults/members", request, {
+            headers: {
+                Authorization: `Bearer ${VaultRepository.token}`
+            }
+        })
+
         return response.data
     }
 

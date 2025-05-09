@@ -38,7 +38,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
 
         if (userStore) {
-            set({ user: userStore.user })
             try {
                 const init: InitGlobalStateData = {
                     user: userStore.user,
@@ -153,6 +152,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     },
 
     initGlobalState: async (config: InitGlobalStateData) => {
+        set({ user: config.user })
         await get().regenerateUserPrivK(config.user, config.password)
 
         VaultRepository.setToken(config.token)

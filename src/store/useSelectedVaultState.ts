@@ -13,8 +13,12 @@ import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { MinimalUserInfoResponse } from "@/models/data/interfaces/MinimalUserInfoResponse"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
+import { RegenerateSVKToMemberDTO } from "@/models/data/interfaces/RegenerateSVKToMemberDTO"
+import { invoke } from "@tauri-apps/api/core"
+import { AddMemberRequest } from "@/models/data/interfaces/AddMemberRequest"
+import { UpdateMemberRequest } from "@/models/data/interfaces/UpdateMemberRequest"
 
-export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
+export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     vault: {} as DecryptedVault,
     members: [],
     passwords: [],
@@ -44,19 +48,46 @@ export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
     },
 
     addMember: async (user: MinimalUserInfoResponse) => {
-        // Realizar chamada de API para adicionar membro
-        const memberCopy: VaultMemberResponse = {
-            ...user,
-            vaultId: "", // Provide appropriate value
-            userId: "", // Provide appropriate value
-            esvk_pubK_user: "", // Provide appropriate value
-            permission: MemberPermissionType.WRITE, // Adjust as needed
-            addedBy: "", // Provide appropriate value
-            addAt: "", // Provide appropriate value
-        }
-        set((state) => ({ members: [...state.members, memberCopy] }))
         const { translations } = useLanguageState.getState()
-        toast.success(translations.memberAddedSuccessfully)
+        const { privateKey } = useGlobalState.getState()
+
+        const dto: RegenerateSVKToMemberDTO = {
+            esvkPubKUser: get().vault.esvkPubKUser,
+            privateKey: privateKey,
+            targetUserPubK: user.publicKey
+        }
+        const jsonArg: string = JSON.stringify(dto)
+
+        try {
+            const result: string = await invoke<string>('regenerate_svk_to_member', { arg: jsonArg })
+
+            const addMemberRequest: AddMemberRequest = {
+                vaultId: get().vault.id,
+                userId: user.id,
+                esvk_pubK_user: result,
+                permission: MemberPermissionType.WRITE
+            }
+
+            const vaultRepository = VaultRepository.getInstance()
+            const response: VaultMemberResponse = await vaultRepository.addMember(addMemberRequest)
+
+            const memberCopy: VaultMemberResponse = {
+                id: response.id,
+                vaultId: response.vaultId,
+                userId: response.userId,
+                username: user.username,
+                email: user.email,
+                esvk_pubK_user: response.esvk_pubK_user,
+                permission: response.permission,
+                addedBy: response.addedBy,
+                addAt: response.addAt,
+            }
+            set((state) => ({ members: [...state.members, memberCopy] }))
+
+            toast.success(translations.memberAddedSuccessfully)
+        } catch (error) {
+            toast.warning(translations.someError)
+        }
     },
 
     removeMember: async (memberId: string) => {
@@ -72,7 +103,37 @@ export const useSelectedVaultState = create<SelectedVaultState>((set) => ({
         }
     },
 
-    updateMemberVaultPermission: async (userId: string, newRole: MemberPermissionType) => {},
+    updateMemberVaultPermission: async (userId: string, permission: MemberPermissionType) => { 
+        const member: VaultMemberResponse | undefined = get().members.find((member: VaultMemberResponse) => member.userId === userId)
+        if(!member) return
+
+        const { translations } = useLanguageState.getState()
+        const updateMemberRequest: UpdateMemberRequest = {
+            memberId: member.id,
+            esvk_pubK_user: member.esvk_pubK_user,
+            permission: permission
+        }
+
+        try {
+            const vaultRepository = VaultRepository.getInstance()
+            await vaultRepository.updateMember(updateMemberRequest)
+
+            const memberCopy: VaultMemberResponse = {
+                id: member.id,
+                vaultId: member.vaultId,
+                userId: member.userId,
+                username: member.username,
+                email: member.email,
+                esvk_pubK_user: member.esvk_pubK_user,
+                permission: permission,
+                addedBy: member.addedBy,
+                addAt: member.addAt,
+            }
+            set((state) => ({ members: state.members.map((m: VaultMemberResponse) => m.id === member.id ? memberCopy : m) }))
+        } catch (error) {
+            toast.warning(translations.someError)
+        }
+    },
 
     clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [] })
 }))
