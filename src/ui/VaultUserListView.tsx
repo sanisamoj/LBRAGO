@@ -21,10 +21,13 @@ export function VaultUserListView() {
     const { users } = useAdminState()
     const { vault, members, addMember, removeMember, updateMemberVaultPermission } = useSelectedVaultState()
 
-    const filteredUsers: MinimalUserInfoResponse[] = users.filter(
-        (minUser: MinimalUserInfoResponse) => minUser.id !== user!.id && !members.find(member => member.id === minUser.id)
-    )
-
+    const filteredUsers: MinimalUserInfoResponse[] = useMemo(() => {
+        return users.filter(
+            (minUser: MinimalUserInfoResponse) =>
+                minUser.id !== user!.id && !members.find(member => member.userId === minUser.id)
+        )
+    }, [members])
+    
     const [mainSearchTerm, setMainSearchTerm] = useState("")
 
     const filteredVaultUsers: VaultMemberResponse[] = useMemo(() => {
