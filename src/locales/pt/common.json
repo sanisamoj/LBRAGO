@@ -192,5 +192,10 @@
     "areYouSureInRemovePassword": "Tem certeza que deseja remover esta senha?",
     "areYouSureInRemovePasswordDialogDescription": "Removendo a senha, todos os dados relacionados a ela serão perdidos permanentemente inclusive os acessos dos outros membros.",
     "passwordRemoveSuccessfully": "Senha removida com sucesso!",
-    "errorInRemovePassword": "Ocorreu um erro ao remover a senha."
+    "errorInRemovePassword": "Ocorreu um erro ao remover a senha.",
+
+    "noVaultsFound": "Nenhum cofre encontrado.",
+    "noVaultsAvailable": "Nenhum cofre disponível.",
+    "searchVaultsPlaceholder": "Pesquisar cofres...",
+    "searachPasswordsPlaceholder": "Pesquisar senhas..."
 }

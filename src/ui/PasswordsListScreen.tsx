@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState } from "react"
-import { Copy, Crown, Edit2, Eye, EyeOff, Info, LinkIcon, Plus, Save, Trash2, UsersRound } from "lucide-react"
+import { useRef, useEffect, useState, useMemo } from "react"
+import { Copy, Crown, Edit2, Eye, EyeOff, Info, LinkIcon, Plus, Save, Search, Trash2, UsersRound } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -28,7 +28,6 @@ export default function PasswordsListScreen() {
         removePasswordDialogIsOpen, setRemovePasswordDialogIsOpen, updatePassword
     } = useSelectedVaultState()
 
-    const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [selectedPassword, setSelectedPassword] = useState<DecryptedPassword | null>(null)
     const [editingPassword, setEditingPassword] = useState<string | null>(null)
@@ -39,13 +38,31 @@ export default function PasswordsListScreen() {
     const containerRef = useRef<HTMLDivElement>(null);
     const passwordListRef = useRef<HTMLDivElement>(null);
 
-    const filteredPasswords = passwords.filter(
-        (password) =>
-            searchQuery === "" ||
-            password.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            password.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (password.url && password.url.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
+    const [searchQuery, setSearchQuery] = useState('')
+
+    const filteredPasswords = useMemo(() => {
+        const trimmedQuery = searchQuery.trim();
+
+        if (!trimmedQuery) {
+            return passwords
+        }
+
+        const lowerCaseQuery = trimmedQuery.toLowerCase()
+
+        return passwords.filter(password => {
+            const nameMatch = password.name.toLowerCase().includes(lowerCaseQuery)
+
+            const descriptionMatch = password.description
+                ? password.description.toLowerCase().includes(lowerCaseQuery)
+                : false;
+
+            const urlMatch = password.url
+                ? password.url.toLowerCase().includes(lowerCaseQuery)
+                : false
+
+            return nameMatch || descriptionMatch || urlMatch
+        });
+    }, [passwords, searchQuery])
 
     const copyToClipboard = (text: string | undefined | null) => {
         if (text) {
@@ -186,7 +203,19 @@ export default function PasswordsListScreen() {
 
     return (
         <div className="flex flex-col w-full h-full overflow-y-auto scrollbar-invisible" ref={containerRef}>
-
+            <div className="px-2">
+                <div className="relative mt-1">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        id="search-vaults-input"
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => { setSearchQuery(e.target.value) }}
+                        className="h-8 pl-8 text-xs w-full"
+                        placeholder={translations.searachPasswordsPlaceholder}
+                    />
+                </div>
+            </div>
             <div className="flex-1 px-2 pb-2 w-full">
                 <div
                     className="rounded-lg border border-border overflow-hidden mt-2 divide-y divide-border relative"

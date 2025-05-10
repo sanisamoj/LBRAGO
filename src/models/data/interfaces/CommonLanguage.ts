@@ -195,4 +195,9 @@ export interface CommonLanguage {
     areYouSureInRemovePasswordDialogDescription: string
     passwordRemoveSuccessfully: string
     errorInRemovePassword: string
+
+    noVaultsFound: string
+    noVaultsAvailable: string
+    searchVaultsPlaceholder: string
+    searachPasswordsPlaceholder: string
 }
