@@ -200,4 +200,7 @@ export interface CommonLanguage {
     noVaultsAvailable: string
     searchVaultsPlaceholder: string
     searachPasswordsPlaceholder: string
+
+    youAlreadyHavePersonalVault: string
+    youAlreadyHavePersonalVaultDescription: string
 }

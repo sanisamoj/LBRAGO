@@ -15,6 +15,7 @@ import { EVaultResponse } from "@/models/data/interfaces/EVaultResponse"
 import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 import { decryptVaultWithMemberResponse } from "@/utils/ED_vaults"
 import { useVaultsState } from "./useVaultsState"
+import { AxiosError } from "axios"
 
 export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     name: "",
@@ -63,7 +64,14 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
 
             toast.success(translations.vaultCreatedSuccessfully)
             navigateReplace(NavigationScreen.VAULTS)
-        } catch (error) {
+        } catch (error: AxiosError | any) {
+            if (error instanceof AxiosError) {
+                if (error.status === 403) {
+                    toast.warning(translations.youAlreadyHavePersonalVault)
+                    return
+                }
+            }
+
             toast.error(translations.errorGeneratingVault)
         }
 

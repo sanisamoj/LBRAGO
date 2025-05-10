@@ -16,6 +16,7 @@ export interface GlobalState {
 
     signout: () => Promise<void>
 
+    initialAppConfiguration: () => Promise<void>
     initGlobalState: (config: InitGlobalStateData) => Promise<void>
     clearAllStates: () => void
 }

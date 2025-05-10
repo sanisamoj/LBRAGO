@@ -1,12 +1,8 @@
-"use client"
-
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import IconSelectorScreen from "./IconSelectScreen"
-import UserSelector from "./UserSelector"
 import { useLanguageState } from "@/store/useLanguageState"
 import { useCreateVaultState } from "@/store/useCreateVaultState"
 
@@ -17,23 +13,6 @@ export default function CreateVaultScreen() {
     setImageUrl, createVault, setPersonalVault
   } = useCreateVaultState()
 
-  const [users, setUsers] = useState<any[]>([
-    {
-      id: "1",
-      email: "joao.silva@acmecorp.com",
-      name: "João Silva",
-      imageUrl: "/placeholder.svg?height=40&width=40",
-      permission: "w"
-    },
-  ])
-
-  const handleAddUser = (user: any) => {
-    setUsers([...users, user])
-  }
-
-  const handleRemoveUser = (email: string) => {
-    setUsers(users.filter((user) => user.email !== email))
-  }
 
   return (
     <div className="flex flex-col h-full p-4">
@@ -84,14 +63,7 @@ export default function CreateVaultScreen() {
           </Label>
         </div>
 
-        {!personalVault && (
-          <div className="space-y-2">
-            <Label className="text-xs font-medium">{translations.users}</Label>
-            <UserSelector selectedUsers={users} onAddUser={handleAddUser} onRemoveUser={handleRemoveUser} />
-          </div>
-        )}
-
-        <Button type="submit" className="w-full h-8 text-xs mt-4 mb-4" disabled={isLoading}>
+        <Button type="submit" className="w-full h-8 text-xs mt-1 mb-4" disabled={isLoading}>
           {isLoading ? translations.encryptingVault : translations.createVault}
         </Button>
       </form>

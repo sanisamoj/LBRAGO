@@ -8,7 +8,7 @@ export interface CommonDialogProps {
     confirmButtonText?: string
 
     cancelButtonAction?: () => void
-    confirmButtonAction?: () => Promise<void>
+    confirmButtonAction: () => Promise<void>
     sendingInviteLoadingText?: string
     isLoading?: boolean
 }

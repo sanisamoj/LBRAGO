@@ -21,12 +21,25 @@ import { usePasswordsCreationViewState } from "./usePasswordCreationState"
 import { useEnvironmentCreationState } from "./useEnvironmentCreationState"
 import { useCreateVaultState } from "./useCreateVaultState"
 import { Config } from "@/Config"
+import { InitIconTray } from "@/utils/IconTray"
+import { setupShortcutListener } from "@/utils/setupShortcutListener"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
     store: null,
     privateKey: "",
     publicKey: "",
+
+    initialAppConfiguration: async () => {
+        // Inicia as informações iniciais do app como os estados
+        get().loadStore()
+
+        // Gera a barra de ícone
+        InitIconTray()
+
+        // Assiste o atalho
+        setupShortcutListener()
+    },
 
     loadStore: async () => {
         await usePreferencesState.getState().initPreferencesState()

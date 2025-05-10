@@ -197,5 +197,8 @@
     "noVaultsFound": "Nenhum cofre encontrado.",
     "noVaultsAvailable": "Nenhum cofre disponível.",
     "searchVaultsPlaceholder": "Pesquisar cofres...",
-    "searachPasswordsPlaceholder": "Pesquisar senhas..."
+    "searachPasswordsPlaceholder": "Pesquisar senhas...",
+
+    "youAlreadyHavePersonalVault": "Você ja tem um cofre pessoal.",
+    "youAlreadyHavePersonalVaultDescription": "Se você deseja criar um cofre pessoal, você deve remover o cofre pessoal existente primeiro."
 }

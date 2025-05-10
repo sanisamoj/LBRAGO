@@ -78,7 +78,7 @@ export default function HeaderNavigation() {
                 size="sm"
                 onClick={() => {
                     const currentWindow = Window.getCurrent()
-                    currentWindow.minimize()
+                    currentWindow.hide()
                 }}
                 className="h-7 w-7 p-0"
                 title="Minimizar"

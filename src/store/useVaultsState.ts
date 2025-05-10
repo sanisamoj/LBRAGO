@@ -55,7 +55,6 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
       const vaultsRespository = VaultRepository.getInstance()
       await vaultsRespository.deleteVault(vaultId)
-      useNavigationState.getState().resetNavigation(NavigationScreen.VAULTS)
       toast.success(translations.vaultRemovedSuccessfully)
     } catch (error) {
       toast.warning(translations.tryInSomeTime)

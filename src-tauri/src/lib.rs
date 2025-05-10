@@ -1,4 +1,6 @@
 use std::process::Command;
+use tauri::{Manager};
+use tauri_plugin_global_shortcut::{Code, Modifiers, ShortcutState};
 
 #[tauri::command]
 async fn generate_user_credentials(arg: String) -> Result<String, String> {
@@ -125,6 +127,29 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
+        .setup(|app| {
+            let app_handle = app.handle();
+
+            // 2) Registra os atalhos
+            app_handle.plugin(
+                tauri_plugin_global_shortcut::Builder::new()
+                    .with_shortcuts(["Ctrl+s", "Alt+Space"])?
+                    .with_handler(move |app_handle, shortcut, event| {
+                        if event.state == ShortcutState::Pressed
+                            && (shortcut.matches(Modifiers::CONTROL, Code::KeyS)
+                                || shortcut.matches(Modifiers::ALT, Code::Space))
+                        {
+                            // 3) Reabre e foca a janela escondida
+                            if let Some(win) = app_handle.get_webview_window("main") {
+                                let _ = win.show();
+                                let _ = win.set_focus();
+                            }
+                        }
+                    })
+                    .build(),
+            )?;
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             generate_user_credentials,
             generate_user_credentials_with_param,

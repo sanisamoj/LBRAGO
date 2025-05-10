@@ -6,8 +6,8 @@ import LBragoApp from "./ui/LBragoApp"
 import "./App.css"
 
 function App() {
-  const { loadStore } = useGlobalState()
-  useEffect(() => { loadStore() }, [])
+  const { initialAppConfiguration } = useGlobalState()
+  useEffect(() => { initialAppConfiguration() }, [])
 
   return (
     <div>

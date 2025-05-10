@@ -14,18 +14,28 @@ import { useState } from "react"
 import { useLanguageState } from "@/store/useLanguageState"
 import { UserPermissionType } from "@/models/data/enums/UserPermissionType"
 import clsx from "clsx"
+import { CommonDialog } from "./common/Dialog"
+import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 
 export default function SettingsScreen() {
     const { translations } = useLanguageState()
     const { vaults } = useVaultsState()
     const { user, signout } = useGlobalState()
     const { navigateTo } = useNavigationState()
+    const { deleteVault } = useVaultsState()
     const {
         isDarkTheme, minimizeOnCopy, clearClipboardTimeout, setDarkTheme,
         setMinimizeOnCopy, setClearClipboardTimeout
     } = usePreferencesState()
 
     const [settingsTab, setSettingsTab] = useState(translations.general)
+    const [removeVaultDialogIsOpen, setRemoveVaultDialogIsOpen] = useState(false)
+    const [virtualVault, setVirtualVault] = useState<DecryptedVault | null>(null)
+
+    const handleRemoveVault = (vault: DecryptedVault) => () => {
+        setVirtualVault(vault)
+        setRemoveVaultDialogIsOpen(true)
+    }
 
     return (
         <>
@@ -76,7 +86,7 @@ export default function SettingsScreen() {
                             <div className="rounded-lg border border-border overflow-hidden">
                                 <div className="p-2 bg-muted/50 border-b border-border"><h3 className="text-sm font-medium">{translations.manageVaults}</h3></div>
                                 <div className="max-h-[150px] overflow-y-auto scrollbar-invisible">
-                                    {vaults.map((vault) => (
+                                    {vaults.map((vault: DecryptedVault) => (
                                         <div key={vault.id} className="flex items-center py-2 px-3 border-b border-border last:border-b-0 gap-3 cursor-pointer">
                                             <VaultIcon icon={vault.decryptedVaultMetadata.imageUrl} />
                                             <div className="flex-1 min-w-0">
@@ -84,7 +94,7 @@ export default function SettingsScreen() {
                                                 <p className="text-xs text-muted-foreground truncate">{vault.permission}</p>
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" title="Excluir cofre"><Trash2 className="h-3 w-3" /></Button>
+                                                <Button variant="ghost" size="sm" onClick={handleRemoveVault(vault)} className="h-6 w-6 p-0 text-destructive" title={translations.removeVault}><Trash2 className="h-3 w-3" /></Button>
                                             </div>
                                         </div>
                                     ))}
@@ -123,6 +133,16 @@ export default function SettingsScreen() {
                         </div>
                     </TabsContent>
                 </Tabs>
+
+                <CommonDialog
+                    isOpen={removeVaultDialogIsOpen}
+                    onOpenChange={setRemoveVaultDialogIsOpen}
+                    title={translations.areYouSureInRemoveVault}
+                    description={translations.areYouSureInRemoveVaultDialogDescription}
+                    cancelButtonText={translations.cancel}
+                    confirmButtonText={translations.remove}
+                    confirmButtonAction={async () => { deleteVault(virtualVault!.id) }}
+                />
             </div>
         </>
     )

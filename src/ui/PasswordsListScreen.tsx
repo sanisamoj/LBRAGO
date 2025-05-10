@@ -21,7 +21,7 @@ import { toast } from "sonner"
 export default function PasswordsListScreen() {
     const { translations } = useLanguageState()
     const { user } = useGlobalState()
-    const { navigateTo } = useNavigationState()
+    const { navigateTo, resetNavigation } = useNavigationState()
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
     const {
         passwords, handleCreatePassword, removePassword, isLoading: removePasswordLoading,
@@ -468,7 +468,7 @@ export default function PasswordsListScreen() {
                 description={translations.areYouSureInRemoveVaultDialogDescription}
                 cancelButtonText={translations.cancel}
                 confirmButtonText={translations.remove}
-                confirmButtonAction={async () => { deleteVault(selectedVault!.id) }}
+                confirmButtonAction={async () => { deleteVault(selectedVault!.id); resetNavigation(NavigationScreen.VAULTS) }}
                 isLoading={buttonIsLoading}
             />
 
