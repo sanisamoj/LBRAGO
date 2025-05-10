@@ -4,14 +4,14 @@ import { EVaultWithMemberInfo } from "../data/interfaces/EVaultWithMemberInfo"
 import { CreateVaultRequest } from "../data/interfaces/CreateVaultRequest"
 import { EVaultResponse } from "../data/interfaces/EVaultResponse"
 import { EPasswordResponse } from "../data/interfaces/EPasswordResponse"
-import { CreatePasswordRequest } from "../data/interfaces/CreatePasswordRequest"
+import { PasswordRequest } from "../data/interfaces/PasswordRequest"
 import { VaultMemberResponse } from "../data/interfaces/VaultMemberResponse"
 import { UpdateMemberRequest } from "../data/interfaces/UpdateMemberRequest"
 import { AddMemberRequest } from "../data/interfaces/AddMemberRequest"
+import { UpdatePasswordRequest } from "../data/interfaces/UpdatePasswordRequest"
 
 export class VaultRepository {
     private static instance: VaultRepository | null = null
-    private static token: string
 
     private api: AxiosInstance = axios.create({
         baseURL: Config.API_URL,
@@ -30,14 +30,10 @@ export class VaultRepository {
         return this.instance
     }
 
-    public static setToken(token: string): void {
-        this.token = token
-    }
-
     public async getMyVaults(): Promise<EVaultWithMemberInfo[]> {
         const response = await this.api.get("/users/vaults", {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
 
@@ -47,7 +43,7 @@ export class VaultRepository {
     public async createVault(request: CreateVaultRequest): Promise<EVaultResponse> {
         const response = await this.api.post("/vaults", request, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
 
@@ -57,7 +53,7 @@ export class VaultRepository {
     public async deleteVault(vaultId: string): Promise<void> {
         await this.api.delete(`/vaults/${vaultId}`, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
     }
@@ -65,26 +61,44 @@ export class VaultRepository {
     public async getPasswords(vaultId: string): Promise<EPasswordResponse[]> {
         const response = await this.api.get(`/vaults/passwords?vaultId=${vaultId}`, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
         return response.data
     }
 
-    public async createPassword(request: CreatePasswordRequest): Promise<EPasswordResponse> {
+    public async createPassword(request: PasswordRequest): Promise<EPasswordResponse> {
         const response = await this.api.post("/vaults/passwords", request, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
 
         return response.data
+    }
+
+    public async updatePassword(request: UpdatePasswordRequest): Promise<EPasswordResponse> {
+        const response = await this.api.put(`/vaults/passwords`, request, {
+            headers: {
+                Authorization: `Bearer ${Config.token}`
+            }
+        })
+
+        return response.data
+    }
+
+    public async deletePassword(passwordId: string): Promise<void> {
+        await this.api.delete(`/vaults/passwords?id=${passwordId}`, {
+            headers: {
+                Authorization: `Bearer ${Config.token}`
+            }
+        })
     }
 
     public async getMembers(vaultId: string): Promise<VaultMemberResponse[]> {
         const response = await this.api.get(`/vaults/members?vaultId=${vaultId}`, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
         return response.data
@@ -93,7 +107,7 @@ export class VaultRepository {
     public async addMember(request: AddMemberRequest): Promise<VaultMemberResponse> {
         const response = await this.api.post("/vaults/members", request, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
 
@@ -103,7 +117,7 @@ export class VaultRepository {
     public async removeMember(userId: string): Promise<void> {
         await this.api.delete(`/vaults/members?id=${userId}`, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
     }
@@ -111,7 +125,7 @@ export class VaultRepository {
     public async updateMember(request: UpdateMemberRequest): Promise<void> {
         await this.api.put(`/vaults/members`, request, {
             headers: {
-                Authorization: `Bearer ${VaultRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
     }

@@ -1,6 +1,6 @@
 import { EncryptedKey } from "./EncryptedKey"
 
-export interface CreatePasswordRequest {
+export interface PasswordRequest {
     vaultId: string
     encryptedItemData: EncryptedKey
 }

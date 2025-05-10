@@ -58,7 +58,6 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       useNavigationState.getState().resetNavigation(NavigationScreen.VAULTS)
       toast.success(translations.vaultRemovedSuccessfully)
     } catch (error) {
-
       toast.warning(translations.tryInSomeTime)
     }
 

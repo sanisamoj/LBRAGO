@@ -5,7 +5,6 @@ import { InviteUserRequest } from "../data/interfaces/InviteUserRequest"
 
 export class EnvironmentRepository {
     private static instance: EnvironmentRepository | null = null
-    private static token: string
 
     private api: AxiosInstance = axios.create({
         baseURL: Config.API_URL,
@@ -24,14 +23,10 @@ export class EnvironmentRepository {
         return this.instance
     }
 
-    public static setToken(token: string): void {
-        this.token = token
-    }
-
     public async getAllUsers(): Promise<MinimalUserInfoResponse[]> {
         const response = await this.api.get("/org/users", {
             headers: {
-                Authorization: `Bearer ${EnvironmentRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
         return response.data
@@ -40,7 +35,7 @@ export class EnvironmentRepository {
     public async inviteUser(request: InviteUserRequest): Promise<{ invitedCode: string }> {
         const response = await this.api.post<{ invitedCode: string }>("/invites", request, {
             headers: {
-                Authorization: `Bearer ${EnvironmentRepository.token}`
+                Authorization: `Bearer ${Config.token}`
             }
         })
         return response.data
@@ -50,11 +45,11 @@ export class EnvironmentRepository {
         try {
             await this.api.delete("/signout", {
                 headers: {
-                    Authorization: `Bearer ${EnvironmentRepository.token}`
+                    Authorization: `Bearer ${Config.token}`
                 }
             })
         } catch (_) { }
-        EnvironmentRepository.token = ""
+        Config.clearToken()
     }
 
 }

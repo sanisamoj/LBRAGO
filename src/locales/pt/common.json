@@ -162,6 +162,7 @@
     "managerMembers": "Gerenciar Membros",
     "removeVault": "Remover Cofre",
     "passwordCreatedSuccessfully": "Senha criada com sucesso!",
+    "passwordUpdatedSuccessfully": "Senha atualizada com sucesso!",
 
     "internalErrorTryAgain": "Ocorreu um erro interno, tente novamente.",
     "networkError": "Ocorreu um erro de rede!",
@@ -183,5 +184,13 @@
     "addUserByEmailPlaceholder": "Adicionar usuário por email",
     "copyNotes": "Copiar Notas",
     "memberRemovedSuccessfully": "Membro removido com sucesso!",
-    "memberAddedSuccessfully": "Membro adicionado com sucesso!"
+    "memberAddedSuccessfully": "Membro adicionado com sucesso!",
+
+    "areYouSureInRemoveVault": "Tem certeza que deseja remover este cofre?",
+    "areYouSureInRemoveVaultDialogDescription": "Todas as informações relacionadas a este cofre serão perdidas permanentemente inclusive os acessos dos outros membros.",
+    "removePassword": "Remover Senha",
+    "areYouSureInRemovePassword": "Tem certeza que deseja remover esta senha?",
+    "areYouSureInRemovePasswordDialogDescription": "Removendo a senha, todos os dados relacionados a ela serão perdidos permanentemente inclusive os acessos dos outros membros.",
+    "passwordRemoveSuccessfully": "Senha removida com sucesso!",
+    "errorInRemovePassword": "Ocorreu um erro ao remover a senha."
 }

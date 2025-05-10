@@ -163,6 +163,7 @@ export interface CommonLanguage {
     managerMembers: string
 
     passwordCreatedSuccessfully: string
+    passwordUpdatedSuccessfully: string
 
     networkError: string
     internalErrorTryAgain: string
@@ -186,4 +187,12 @@ export interface CommonLanguage {
     copyNotes: string
     memberRemovedSuccessfully: string
     memberAddedSuccessfully: string
+
+    areYouSureInRemoveVault: string
+    areYouSureInRemoveVaultDialogDescription: string
+    removePassword: string
+    areYouSureInRemovePassword: string
+    areYouSureInRemovePasswordDialogDescription: string
+    passwordRemoveSuccessfully: string
+    errorInRemovePassword: string
 }

@@ -16,20 +16,25 @@ import { useNavigationState } from "@/store/useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useSelectedVaultState } from "@/store/useSelectedVaultState"
 import { useGlobalState } from "@/store/useGlobalState"
+import { toast } from "sonner"
 
 export default function PasswordsListScreen() {
     const { translations } = useLanguageState()
     const { user } = useGlobalState()
     const { navigateTo } = useNavigationState()
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
-    const { passwords, handleCreatePassword } = useSelectedVaultState()
+    const {
+        passwords, handleCreatePassword, removePassword, isLoading: removePasswordLoading,
+        removePasswordDialogIsOpen, setRemovePasswordDialogIsOpen, updatePassword
+    } = useSelectedVaultState()
 
     const [searchQuery, _] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [selectedPassword, setSelectedPassword] = useState<DecryptedPassword | null>(null)
     const [editingPassword, setEditingPassword] = useState<string | null>(null)
     const [editedPasswordData, setEditedPasswordData] = useState<Partial<DecryptedPassword>>({})
-    const [isOpen, setIsOpen] = useState(false)
+
+    const [removeVaultDialogIsOpen, setRemoveVaultDialogIsOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null);
     const passwordListRef = useRef<HTMLDivElement>(null);
@@ -70,19 +75,21 @@ export default function PasswordsListScreen() {
         MemberPermissionType.WRITE
     ].includes(selectedVault.permission) : false
 
+    const deletePermission: boolean = selectedVault?.permission === MemberPermissionType.ADMIN
+
     const handlePasswordClick = (password: DecryptedPassword) => {
-        if (editingPassword === password.id) return; // Do nothing if already editing this one
+        if (editingPassword === password.id) return
 
         if (password.id === selectedPassword?.id) {
             // If clicking the already selected password, deselect it
-            setSelectedPassword(null);
-            setShowPassword(false); // Hide password when deselecting
+            setSelectedPassword(null)
+            setShowPassword(false)
         } else {
             // If clicking a new password, select it
-            setSelectedPassword(password);
-            setEditingPassword(null); // Ensure editing mode is cancelled
-            setEditedPasswordData({}); // Clear any previous edit data
-            setShowPassword(false); // Ensure password is hidden initially
+            setSelectedPassword(password)
+            setEditingPassword(null)
+            setEditedPasswordData({})
+            setShowPassword(false)
         }
     }
 
@@ -94,42 +101,39 @@ export default function PasswordsListScreen() {
             username: password.username,
             password: password.password,
             url: password.url,
-            notes: password.notes,
-            // Include other editable fields if necessary
+            notes: password.notes
         })
-        setShowPassword(false) // Keep password hidden by default when starting edit
+        setShowPassword(false)
     }
 
     const cancelEditing = () => {
         setEditingPassword(null)
         setEditedPasswordData({})
-        // Optional: revert selectedPassword if needed, or keep it selected
-        setShowPassword(false) // Ensure password is hidden on cancel
+        setShowPassword(false)
     }
 
-    const savePasswordChanges = (passwordId: string) => {
-        if (!editPermission) return // Prevent saving without permission
+    const savePasswordChanges = async (passwordId: string) => {
+        if (!editPermission || !selectedPassword) return
 
-        console.log("Simulando salvar senha ID:", passwordId, "com dados:", editedPasswordData)
-        // **Zustand Integration Point:**
-        // Replace console.log with actual Zustand action call:
-        // updatePassword(passwordId, editedPasswordData)
+        const decryptedPassword: DecryptedPassword = {
+            id: passwordId,
+            name: selectedPassword.name,
+            imageUrl: selectedPassword.imageUrl,
+            username: editedPasswordData.username || selectedPassword.username,
+            description: selectedPassword.description,
+            url: editedPasswordData.url || selectedPassword.url,
+            esvkPubKUser: selectedPassword.esvkPubKUser,
+            password: editedPasswordData.password || selectedPassword.password,
+            notes: editedPasswordData.notes || selectedPassword.notes,
+            permission: selectedPassword.permission,
+            addedAt: selectedPassword.addedAt,
+            updatedAt: new Date().toISOString()
+        }
+        await updatePassword(decryptedPassword)
 
-        // After successful update (handle async):
         setEditingPassword(null)
         setEditedPasswordData({})
-        setShowPassword(false) // Hide password after saving
-
-        // Refresh selected password data if necessary, Zustand might handle this reactively
-        const updatedPassword = filteredPasswords.find(p => p.id === passwordId)
-        if (updatedPassword) {
-            // Update the selected password state locally *if* Zustand doesn't automatically update the component
-            // This might involve merging editedPasswordData with the original password data
-            // Example (needs refinement based on actual data structure):
-            const mergedData = { ...updatedPassword, ...editedPasswordData }
-            setSelectedPassword(mergedData)
-        }
-
+        setShowPassword(false)
     }
 
     const handleEditChange = (field: keyof Password, value: string) => {
@@ -141,6 +145,14 @@ export default function PasswordsListScreen() {
 
     const handleShowPasswordToggle = (newState: boolean) => {
         setShowPassword(newState)
+    }
+
+    const handleRemovePassword = async () => {
+        if (selectedPassword) {
+            await removePassword(selectedPassword.id)
+        } else {
+            toast.error(translations.someError)
+        }
     }
 
     // Effect to scroll the details into view when a password is selected
@@ -181,7 +193,7 @@ export default function PasswordsListScreen() {
                     ref={passwordListRef}
                 >
                     {filteredPasswords.length > 0 ? (
-                        filteredPasswords.map((password) => (
+                        filteredPasswords.map((password: DecryptedPassword) => (
                             <div key={password.id} className="relative">
                                 <div
                                     className={cn(
@@ -233,14 +245,14 @@ export default function PasswordsListScreen() {
                                             <div className="flex justify-end mb-1 -mt-1">
                                                 {editingPassword === password.id ? (
                                                     <div className="flex gap-1">
-                                                        <Button variant="outline" size="sm" className="h-6 text-xs px-2" onClick={cancelEditing}>{translations.cancel || "Cancelar"}</Button>
+                                                        <Button variant="outline" size="sm" className="h-6 text-xs px-2" onClick={cancelEditing}>{translations.cancel}</Button>
                                                         <Button variant="default" size="sm" className="h-6 text-xs px-2" onClick={() => savePasswordChanges(password.id)}>
-                                                            <Save className="h-3 w-3 mr-1" /> {translations.save || "Salvar"}
+                                                            <Save className="h-3 w-3 mr-1" /> {translations.save}
                                                         </Button>
                                                     </div>
                                                 ) : (
                                                     <Button variant="ghost" size="sm" className="h-6 text-xs px-2" onClick={() => startEditing(password)}>
-                                                        <Edit2 className="h-3 w-3 mr-1" /> {translations.edit || "Editar"}
+                                                        <Edit2 className="h-3 w-3 mr-1" /> {translations.edit}
                                                     </Button>
                                                 )}
                                             </div>
@@ -361,6 +373,20 @@ export default function PasswordsListScreen() {
                                                 </div>
                                             )}
                                         </div>
+                                        {deletePermission && (
+                                            <div className="flex justify-center">
+                                                <Button
+                                                    title={translations.removePassword}
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    className="h-6 text-xs px-2 hover:bg-red-700 dark:hover:bg-red-500"
+                                                    onClick={() => { setRemovePasswordDialogIsOpen(true) }}
+                                                >
+                                                    <Trash2 className="h-3 w-3 mr-1" />
+                                                    {translations.removePassword}
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -388,7 +414,7 @@ export default function PasswordsListScreen() {
 
             <div className="sticky bottom-0 flex w-full p-2 justify-end gap-2 border-t z-10 bg-white dark:bg-zinc-900">
                 {selectedVault?.vaultCreatedBy === user?.id && (
-                    <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setIsOpen(true) }}>
+                    <Button variant="outline" size="sm" className="h-8 text-xs px-2" title={translations.removeVault} onClick={() => { setRemoveVaultDialogIsOpen(true) }}>
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 )}
@@ -407,14 +433,25 @@ export default function PasswordsListScreen() {
             </div>
 
             <CommonDialog
-                isOpen={isOpen}
-                onOpenChange={setIsOpen}
-                title="Tem certeza que seja remover este cofre?"
-                description="Todas as informações relacionadas a este cofre serão perdidas permanentemente inclusive os acessos dos outros membros."
-                cancelButtonText="Cancelar"
-                confirmButtonText="Remover"
+                isOpen={removeVaultDialogIsOpen}
+                onOpenChange={setRemoveVaultDialogIsOpen}
+                title={translations.areYouSureInRemoveVault}
+                description={translations.areYouSureInRemoveVaultDialogDescription}
+                cancelButtonText={translations.cancel}
+                confirmButtonText={translations.remove}
                 confirmButtonAction={async () => { deleteVault(selectedVault!.id) }}
                 isLoading={buttonIsLoading}
+            />
+
+            <CommonDialog
+                isOpen={removePasswordDialogIsOpen}
+                onOpenChange={setRemovePasswordDialogIsOpen}
+                title={translations.areYouSureInRemovePassword}
+                description={translations.areYouSureInRemovePasswordDialogDescription}
+                cancelButtonText={translations.cancel}
+                confirmButtonText={translations.remove}
+                confirmButtonAction={async () => { handleRemovePassword() }}
+                isLoading={removePasswordLoading}
             />
         </div>
     )

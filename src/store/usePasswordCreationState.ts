@@ -1,15 +1,13 @@
 import { Config } from "@/Config"
-import { CreatePasswordRequest } from "@/models/data/interfaces/CreatePasswordRequest"
+import { PasswordRequest } from "@/models/data/interfaces/PasswordRequest"
 import { EncryptedKey } from "@/models/data/interfaces/EncryptedKey"
 import { PasswordMetadata } from "@/models/data/interfaces/PasswordMetadata"
 import { VaultRepository } from "@/models/repository/VaultRepository"
-import { invoke } from "@tauri-apps/api/core"
 import { create } from "zustand"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
-import { EncryptPasswordMetadataDTO } from "@/models/data/interfaces/EncryptPasswordMetadataDTO"
 import { useGlobalState } from "./useGlobalState"
 import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
@@ -17,6 +15,7 @@ import { decryptPassword } from "@/utils/ED_passwords"
 import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { PasswordCreationState } from "@/models/data/states/PasswordCreationState"
 import { useSelectedVaultState } from "./useSelectedVaultState"
+import { encryptPassword } from "@/utils/encryptPassword"
 
 export const usePasswordsCreationViewState = create<PasswordCreationState>((set, get) => ({
     vaultId: "",
@@ -57,20 +56,12 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
         }
 
         const { privateKey } = useGlobalState.getState()
-        const e_passwordMetadataDTO: EncryptPasswordMetadataDTO = {
-            encryptedPasswordMetadata: passMetadata,
-            esvkPubKUser: get().esvkPubKUser,
-            privUserK: privateKey
-        }
-
-        const jsonArg: string = JSON.stringify(e_passwordMetadataDTO)
         const { translations } = useLanguageState.getState()
 
         try {
-            const output: string = await invoke<string>('encrypt_password_metadata', { arg: jsonArg })
-            const encryptedKey: EncryptedKey = JSON.parse(output)
+            const encryptedKey: EncryptedKey = await encryptPassword(passMetadata, get().esvkPubKUser, privateKey)
 
-            const request: CreatePasswordRequest = {
+            const request: PasswordRequest = {
                 vaultId: get().vaultId,
                 encryptedItemData: encryptedKey
             }
@@ -92,3 +83,4 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
     clearState: () => set({ name: "", description: "", imageUrl: undefined, username: "", password: "", notes: "", url: "", file: undefined })
 }))
+

@@ -9,10 +9,16 @@ export interface SelectedVaultState {
     members: VaultMemberResponse[]
     passwords: DecryptedPassword[]
 
+    isLoading: boolean
+    removePasswordDialogIsOpen: boolean 
+    setRemovePasswordDialogIsOpen: (isOpen: boolean) => void
+
     initState: (vault: DecryptedVault, passwords: DecryptedPassword[]) => Promise<void>
     selectPassword: (vault: DecryptedVault) => void
     addPassword: (password: DecryptedPassword) => void
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => void
+    removePassword: (passwordId: string) => Promise<void>
+    updatePassword: (password: DecryptedPassword) => Promise<void>
 
     addMember: (user: MinimalUserInfoResponse) => Promise<void>
     removeMember: (memberId: string) => Promise<void>

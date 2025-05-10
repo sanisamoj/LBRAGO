@@ -13,7 +13,6 @@ import { DecryptedUserKeys } from "@/models/data/interfaces/DecryptedUserKeys"
 import { useVaultsState } from "./useVaultsState"
 import { EnvironmentRepository } from "@/models/repository/EnvironmentRepository"
 import { useAdminState } from "./useAdminState"
-import { VaultRepository } from "@/models/repository/VaultRepository"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { useUserCreationState } from "./useUserCreationState"
@@ -21,6 +20,7 @@ import { useSelectedVaultState } from "./useSelectedVaultState"
 import { usePasswordsCreationViewState } from "./usePasswordCreationState"
 import { useEnvironmentCreationState } from "./useEnvironmentCreationState"
 import { useCreateVaultState } from "./useCreateVaultState"
+import { Config } from "@/Config"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -155,11 +155,10 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         set({ user: config.user })
         await get().regenerateUserPrivK(config.user, config.password)
 
-        VaultRepository.setToken(config.token)
+        Config.setToken(config.token)
         await useVaultsState.getState().initVaultState()
 
         if (config.user.role === "admin") {
-            EnvironmentRepository.setToken(config.token)
             useAdminState.getState().initAdminState()
         }
 
