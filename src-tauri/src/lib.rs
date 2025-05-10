@@ -133,10 +133,10 @@ pub fn run() {
             // 2) Registra os atalhos
             app_handle.plugin(
                 tauri_plugin_global_shortcut::Builder::new()
-                    .with_shortcuts(["Ctrl+s", "Alt+Space"])?
+                    .with_shortcuts(["Ctrl+w", "Alt+Space"])?
                     .with_handler(move |app_handle, shortcut, event| {
                         if event.state == ShortcutState::Pressed
-                            && (shortcut.matches(Modifiers::CONTROL, Code::KeyS)
+                            && (shortcut.matches(Modifiers::CONTROL, Code::KeyW)
                                 || shortcut.matches(Modifiers::ALT, Code::Space))
                         {
                             // 3) Reabre e foca a janela escondida

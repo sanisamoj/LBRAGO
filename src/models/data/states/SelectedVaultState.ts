@@ -24,5 +24,7 @@ export interface SelectedVaultState {
     removeMember: (memberId: string) => Promise<void>
     updateMemberVaultPermission: (userId: string, permission: MemberPermissionType) => Promise<void>
 
+    copyToClipboard: (text: string | undefined | null) => void
+
     clearState: () => void
 }

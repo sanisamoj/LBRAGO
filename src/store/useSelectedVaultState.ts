@@ -23,6 +23,8 @@ import { encryptPassword } from "@/utils/encryptPassword"
 import { decryptPassword } from "@/utils/ED_passwords"
 import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { UpdatePasswordRequest } from "@/models/data/interfaces/UpdatePasswordRequest"
+import { usePreferencesState } from "./usePreferencesState"
+import { Window } from "@tauri-apps/api/window"
 
 export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     vault: {} as DecryptedVault,
@@ -205,6 +207,19 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
             set((state) => ({ members: state.members.map((m: VaultMemberResponse) => m.id === member.id ? memberCopy : m) }))
         } catch (error) {
             toast.warning(translations.someError)
+        }
+    },
+
+    copyToClipboard: (text: string | undefined | null) => {
+        if (text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const { minimizeOnCopy } = usePreferencesState.getState()
+                    if (minimizeOnCopy) {
+                        const currentWindow = Window.getCurrent()
+                        currentWindow.hide()
+                    }
+                })
         }
     },
 

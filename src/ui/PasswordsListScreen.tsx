@@ -25,7 +25,7 @@ export default function PasswordsListScreen() {
     const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
     const {
         passwords, handleCreatePassword, removePassword, isLoading: removePasswordLoading,
-        removePasswordDialogIsOpen, setRemovePasswordDialogIsOpen, updatePassword
+        removePasswordDialogIsOpen, setRemovePasswordDialogIsOpen, updatePassword, copyToClipboard: copyPassword
     } = useSelectedVaultState()
 
     const [showPassword, setShowPassword] = useState(false)
@@ -334,7 +334,7 @@ export default function PasswordsListScreen() {
                                                             {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                                                         </Button>
                                                     </div>
-                                                    <Button variant="outline" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => copyToClipboard(editingPassword === password.id ? editedPasswordData.password : password.password)} title={translations.copyPassword || "Copiar senha"} disabled={!(editingPassword === password.id ? editedPasswordData.password : password.password)}>
+                                                    <Button variant="outline" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => copyPassword(editingPassword === password.id ? editedPasswordData.password : password.password)} title={translations.copyPassword || "Copiar senha"} disabled={!(editingPassword === password.id ? editedPasswordData.password : password.password)}>
                                                         <Copy className="h-3 w-3" />
                                                     </Button>
                                                 </div>
