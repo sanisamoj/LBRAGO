@@ -33,7 +33,7 @@ export function VaultUserListView() {
     const filteredVaultUsers: VaultMemberResponse[] = useMemo(() => {
         if (!mainSearchTerm) return members
         return members.filter(user =>
-            user.username.toLowerCase().includes(mainSearchTerm.toLowerCase()) ||
+            user.username!.toLowerCase().includes(mainSearchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(mainSearchTerm.toLowerCase())
         )
     }, [members, mainSearchTerm])
@@ -91,7 +91,7 @@ export function VaultUserListView() {
                                 <Avatar className="h-8 w-8 flex-shrink-0">
                                     <AvatarImage src={undefined} alt={member.username} />
                                     <AvatarFallback className="text-xs">
-                                        {member.username.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase()}
+                                        {member.username!.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar>
 
