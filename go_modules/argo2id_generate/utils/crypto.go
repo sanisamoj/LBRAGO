@@ -133,9 +133,13 @@ func GenerateRsaKeys() (models.RsaKeyPair, error) {
 	publicKey := &privateKey.PublicKey
 
 	// Encode Private Key to PEM format
-	privBytes := x509.MarshalPKCS1PrivateKey(privateKey) // Ou PKCS8
+	privBytes, err := x509.MarshalPKCS8PrivateKey(privateKey) // Ou PKCS8
+	if err != nil {
+		log.Printf("Error marshalling RSA private key: %v\n", err)
+		return models.RsaKeyPair{}, fmt.Errorf("failed to marshal RSA private key: %w", err)
+	}
 	privPem := pem.EncodeToMemory(&pem.Block{
-		Type:  "RSA PRIVATE KEY",
+		Type:  "PRIVATE KEY",
 		Bytes: privBytes,
 	})
 
@@ -191,37 +195,43 @@ func EncryptWithRsaPublicKey(data []byte, pubKeyBase64 string) (string, error) {
 }
 
 func DecryptWithRsaPrivateKey(ciphertextBase64 string, privKeyBase64 string) ([]byte, error) {
-	privPemBytes, err := Base64ToBytes(privKeyBase64)
-	if err != nil {
-		log.Printf("Error decoding base64 private key: %v\n", err)
-		return nil, fmt.Errorf("failed to decode base64 private key: %w", err)
-	}
+    privPemBytes, err := Base64ToBytes(privKeyBase64)
+    if err != nil {
+        log.Printf("Error decoding base64 private key: %v\n", err)
+        return nil, fmt.Errorf("failed to decode base64 private key: %w", err)
+    }
 
-	block, _ := pem.Decode(privPemBytes)
-	if block == nil || block.Type != "RSA PRIVATE KEY" {
-		log.Println("Failed to decode PEM block containing private key")
-		return nil, fmt.Errorf("failed to decode PEM block containing private key")
-	}
+    block, _ := pem.Decode(privPemBytes)
+    if block == nil || block.Type != "PRIVATE KEY" { 
+        log.Println("Failed to decode PEM block containing private key, or incorrect type")
+        return nil, fmt.Errorf("failed to decode PEM block containing private key or incorrect type. Expected 'PRIVATE KEY', got '%s'", block.Type)
+    }
 
-	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err != nil {
-		log.Printf("Error parsing private key: %v\n", err)
-		return nil, fmt.Errorf("failed to parse private key: %w", err)
-	}
+    parsedKey, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+    if err != nil {
+        log.Printf("Error parsing PKCS#8 private key: %v\n", err)
+        return nil, fmt.Errorf("failed to parse PKCS#8 private key: %w", err)
+    }
 
-	ciphertext, err := Base64ToBytes(ciphertextBase64)
-	if err != nil {
-		log.Printf("Error decoding base64 ciphertext: %v\n", err)
-		return nil, fmt.Errorf("failed to decode base64 ciphertext: %w", err)
-	}
+    priv, ok := parsedKey.(*rsa.PrivateKey)
+    if !ok {
+        log.Println("Parsed key is not an RSA private key")
+        return nil, fmt.Errorf("key is not an RSA private key")
+    }
 
-	plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, priv, ciphertext, nil)
-	if err != nil {
-		log.Printf("Error decrypting data with RSA private key: %v\n", err)
-		return nil, fmt.Errorf("failed to decrypt with RSA private key: %w", err)
-	}
+    ciphertext, err := Base64ToBytes(ciphertextBase64)
+    if err != nil {
+        log.Printf("Error decoding base64 ciphertext: %v\n", err)
+        return nil, fmt.Errorf("failed to decode base64 ciphertext: %w", err)
+    }
 
-	return plaintext, nil
+    plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, priv, ciphertext, nil)
+    if err != nil {
+        log.Printf("Error decrypting data with RSA private key: %v\n", err)
+        return nil, fmt.Errorf("failed to decrypt with RSA private key: %w", err)
+    }
+
+    return plaintext, nil
 }
 
 func GenerateAES256Key() ([]byte, error) {

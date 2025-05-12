@@ -1,5 +1,4 @@
-use enigo::{Enigo, Settings};
-use enigo::Mouse;
+use enigo::{Enigo, Mouse, Settings, InputResult};
 use tauri::WebviewWindow;
 use tauri::PhysicalPosition;
 use tauri::Position;
@@ -135,30 +134,51 @@ pub fn run() {
         .setup(|app| {
             let app_handle = app.handle();
 
-            // Registra os atalhos
+            let handle_clone_for_handler = app_handle.clone();
+
             app_handle.plugin(
                 tauri_plugin_global_shortcut::Builder::new()
                     .with_shortcuts(["Ctrl+w", "Alt+Space"])?
-                    .with_handler(move |app_handle, shortcut, event| {
+                    .with_handler(move |_app_handle_ignored, shortcut, event| {
                         if event.state == ShortcutState::Pressed
                             && (shortcut.matches(Modifiers::CONTROL, Code::KeyW)
                                 || shortcut.matches(Modifiers::ALT, Code::Space))
                         {
-                            if let Some(win) = app_handle.get_webview_window("main") {
-                                // Tente obter a posição do mouse ANTES de mostrar a janela
-                                match get_mouse_position_and_reposition_window(&win) {
-                                    Ok(_) => {
-                                        // Agora mostre e foque a janela na nova posição
-                                        let _ = win.show();
-                                        let _ = win.set_focus();
+                            if let Some(win) = handle_clone_for_handler.get_webview_window("main") {
+                                match win.is_visible() {
+                                    Ok(is_visible) => {
+                                        if is_visible {
+                                            if let Err(e) = win.hide() {
+                                                 eprintln!("Erro ao esconder a janela: {}", e);
+                                            }
+                                        } else {
+                                            match get_mouse_position_and_reposition_window(&win) {
+                                                Ok(_) => {
+                                                    if let Err(e) = win.show() {
+                                                         eprintln!("Erro ao mostrar a janela: {}", e);
+                                                    }
+                                                    if let Err(e) = win.set_focus() {
+                                                         eprintln!("Erro ao focar a janela: {}", e);
+                                                    }
+                                                }
+                                                Err(e) => {
+                                                    eprintln!("Erro ao reposicionar a janela: {}. Mostrando na posição anterior.", e);
+                                                     if let Err(e) = win.show() {
+                                                         eprintln!("Erro ao mostrar a janela (fallback): {}", e);
+                                                    }
+                                                    if let Err(e) = win.set_focus() {
+                                                         eprintln!("Erro ao focar a janela (fallback): {}", e);
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                     Err(e) => {
-                                        eprintln!("Erro ao reposicionar a janela: {}", e);
-                                        // Fallback: Apenas mostra e foca na posição antiga
-                                        let _ = win.show();
-                                        let _ = win.set_focus();
+                                        eprintln!("Erro ao verificar visibilidade da janela: {}", e);
                                     }
                                 }
+                            } else {
+                                eprintln!("Janela 'main' não encontrada.");
                             }
                         }
                     })
@@ -181,19 +201,16 @@ pub fn run() {
 }
 
 fn get_mouse_position_and_reposition_window(win: &WebviewWindow) -> Result<(), String> {
-    // Cria uma instância do Enigo para interagir com o mouse
-    let settings = Settings::default(); // <--- Pega as configurações padrão
-    let mut enigo = Enigo::new(&settings) // <--- Passa as configurações para new()
+    let settings = Settings::default();
+    let enigo = Enigo::new(&settings)
         .map_err(|e| format!("Falha ao inicializar Enigo: {:?}", e))?;
 
-    // Pega a localização atual do mouse (coordenadas físicas da tela)
-    let (mouse_x, mouse_y) = enigo.location() // <--- Usa o método location()
-        .map_err(|e| format!("Falha ao obter localização do mouse: {:?}", e))?; // <--- Trata o Result de location()
+    let location_result: InputResult<(i32, i32)> = enigo.location();
+    let (mouse_x, mouse_y) = location_result
+        .map_err(|e| format!("Falha ao obter localização do mouse: {:?}", e))?;
 
-    // Calcula a nova posição da janela
-    let new_pos = PhysicalPosition::new(mouse_x + 10, mouse_y + 10); // Offset de 10px
+    let new_pos = PhysicalPosition::new(mouse_x + 10, mouse_y + 10);
 
-    // Define a posição da janela
     win.set_position(Position::Physical(new_pos))
         .map_err(|e| format!("Falha ao definir a posição da janela: {}", e))?;
 

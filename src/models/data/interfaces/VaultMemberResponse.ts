@@ -4,7 +4,7 @@ export interface VaultMemberResponse {
     id: string
     vaultId: string
     userId: string
-    username: string
+    username?: string
     email: string
     esvk_pubK_user: string
     permission: MemberPermissionType

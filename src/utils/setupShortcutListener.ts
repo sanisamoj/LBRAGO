@@ -4,7 +4,15 @@ import { Window } from '@tauri-apps/api/window'
 export async function setupShortcutListener() {
     await listen<string>("shortcut-event", async (_) => {
         const appWindow = Window.getCurrent()
-        await appWindow.show()
-        await appWindow.setFocus()
+
+        const isOpen: boolean = await appWindow.isVisible()
+        console.log("isOpen", isOpen)
+        if (isOpen) {
+            await appWindow.hide()
+        } else {
+            await appWindow.show()
+            await appWindow.setFocus()
+        }
+
     })
 }
