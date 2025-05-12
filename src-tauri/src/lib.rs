@@ -1,5 +1,10 @@
+use enigo::{Enigo, Settings};
+use enigo::Mouse;
+use tauri::WebviewWindow;
+use tauri::PhysicalPosition;
+use tauri::Position;
 use std::process::Command;
-use tauri::{Manager};
+use tauri::Manager;
 use tauri_plugin_global_shortcut::{Code, Modifiers, ShortcutState};
 
 #[tauri::command]
@@ -130,7 +135,7 @@ pub fn run() {
         .setup(|app| {
             let app_handle = app.handle();
 
-            // 2) Registra os atalhos
+            // Registra os atalhos
             app_handle.plugin(
                 tauri_plugin_global_shortcut::Builder::new()
                     .with_shortcuts(["Ctrl+w", "Alt+Space"])?
@@ -139,10 +144,21 @@ pub fn run() {
                             && (shortcut.matches(Modifiers::CONTROL, Code::KeyW)
                                 || shortcut.matches(Modifiers::ALT, Code::Space))
                         {
-                            // 3) Reabre e foca a janela escondida
                             if let Some(win) = app_handle.get_webview_window("main") {
-                                let _ = win.show();
-                                let _ = win.set_focus();
+                                // Tente obter a posição do mouse ANTES de mostrar a janela
+                                match get_mouse_position_and_reposition_window(&win) {
+                                    Ok(_) => {
+                                        // Agora mostre e foque a janela na nova posição
+                                        let _ = win.show();
+                                        let _ = win.set_focus();
+                                    }
+                                    Err(e) => {
+                                        eprintln!("Erro ao reposicionar a janela: {}", e);
+                                        // Fallback: Apenas mostra e foca na posição antiga
+                                        let _ = win.show();
+                                        let _ = win.set_focus();
+                                    }
+                                }
                             }
                         }
                     })
@@ -162,4 +178,24 @@ pub fn run() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+fn get_mouse_position_and_reposition_window(win: &WebviewWindow) -> Result<(), String> {
+    // Cria uma instância do Enigo para interagir com o mouse
+    let settings = Settings::default(); // <--- Pega as configurações padrão
+    let mut enigo = Enigo::new(&settings) // <--- Passa as configurações para new()
+        .map_err(|e| format!("Falha ao inicializar Enigo: {:?}", e))?;
+
+    // Pega a localização atual do mouse (coordenadas físicas da tela)
+    let (mouse_x, mouse_y) = enigo.location() // <--- Usa o método location()
+        .map_err(|e| format!("Falha ao obter localização do mouse: {:?}", e))?; // <--- Trata o Result de location()
+
+    // Calcula a nova posição da janela
+    let new_pos = PhysicalPosition::new(mouse_x + 10, mouse_y + 10); // Offset de 10px
+
+    // Define a posição da janela
+    win.set_position(Position::Physical(new_pos))
+        .map_err(|e| format!("Falha ao definir a posição da janela: {}", e))?;
+
+    Ok(())
 }
