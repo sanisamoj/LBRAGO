@@ -45,7 +45,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const { resetNavigation } = useNavigationState.getState()
 
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
-
         if (userStore) {
             try {
                 const init: InitGlobalStateData = {
@@ -150,7 +149,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
         const store: Store = await load('store.json', { autoSave: false })
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-        if (userStore && !userStore.savePassword) {
+        if (userStore) {
             await store.delete('userStore')
             await store.save()
         }
