@@ -17,7 +17,6 @@ export async function InitIconTray() {
     const quitMenuItem = await MenuItem.new({
         text: 'Sair',
         action: async () => {
-            console.log("fui executado")
             const appWindow = Window.getCurrent()
             await appWindow.destroy()
         },

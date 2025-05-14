@@ -1,1 +1,3 @@
-export const getIconUrl = (domain: string) => `https://icon.horse/icon/${domain}`
+import { Config } from "@/Config";
+
+export const getIconUrl = (domain: string) => `${Config.API_URL}/media/${domain}`

@@ -75,7 +75,6 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
 
             toast.success(translations.passwordRemoveSuccessfully)
         } catch (error) {
-            console.log("error", error)
             toast.error(translations.errorInRemovePassword)
         }
 
@@ -115,7 +114,6 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
             const newPasswords: DecryptedPassword[] = get().passwords.map(p => p.id === password.id ? decryptedPassword : p)
             set({ passwords: newPasswords })
         } catch (error) {
-            console.log("error", error)
             toast.error(translations.internalErrorTryAgain)
         }
 

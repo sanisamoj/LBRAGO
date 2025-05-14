@@ -45,7 +45,6 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
             set({ isLoading: false, isError: false, errorMessage: "" })
             toast.success(translations.sentCodeSuccess)
         } catch (error: AxiosError | any) {
-            console.log("error", error)
             if (error?.response?.status === 429) {
                 set({
                     isLoading: false,
