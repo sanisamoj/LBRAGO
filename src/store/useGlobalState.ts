@@ -44,6 +44,10 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
 
+        // await invoke("update_shortcuts", {
+        //     shortcuts: ["Ctrl+Shift+Y", "Alt+Q"]
+        // });
+
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
         if (userStore) {
             try {

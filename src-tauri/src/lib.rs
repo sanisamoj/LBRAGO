@@ -1,10 +1,10 @@
-use enigo::{Enigo, Mouse, Settings, InputResult};
-use tauri::WebviewWindow;
-use tauri::PhysicalPosition;
-use tauri::Position;
+use enigo::{Enigo, InputResult, Mouse, Settings};
 use std::process::Command;
 use tauri::Manager;
-use tauri_plugin_global_shortcut::{Code, Modifiers, ShortcutState};
+use tauri::PhysicalPosition;
+use tauri::Position;
+use tauri::WebviewWindow;
+use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 
 #[tauri::command]
 async fn generate_user_credentials(arg: String) -> Result<String, String> {
@@ -139,46 +139,20 @@ pub fn run() {
             app_handle.plugin(
                 tauri_plugin_global_shortcut::Builder::new()
                     .with_shortcuts(["Ctrl+w", "Alt+Space"])?
-                    .with_handler(move |_app_handle_ignored, shortcut, event| {
-                        if event.state == ShortcutState::Pressed
-                            && (shortcut.matches(Modifiers::CONTROL, Code::KeyW)
-                                || shortcut.matches(Modifiers::ALT, Code::Space))
-                        {
-                            if let Some(win) = handle_clone_for_handler.get_webview_window("main") {
+                    .with_handler(move |app_handle, shortcut, event| {
+                        if event.state == ShortcutState::Pressed {
+                            if let Some(win) = app_handle.get_webview_window("main") {
                                 match win.is_visible() {
-                                    Ok(is_visible) => {
-                                        if is_visible {
-                                            if let Err(e) = win.hide() {
-                                                 eprintln!("Erro ao esconder a janela: {}", e);
-                                            }
-                                        } else {
-                                            match get_mouse_position_and_reposition_window(&win) {
-                                                Ok(_) => {
-                                                    if let Err(e) = win.show() {
-                                                         eprintln!("Erro ao mostrar a janela: {}", e);
-                                                    }
-                                                    if let Err(e) = win.set_focus() {
-                                                         eprintln!("Erro ao focar a janela: {}", e);
-                                                    }
-                                                }
-                                                Err(e) => {
-                                                    eprintln!("Erro ao reposicionar a janela: {}. Mostrando na posição anterior.", e);
-                                                     if let Err(e) = win.show() {
-                                                         eprintln!("Erro ao mostrar a janela (fallback): {}", e);
-                                                    }
-                                                    if let Err(e) = win.set_focus() {
-                                                         eprintln!("Erro ao focar a janela (fallback): {}", e);
-                                                    }
-                                                }
-                                            }
-                                        }
+                                    Ok(true) => {
+                                        let _ = win.hide();
                                     }
-                                    Err(e) => {
-                                        eprintln!("Erro ao verificar visibilidade da janela: {}", e);
+                                    Ok(false) => {
+                                        let _ = get_mouse_position_and_reposition_window(&win);
+                                        let _ = win.show();
+                                        let _ = win.set_focus();
                                     }
+                                    Err(e) => eprintln!("Erro ao verificar visibilidade: {}", e),
                                 }
-                            } else {
-                                eprintln!("Janela 'main' não encontrada.");
                             }
                         }
                     })
@@ -194,7 +168,8 @@ pub fn run() {
             encrypt_vault_metadata,
             encrypt_password_metadata,
             decrypt_password_metadata,
-            regenerate_svk_to_member
+            regenerate_svk_to_member,
+            update_shortcuts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -202,17 +177,40 @@ pub fn run() {
 
 fn get_mouse_position_and_reposition_window(win: &WebviewWindow) -> Result<(), String> {
     let settings = Settings::default();
-    let enigo = Enigo::new(&settings)
-        .map_err(|e| format!("Falha ao inicializar Enigo: {:?}", e))?;
+    let enigo =
+        Enigo::new(&settings).map_err(|e| format!("Falha ao inicializar Enigo: {:?}", e))?;
 
     let location_result: InputResult<(i32, i32)> = enigo.location();
-    let (mouse_x, mouse_y) = location_result
-        .map_err(|e| format!("Falha ao obter localização do mouse: {:?}", e))?;
+    let (mouse_x, mouse_y) =
+        location_result.map_err(|e| format!("Falha ao obter localização do mouse: {:?}", e))?;
 
     let new_pos = PhysicalPosition::new(mouse_x + 10, mouse_y + 10);
 
     win.set_position(Position::Physical(new_pos))
         .map_err(|e| format!("Falha ao definir a posição da janela: {}", e))?;
+
+    Ok(())
+}
+
+#[tauri::command]
+async fn update_shortcuts(app: tauri::AppHandle, shortcuts: Vec<String>) -> Result<(), String> {
+    let plugin = app.global_shortcut();
+
+    // Remove todos os atalhos anteriores
+    plugin
+        .unregister_all()
+        .map_err(|e| format!("Falha ao remover atalhos antigos: {}", e))?;
+
+    // Registra todos os novos atalhos
+    for shortcut_str in shortcuts {
+        let shortcut = shortcut_str
+            .parse::<Shortcut>()
+            .map_err(|e| format!("Atalho inválido '{}': {:?}", shortcut_str, e))?;
+
+        plugin
+            .register(shortcut)
+            .map_err(|e| format!("Erro ao registrar atalho '{}': {}", shortcut_str, e))?;
+    }
 
     Ok(())
 }
