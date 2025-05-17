@@ -16,9 +16,14 @@ import InviteUserScreen from "./InviteUserScreen"
 import VaultsListScreen from "./VaultsListScreen"
 import PasswordsListScreen from "./PasswordsListScreen"
 import { VaultUserListView } from "./VaultUserListView"
+import SplashScreen from "./SplashScreen"
 
 export default function LBragoApp() {
   const { getCurrentScreen } = useNavigationState()
+
+  if (getCurrentScreen() === NavigationScreen.APRESENTATION) {
+    return <SplashScreen />
+  }
 
   return (
     <div className="flex items-center justify-center h-screen w-full bg-white dark:bg-zinc-900" data-tauri-drag-region>
