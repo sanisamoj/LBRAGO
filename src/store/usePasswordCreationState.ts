@@ -16,6 +16,8 @@ import { MemberPermissionType } from "@/models/data/enums/MemberPermissionType"
 import { PasswordCreationState } from "@/models/data/states/PasswordCreationState"
 import { useSelectedVaultState } from "./useSelectedVaultState"
 import { encryptPassword } from "@/utils/encryptPassword"
+import { SavedMediaResponse } from "@/models/data/interfaces/SavedMediaResponse"
+import { UploadMedia } from "@/utils/uploadMedia"
 
 export const usePasswordsCreationViewState = create<PasswordCreationState>((set, get) => ({
     vaultId: "",
@@ -45,9 +47,16 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
     createPassword: async () => {
         set({ isLoading: true })
+
+        let imageUrl: string = get().imageUrl ?? ""
+        if(get().file) {
+            const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
+            imageUrl = savedMedia.url
+        }
+
         const passMetadata: PasswordMetadata = {
             name: get().name,
-            imageUrl: get().imageUrl ?? "",
+            imageUrl: imageUrl,
             username: get().username,
             description: get().description,
             url: get().url,

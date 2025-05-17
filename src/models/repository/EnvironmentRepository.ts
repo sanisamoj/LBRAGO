@@ -2,6 +2,7 @@ import { Config } from "@/Config"
 import axios, { AxiosInstance } from "axios"
 import { MinimalUserInfoResponse } from "../data/interfaces/MinimalUserInfoResponse"
 import { InviteUserRequest } from "../data/interfaces/InviteUserRequest"
+import { SavedMediaResponse } from "../data/interfaces/SavedMediaResponse"
 
 export class EnvironmentRepository {
     private static instance: EnvironmentRepository | null = null
@@ -36,6 +37,19 @@ export class EnvironmentRepository {
         const response = await this.api.post<{ invitedCode: string }>("/invites", request, {
             headers: {
                 Authorization: `Bearer ${Config.token}`
+            }
+        })
+        return response.data
+    }
+
+    public async uploadMedia(file: File): Promise<SavedMediaResponse> {
+        const formData = new FormData()
+        formData.append("media", file)
+
+        const response = await this.api.post<SavedMediaResponse>("/media", formData, {
+            headers: {
+                Authorization: `Bearer ${Config.token}`,
+                "Content-Type": "multipart/form-data"
             }
         })
         return response.data

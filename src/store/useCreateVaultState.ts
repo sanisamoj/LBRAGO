@@ -16,12 +16,15 @@ import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 import { decryptVaultWithMemberResponse } from "@/utils/ED_vaults"
 import { useVaultsState } from "./useVaultsState"
 import { AxiosError } from "axios"
+import { SavedMediaResponse } from "@/models/data/interfaces/SavedMediaResponse"
+import { UploadMedia } from "@/utils/uploadMedia"
 
 export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     name: "",
     description: "",
     imageUrl: Config.FAVICON_URL,
     personalVault: false,
+    file: undefined,
 
     isLoading: false,
 
@@ -29,6 +32,7 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     setDescription: (description: string) => set({ description }),
     setImageUrl: (imageUrl: string | undefined) => set({ imageUrl }),
     setPersonalVault: (personalVault: boolean) => set({ personalVault }),
+    setFile: (file: File | undefined) => set({ file }),
 
     createVault: async () => {
         set({ isLoading: true })
@@ -37,10 +41,16 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
         const { translations } = useLanguageState.getState()
         const { navigateReplace } = useNavigationState.getState()
 
+        let imageUrl: string = get().imageUrl ?? ""
+        if(get().file) {
+            const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
+            imageUrl = savedMedia.url
+        }
+
         const dto: EncryptVaultMetadataDTO = {
             userPubkey: publicKey,
             metadata: {
-                imageUrl: get().imageUrl ?? "",
+                imageUrl: imageUrl,
                 name: get().name,
                 description: get().description
             }

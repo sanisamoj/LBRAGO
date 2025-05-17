@@ -3,6 +3,7 @@ export interface CreateVaultState {
     description: string
     imageUrl: string | undefined
     personalVault: boolean
+    file: File | undefined
 
     isLoading: boolean
 
@@ -10,6 +11,7 @@ export interface CreateVaultState {
     setDescription: (description: string) => void
     setImageUrl: (imageUrl: string | undefined) => void
     setPersonalVault: (personalVault: boolean) => void
+    setFile: (file: File | undefined) => void
 
     createVault: () => Promise<void>
 

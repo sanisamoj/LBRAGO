@@ -86,6 +86,7 @@ export default function SettingsScreen() {
                                 type="text"
                                 placeholder={translations.appShortcutPlaceholder}
                                 value={customOpenAppShortcut}
+                                readOnly
                                 onKeyDown={(e) => {
                                     e.preventDefault()
                                     const modifiers = []

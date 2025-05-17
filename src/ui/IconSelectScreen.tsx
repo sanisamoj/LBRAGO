@@ -92,6 +92,7 @@ export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: I
         <div className="flex-1">
           {!open && (
             <Button
+              id="IconSelectButton"
               type="button"
               variant="outline"
               size="sm"
@@ -152,15 +153,15 @@ export default function IconSelectorScreen({ imageUrl, setFile, setImageUrl }: I
                       <img src={previewImage} alt="Preview" className="h-12 w-12 object-contain" />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="h-7 text-xs" onClick={triggerFileInput}>{translations.replace}</Button>
-                      <Button variant="outline" size="sm" className="h-7 text-xs" onClick={clearCustomImage}>{translations.remove}</Button>
+                      <Button type="button" variant="outline" size="sm" className="h-7 text-xs" onClick={triggerFileInput}>{translations.replace}</Button>
+                      <Button type="button" variant="outline" size="sm" className="h-7 text-xs" onClick={clearCustomImage}>{translations.remove}</Button>
                     </div>
                   </>
                 ) : (
                   <>
                     <Upload className="h-8 w-8 text-muted-foreground mb-2" />
                     <p className="text-xs text-center text-muted-foreground">{translations.dragOrClickToUpload}</p>
-                    <Button variant="outline" size="sm" className="h-7 text-xs mt-2" onClick={triggerFileInput}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 text-xs mt-2" onClick={triggerFileInput}>
                       {translations.selectImage}
                     </Button>
                   </>

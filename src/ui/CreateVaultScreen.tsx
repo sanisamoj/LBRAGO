@@ -10,7 +10,7 @@ export default function CreateVaultScreen() {
   const { translations } = useLanguageState()
   const {
     name, description, imageUrl, isLoading, personalVault, setName, setDescription,
-    setImageUrl, createVault, setPersonalVault
+    setImageUrl, createVault, setPersonalVault, setFile
   } = useCreateVaultState()
 
 
@@ -18,7 +18,7 @@ export default function CreateVaultScreen() {
     <div className="flex flex-col h-full p-4">
 
       <form onSubmit={(e) => { e.preventDefault(); createVault() }} className="space-y-3">
-        <IconSelectorScreen imageUrl={imageUrl} setFile={() => { }} setImageUrl={setImageUrl} />
+        <IconSelectorScreen imageUrl={imageUrl} setFile={setFile} setImageUrl={setImageUrl} />
 
         <div className="space-y-1">
           <Label htmlFor="name" className="text-xs font-medium">
