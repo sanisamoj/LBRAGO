@@ -23,12 +23,16 @@ import { Config } from "@/Config"
 import { InitIconTray } from "@/utils/IconTray"
 import { InitGlobalStateData } from "@/models/data/interfaces/InitGlobalStateData"
 import { jwtDecode } from 'jwt-decode'
+import { GlobalRepository } from "@/models/repository/GlobalRepository"
+import { ApplicationVersion } from "@/models/data/interfaces/Version"
+import { checkVersion, VersionCheckResult } from "@/utils/checkVersion"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
     store: null,
     privateKey: "",
     publicKey: "",
+    availableUpdate: false,
 
     initialAppConfiguration: async () => {
         // Inicia as informações iniciais do app como os estados
@@ -166,6 +170,26 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             }
             get().saveUserSession(userStore)
         }
+
+        get().checkUpdates()
+    },
+
+    checkUpdates: async () => {
+        const check = async () => {
+            const repository: GlobalRepository = GlobalRepository.getInstance()
+            const version: ApplicationVersion = await repository.getLatestVersion()
+            
+            const checkedVersion = checkVersion(Config.VERSION, version.latestDesktopVersion.version)
+            if(checkedVersion === VersionCheckResult.FEATURE_UPDATE || checkedVersion === VersionCheckResult.PATCH_UPDATE) {
+                set({ availableUpdate: true })
+            }
+        }
+        
+        await check()
+
+        setInterval( async () => {
+            await check()
+        }, 1000 * 60 * 60 * 12) // 12 hours
     },
 
     clearAllStates: () => {

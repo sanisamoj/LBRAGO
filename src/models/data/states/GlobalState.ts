@@ -7,6 +7,7 @@ export interface GlobalState {
     store: UserStore | null
     privateKey: string
     publicKey: string
+    availableUpdate: boolean
 
     loadStore (): Promise<void>
     saveStore (userStore: UserStore): Promise<void>
@@ -19,6 +20,9 @@ export interface GlobalState {
 
     initialAppConfiguration: () => Promise<void>
     initGlobalState: (config: InitGlobalStateData) => Promise<void>
+
+    checkUpdates: () => Promise<void>
+
     clearAllStates: () => void
 }
 
