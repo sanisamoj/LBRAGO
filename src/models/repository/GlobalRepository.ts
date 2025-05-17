@@ -1,6 +1,6 @@
 import { Config } from "@/Config"
 import axios, { AxiosInstance } from "axios"
-import { ApplicationVersion } from "../data/interfaces/Version"
+import { Version } from "../data/interfaces/Version"
 
 export class GlobalRepository {
     private static instance: GlobalRepository | null = null
@@ -22,7 +22,7 @@ export class GlobalRepository {
         return GlobalRepository.instance
     }
 
-    public async getLatestVersion(): Promise<ApplicationVersion> {
+    public async getLatestVersion(): Promise<Version> {
         const response = await this.api.get("/versions/latest")
         return response.data
     }

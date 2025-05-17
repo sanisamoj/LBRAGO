@@ -7,7 +7,7 @@ import { usePreferencesState } from "@/store/usePreferencesState"
 import { useGlobalState } from "@/store/useGlobalState"
 
 export default function HeaderNavigation() {
-    const { availableUpdate } = useGlobalState()
+    const { availableUpdate, updateAppVersion } = useGlobalState()
     const { isDarkTheme, setDarkTheme } = usePreferencesState()
     const { canGoBack, navigateBack, getCurrentScreenTitle, getCurrentScreen, navigateTo } = useNavigationState()
     const isApresenting: boolean = NavigationScreen.APRESENTATION === getCurrentScreen()
@@ -44,7 +44,7 @@ export default function HeaderNavigation() {
                 <Button
                     variant="ghost"
                     size="sm"
-                    onClick={undefined}
+                    onClick={updateAppVersion}
                     className="h-7 w-7 p-0 animate-pulse"
                     title="Atualização disponível"
                 >

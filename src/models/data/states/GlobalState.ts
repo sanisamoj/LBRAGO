@@ -22,6 +22,7 @@ export interface GlobalState {
     initGlobalState: (config: InitGlobalStateData) => Promise<void>
 
     checkUpdates: () => Promise<void>
+    updateAppVersion: () => Promise<void>
 
     clearAllStates: () => void
 }
