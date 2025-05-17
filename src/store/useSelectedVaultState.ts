@@ -25,6 +25,7 @@ import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { UpdatePasswordRequest } from "@/models/data/interfaces/UpdatePasswordRequest"
 import { usePreferencesState } from "./usePreferencesState"
 import { Window } from "@tauri-apps/api/window"
+import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 
 export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     vault: {} as DecryptedVault,
@@ -208,7 +209,7 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
         }
     },
 
-    copyToClipboard: (text: string | undefined | null) => {
+    copyToClipboard: async (text: string | undefined | null) => {
         if (text) {
             navigator.clipboard.writeText(text)
                 .then(() => {
@@ -219,6 +220,18 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
                     }
                 })
         }
+
+        get().clearClipboardTimeout()
+    },
+
+    clearClipboardTimeout: async () => {
+        const { clearClipboardTimeout } = usePreferencesState.getState()
+        if (clearClipboardTimeout === 0) return
+
+        const ms: number = clearClipboardTimeout * 1000
+        setTimeout( async () => {
+            await writeText("")
+        }, ms)
     },
 
     clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [] })

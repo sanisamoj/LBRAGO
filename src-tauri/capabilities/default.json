@@ -16,6 +16,7 @@
     "core:app:allow-default-window-icon",
     "core:window:allow-destroy",
     "core:window:allow-show",
-    "core:window:allow-set-focus"
+    "core:window:allow-set-focus",
+    "clipboard-manager:allow-write-text"
   ]
 }

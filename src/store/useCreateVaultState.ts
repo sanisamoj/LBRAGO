@@ -8,7 +8,7 @@ import { EncryptedVaultMetadataDTO } from "@/models/data/interfaces/EncryptedVau
 import { CreateVaultRequest } from "@/models/data/interfaces/CreateVaultRequest"
 import { VaultRepository } from "@/models/repository/VaultRepository"
 import { Config } from "@/Config"
-import { CreateVaultState } from "@/models/data/interfaces/CreateVaultState"
+import { CreateVaultState } from "@/models/data/states/CreateVaultState"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { EVaultResponse } from "@/models/data/interfaces/EVaultResponse"
@@ -39,7 +39,7 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
 
         const { publicKey, privateKey } = useGlobalState.getState()
         const { translations } = useLanguageState.getState()
-        const { navigateReplace } = useNavigationState.getState()
+        const { resetNavigation } = useNavigationState.getState()
 
         let imageUrl: string = get().imageUrl ?? ""
         if(get().file) {
@@ -73,7 +73,7 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
             useVaultsState.getState().addVault(decryptedVault)
 
             toast.success(translations.vaultCreatedSuccessfully)
-            navigateReplace(NavigationScreen.VAULTS)
+            resetNavigation(NavigationScreen.VAULTS)
         } catch (error: AxiosError | any) {
             if (error instanceof AxiosError) {
                 if (error.status === 403) {
