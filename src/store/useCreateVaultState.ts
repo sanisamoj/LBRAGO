@@ -83,9 +83,9 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
             }
 
             toast.error(translations.errorGeneratingVault)
+        } finally {
+            set({ isLoading: false })
         }
-
-        set({ isLoading: false })
     },
 
     clearState: () => set({ name: "", description: "", imageUrl: Config.FAVICON_URL, personalVault: false })

@@ -22,6 +22,9 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
   e_passwords: new Map<string, EPasswordResponse[]>(),
   passwords: new Map<string, DecryptedPassword[]>(),
 
+  removeVaultDialogIsOpen: false,
+  setRemoveVaultDialogIsOpen: (isOpen: boolean) => set({ removeVaultDialogIsOpen: isOpen }),
+
   buttonIsLoading: false,
 
   initVaultState: async () => {
@@ -51,11 +54,14 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
   deleteVault: async (vaultId: string) => {
     set({ buttonIsLoading: true })
     const { translations } = useLanguageState.getState()
+
     try {
-      set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
       const vaultsRespository = VaultRepository.getInstance()
       await vaultsRespository.deleteVault(vaultId)
       toast.success(translations.vaultRemovedSuccessfully)
+      
+      set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
+      set({ removeVaultDialogIsOpen: false })
     } catch (error) {
       toast.warning(translations.tryInSomeTime)
     }

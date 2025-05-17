@@ -64,7 +64,7 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     },
 
     removePassword: async (passwordId: string) => {
-        set({ isLoading: false })
+        set({ isLoading: true })
         const { translations } = useLanguageState.getState()
 
         try {

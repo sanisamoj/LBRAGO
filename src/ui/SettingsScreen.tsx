@@ -19,18 +19,16 @@ import { DecryptedVault } from "@/models/data/interfaces/DecryptedVault"
 
 export default function SettingsScreen() {
     const { translations } = useLanguageState()
-    const { vaults } = useVaultsState()
     const { user, signout } = useGlobalState()
     const { navigateTo } = useNavigationState()
-    const { deleteVault } = useVaultsState()
+    const { vaults, deleteVault, buttonIsLoading, removeVaultDialogIsOpen, setRemoveVaultDialogIsOpen } = useVaultsState()
     const {
         isDarkTheme, minimizeOnCopy, clearClipboardTimeout, setDarkTheme,
-        setMinimizeOnCopy, setClearClipboardTimeout, customOpenAppShortcut, 
+        setMinimizeOnCopy, setClearClipboardTimeout, customOpenAppShortcut,
         updateShortcut
     } = usePreferencesState()
 
     const [settingsTab, setSettingsTab] = useState(translations.general)
-    const [removeVaultDialogIsOpen, setRemoveVaultDialogIsOpen] = useState(false)
     const [virtualVault, setVirtualVault] = useState<DecryptedVault | null>(null)
 
     const handleRemoveVault = (vault: DecryptedVault) => () => {
@@ -115,7 +113,7 @@ export default function SettingsScreen() {
                                                 updateShortcut(shortcutString)
                                             }
                                         }
-                                    } else {}
+                                    } else { }
                                 }}
                                 className="h-7 text-xs"
                             />
@@ -145,7 +143,14 @@ export default function SettingsScreen() {
                                                 <p className="text-xs text-muted-foreground truncate">{vault.permission}</p>
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <Button variant="ghost" size="sm" onClick={handleRemoveVault(vault)} className="h-6 w-6 p-0 text-destructive" title={translations.removeVault}><Trash2 className="h-3 w-3" /></Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={handleRemoveVault(vault)}
+                                                    className="h-6 w-6 p-0 text-destructive"
+                                                    title={translations.removeVault}>
+                                                    <Trash2 className="h-3 w-3" />
+                                                </Button>
                                             </div>
                                         </div>
                                     ))}
@@ -193,6 +198,7 @@ export default function SettingsScreen() {
                     cancelButtonText={translations.cancel}
                     confirmButtonText={translations.remove}
                     confirmButtonAction={async () => { deleteVault(virtualVault!.id) }}
+                    isLoading={buttonIsLoading}
                 />
             </div>
         </>

@@ -21,10 +21,7 @@ export function CommonDialog({ isOpen, onOpenChange, title, description, cancelB
                         <Button
                             type="button"
                             variant="secondary"
-                            onClick={() => {
-                                confirmButtonAction()
-                                onOpenChange(false)
-                            }}
+                            onClick={confirmButtonAction}
                             disabled={isLoading}
                         >
                             {isLoading ? (

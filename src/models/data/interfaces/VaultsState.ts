@@ -11,6 +11,9 @@ export interface VaultsState {
 
     getAllPasswords: (e_vaults: EVaultWithMemberInfo[]) => Promise<void>
 
+    removeVaultDialogIsOpen: boolean
+    setRemoveVaultDialogIsOpen: (isOpen: boolean) => void
+
     e_vaults: EVaultWithMemberInfo[]
     vaults: DecryptedVault[]
     selectedVault: DecryptedVault | null
