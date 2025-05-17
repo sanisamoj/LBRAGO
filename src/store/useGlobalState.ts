@@ -22,6 +22,7 @@ import { useCreateVaultState } from "./useCreateVaultState"
 import { Config } from "@/Config"
 import { InitIconTray } from "@/utils/IconTray"
 import { InitGlobalStateData } from "@/models/data/interfaces/InitGlobalStateData"
+import { jwtDecode } from 'jwt-decode'
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -46,6 +47,13 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
         if (userStore) {
+            const decodedToken = jwtDecode<any>(userStore.token)
+            const currentTimeInSeconds = Math.floor(Date.now() / 1000)
+
+            if (decodedToken.exp < currentTimeInSeconds) {
+                return resetNavigation(NavigationScreen.LOGIN_EMAIL)
+            }
+
             try {
                 const init: InitGlobalStateData = {
                     user: userStore.user,
@@ -53,8 +61,10 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
                     token: userStore.token,
                     savePassword: true
                 }
+
                 await get().initGlobalState(init)
                 return resetNavigation(NavigationScreen.VAULTS)
+
             } catch (error: Error | any) {
                 const { translations } = useLanguageState.getState()
                 if (error instanceof Error && error.message === translations.networkError) {
