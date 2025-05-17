@@ -14,7 +14,7 @@ import { MinimalPasswordVerifier } from "@/models/data/interfaces/MinimalPasswor
 import { EnvironmentLoginRequest } from "@/models/data/interfaces/EnvironmentLoginRequest"
 import { UserWithTokenResponse } from "@/models/data/interfaces/UserWithTokenResponse"
 import { useGlobalState } from "./useGlobalState"
-import { InitGlobalStateData } from "@/models/data/states/GlobalState"
+import { InitGlobalStateData } from "@/models/data/interfaces/InitGlobalStateData"
 
 export const useLoginViewState = create<LoginViewState>((set, get) => ({
     email: "",
@@ -55,7 +55,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 return
             }
 
-            if (error?.response?.status === 401) {
+            if (error?.response?.status === 401 || error?.response?.status === 404) {
                 set({
                     isLoading: false,
                     isError: true,
@@ -147,7 +147,7 @@ export const useLoginViewState = create<LoginViewState>((set, get) => ({
                 email: get().email,
                 verifier: minPasswordVerifier.hash
             }
-            console.log("loginRequest", loginRequest)
+
             const userWithTokenResponse: UserWithTokenResponse = await loginRepository.login(loginRequest)
 
             const init: InitGlobalStateData = {

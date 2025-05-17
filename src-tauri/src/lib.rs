@@ -4,7 +4,7 @@ use tauri::Manager;
 use tauri::PhysicalPosition;
 use tauri::Position;
 use tauri::WebviewWindow;
-use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
+use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
 
 #[tauri::command]
 async fn generate_user_credentials(arg: String) -> Result<String, String> {
@@ -134,11 +134,9 @@ pub fn run() {
         .setup(|app| {
             let app_handle = app.handle();
 
-            let handle_clone_for_handler = app_handle.clone();
-
             app_handle.plugin(
                 tauri_plugin_global_shortcut::Builder::new()
-                    .with_shortcuts(["Ctrl+w", "Alt+Space"])?
+                    .with_shortcuts(["Alt+Space"])?
                     .with_handler(move |app_handle, shortcut, event| {
                         if event.state == ShortcutState::Pressed {
                             if let Some(win) = app_handle.get_webview_window("main") {

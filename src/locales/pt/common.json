@@ -200,5 +200,10 @@
     "searachPasswordsPlaceholder": "Pesquisar senhas...",
 
     "youAlreadyHavePersonalVault": "Você ja tem um cofre pessoal.",
-    "youAlreadyHavePersonalVaultDescription": "Se você deseja criar um cofre pessoal, você deve remover o cofre pessoal existente primeiro."
+    "youAlreadyHavePersonalVaultDescription": "Se você deseja criar um cofre pessoal, você deve remover o cofre pessoal existente primeiro.",
+
+    "appShortcutLabel": "Atalho para Abrir/Fechar Aplicação",
+    "appShortcutDescription": "Defina a combinação de teclas para mostrar ou ocultar a janela principal.",
+    "appShortcutPlaceholder": "Ex: Ctrl+Shift+W",
+    "appShortcutInfo": "Nota: Utilize atalhos que outros sistemas não utilizam, pois a aplicação pode aparecer enquanto você chama o atalho."
 }

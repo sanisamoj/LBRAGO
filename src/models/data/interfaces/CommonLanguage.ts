@@ -203,4 +203,9 @@ export interface CommonLanguage {
 
     youAlreadyHavePersonalVault: string
     youAlreadyHavePersonalVaultDescription: string
+
+    appShortcutLabel: string
+    appShortcutDescription: string
+    appShortcutPlaceholder: string
+    appShortcutInfo: string
 }

@@ -1,3 +1,4 @@
+import { InitGlobalStateData } from "../interfaces/InitGlobalStateData"
 import { UserResponse } from "../interfaces/UserResponse"
 import { UserStore } from "../interfaces/UserStore"
 
@@ -21,10 +22,5 @@ export interface GlobalState {
     clearAllStates: () => void
 }
 
-export interface InitGlobalStateData {
-    user: UserResponse,
-    password: string
-    token: string
-    savePassword: boolean
-}
+
 

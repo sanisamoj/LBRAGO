@@ -1,11 +1,10 @@
 import { create } from "zustand"
 import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
-import { GlobalState, InitGlobalStateData } from "@/models/data/states/GlobalState"
+import { GlobalState } from "@/models/data/states/GlobalState"
 import { load, Store } from '@tauri-apps/plugin-store'
 import { UserStore } from "@/models/data/interfaces/UserStore"
 import { usePreferencesState } from "./usePreferencesState"
-import { PreferencesStore } from "@/models/data/interfaces/PreferenceStore"
 import { UserResponse } from "@/models/data/interfaces/UserResponse"
 import { RegenerateUserKeysDTO } from "@/models/data/interfaces/RegenerateUserKeysDTO"
 import { invoke } from "@tauri-apps/api/core"
@@ -22,6 +21,7 @@ import { useEnvironmentCreationState } from "./useEnvironmentCreationState"
 import { useCreateVaultState } from "./useCreateVaultState"
 import { Config } from "@/Config"
 import { InitIconTray } from "@/utils/IconTray"
+import { InitGlobalStateData } from "@/models/data/interfaces/InitGlobalStateData"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -43,10 +43,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const store: Store = await load('store.json', { autoSave: false })
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
-
-        // await invoke("update_shortcuts", {
-        //     shortcuts: ["Ctrl+Shift+Y", "Alt+Q"]
-        // });
 
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
         if (userStore) {
@@ -106,29 +102,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         await store.save()
 
         set({ store: userStore })
-    },
-
-    updatePreferences: async () => {
-        const store: Store = await load('store.json', { autoSave: false })
-        const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout, savePassword } = usePreferencesState.getState()
-
-        const preferencesStore: PreferencesStore = {
-            isDarkTheme: isDarkTheme,
-            minimizeOnCopy: minimizeOnCopy,
-            clearClipboardTimeout: clearClipboardTimeout,
-            savePassword: savePassword
-        }
-        await store.set('preferencesStore', preferencesStore)
-
-        if (!savePassword) {
-            let userStore: UserStore | undefined = await store.get<UserStore>('userStore')
-            if (userStore) {
-                await store.delete('userStore')
-            }
-        }
-
-        await store.save()
-        return
     },
 
     regenerateUserPrivK: async (userResponse: UserResponse, password: string) => {
