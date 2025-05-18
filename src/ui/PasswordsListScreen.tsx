@@ -183,7 +183,7 @@ export default function PasswordsListScreen() {
                 const detailsRect = detailsElement.getBoundingClientRect()
 
                 if (detailsRect.bottom > containerRect.bottom) {
-                    const scrollAmount = detailsRect.bottom - containerRect.bottom + 16
+                    const scrollAmount = detailsRect.bottom - containerRect.bottom - 120
                     containerRef.current.scrollBy({ top: scrollAmount, behavior: "smooth" })
                 }
 
