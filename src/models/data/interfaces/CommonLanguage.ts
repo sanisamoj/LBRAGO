@@ -127,6 +127,7 @@ export interface CommonLanguage {
     noRegisteredUsers: string
     notFoundUsers: string
     inviteUser: string
+    manageUsers: string
 
     userSearch: string
     sendingInvite: string

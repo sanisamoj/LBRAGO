@@ -128,7 +128,7 @@ export default function SettingsScreen() {
                             {user?.role === "admin" && (
                                 <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
                                     <Plus className="h-3.5 w-3.5 mr-1" />
-                                    {translations.inviteUser}
+                                    {translations.manageUsers}
                                 </Button>
                             )}
 
