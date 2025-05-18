@@ -41,6 +41,9 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         // Inicia as informações iniciais do app como os estados
         get().loadStore()
 
+        // Verifica se tem atualização disponível
+        get().checkUpdates()
+
         // Gera a barra de ícone
         InitIconTray()
     },
@@ -121,6 +124,10 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         set({ store: userStore })
     },
 
+    setAvailableUpdate: async (availableUpdate: boolean) => {
+        set({ availableUpdate })
+    },
+
     regenerateUserPrivK: async (userResponse: UserResponse, password: string) => {
         const regUserKeysDTO: RegenerateUserKeysDTO = {
             pVGenerateDTO: {
@@ -173,8 +180,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             }
             get().saveUserSession(userStore)
         }
-
-        get().checkUpdates()
     },
 
     checkUpdates: async () => {

@@ -13,6 +13,7 @@ export interface GlobalState {
     saveStore (userStore: UserStore): Promise<void>
     clearStore (): Promise<void>
     saveUserSession(userResponse: UserStore): Promise<void>
+    setAvailableUpdate(availableUpdate: boolean): void
 
     regenerateUserPrivK: (userResponse: UserResponse, password: string) => Promise<void>
 
