@@ -9,6 +9,10 @@ function App() {
   const { initialAppConfiguration } = useGlobalState()
   useEffect(() => { initialAppConfiguration() }, [])
 
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+  })
+
   return (
     <div>
       <Toaster />
