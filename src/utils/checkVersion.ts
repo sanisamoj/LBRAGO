@@ -12,18 +12,19 @@ export function checkVersion(current: string, server: string): VersionCheckResul
     throw new Error("Versão inválida")
   }
 
-  const currentSemver = semver.parse(current)!
-  const serverSemver = semver.parse(server)!
+  if (semver.gt(current, server)) {
+    return VersionCheckResult.UP_TO_DATE
+  }
 
-  if (currentSemver.major !== serverSemver.major) {
+  if (semver.major(current) !== semver.major(server)) {
     return VersionCheckResult.INCOMPATIBLE
   }
 
-  if (currentSemver.minor !== serverSemver.minor) {
+  if (semver.minor(current) !== semver.minor(server)) {
     return VersionCheckResult.FEATURE_UPDATE
   }
 
-  if (currentSemver.patch !== serverSemver.patch) {
+  if (semver.patch(current) !== semver.patch(server)) {
     return VersionCheckResult.PATCH_UPDATE
   }
 
