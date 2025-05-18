@@ -4,6 +4,7 @@ import { load, Store } from "@tauri-apps/plugin-store"
 import { create } from "zustand"
 import { useLoginViewState } from "./useLoginViewState"
 import { invoke } from "@tauri-apps/api/core"
+import { enable, disable } from '@tauri-apps/plugin-autostart';
 
 export const usePreferencesState = create<PreferencesState>((set, get) => ({
     isDarkTheme: false,
@@ -11,6 +12,7 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
     clearClipboardTimeout: 0,
     savePassword: false,
     customOpenAppShortcut: "Alt+Space",
+    autoStartup: false,
 
     setDarkTheme: async (isDarkTheme: boolean) => {
         set({ isDarkTheme })
@@ -38,6 +40,18 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
         await get().updatePreferencesStore()
     },
 
+    setAutoStartup: async (autoStartup: boolean) => {
+        set({ autoStartup })
+
+        if(autoStartup) {
+            await enable()
+        } else {
+            await disable()
+        }
+
+        await get().updatePreferencesStore()
+    },
+
     updatePreferencesStore: async () => {
         const store: Store = await load('store.json', { autoSave: false })
         const { isDarkTheme, minimizeOnCopy, clearClipboardTimeout, savePassword, customOpenAppShortcut } = usePreferencesState.getState()
@@ -47,7 +61,8 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
             minimizeOnCopy: minimizeOnCopy,
             clearClipboardTimeout: clearClipboardTimeout,
             savePassword: savePassword,
-            customOpenAppShortcut: customOpenAppShortcut
+            customOpenAppShortcut: customOpenAppShortcut,
+            autoStartup: get().autoStartup
         }
         await store.set('preferencesStore', preferencesStore)
         await store.save()
@@ -64,6 +79,7 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
             get().setClearClipboardTimeout(preferencesStore.clearClipboardTimeout)
             get().setSavePassword(preferencesStore.savePassword)
             get().updateShortcut(preferencesStore.customOpenAppShortcut)
+            get().setAutoStartup(preferencesStore.autoStartup)
             return useLoginViewState.getState().setRememberPassword(preferencesStore.savePassword)
         }
 
@@ -72,7 +88,8 @@ export const usePreferencesState = create<PreferencesState>((set, get) => ({
             minimizeOnCopy: get().minimizeOnCopy,
             clearClipboardTimeout: get().clearClipboardTimeout,
             savePassword: get().savePassword,
-            customOpenAppShortcut: get().customOpenAppShortcut
+            customOpenAppShortcut: get().customOpenAppShortcut,
+            autoStartup: get().autoStartup
         }
 
         await store.set('preferencesStore', newStore)

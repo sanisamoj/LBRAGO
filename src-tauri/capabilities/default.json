@@ -17,6 +17,8 @@
     "core:window:allow-destroy",
     "core:window:allow-show",
     "core:window:allow-set-focus",
-    "clipboard-manager:allow-write-text"
+    "clipboard-manager:allow-write-text",
+    "autostart:allow-enable",
+    "autostart:allow-disable"
   ]
 }

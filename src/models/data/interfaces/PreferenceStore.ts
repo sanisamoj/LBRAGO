@@ -4,4 +4,5 @@ export interface PreferencesStore {
     minimizeOnCopy: boolean
     clearClipboardTimeout: number
     customOpenAppShortcut: string
+    autoStartup: boolean
 }

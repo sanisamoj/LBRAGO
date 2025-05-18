@@ -206,5 +206,8 @@
     "appShortcutLabel": "Atalho para Abrir/Fechar Aplicação",
     "appShortcutDescription": "Defina a combinação de teclas para mostrar ou ocultar a janela principal.",
     "appShortcutPlaceholder": "Ex: Ctrl+Shift+W",
-    "appShortcutInfo": "Nota: Utilize atalhos que outros sistemas não utilizam, pois a aplicação pode aparecer enquanto você chama o atalho."
+    "appShortcutInfo": "Nota: Utilize atalhos que outros sistemas não utilizam, pois a aplicação pode aparecer enquanto você chama o atalho.",
+
+    "startOnOS": "Iniciar com o Sistema Operacional",
+    "startOnOSDescription": "Abrir o aplicativo automaticamente ao iniciar o sistema."
 }

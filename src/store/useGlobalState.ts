@@ -58,7 +58,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
         if (userStore) {
             const decodedToken = jwtDecode<any>(userStore.token)
-            const currentTimeInSeconds = Math.floor(Date.now() / 1000)
+            const currentTimeInSeconds: number = Math.floor(Date.now() / 1000)
 
             if (decodedToken.exp < currentTimeInSeconds) {
                 return resetNavigation(NavigationScreen.LOGIN_EMAIL)

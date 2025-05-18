@@ -209,4 +209,7 @@ export interface CommonLanguage {
     appShortcutDescription: string
     appShortcutPlaceholder: string
     appShortcutInfo: string
+
+    startOnOS: string
+    startOnOSDescription: string
 }
