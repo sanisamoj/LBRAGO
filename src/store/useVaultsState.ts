@@ -62,6 +62,8 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       
       set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
       set({ removeVaultDialogIsOpen: false })
+
+      useSelectedVaultState.getState().clearState()
     } catch (error) {
       toast.warning(translations.tryInSomeTime)
     }
@@ -82,7 +84,8 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
   selectVault: async (vault: DecryptedVault) => {
     set({ selectedVault: vault })
     const passwords: DecryptedPassword[] = get().passwords.get(vault.id) ?? []
-    useSelectedVaultState.getState().initState(vault, passwords)
+
+    await useSelectedVaultState.getState().initState(vault, passwords)
     useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
   },
 

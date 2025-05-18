@@ -14,7 +14,6 @@ export interface SelectedVaultState {
     setRemovePasswordDialogIsOpen: (isOpen: boolean) => void
 
     initState: (vault: DecryptedVault, passwords: DecryptedPassword[]) => Promise<void>
-    selectPassword: (vault: DecryptedVault) => void
     addPassword: (password: DecryptedPassword) => void
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => void
     removePassword: (passwordId: string) => Promise<void>

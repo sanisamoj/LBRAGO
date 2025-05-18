@@ -50,12 +50,8 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
         }
     },
 
-    selectPassword: (vault: DecryptedVault) => {
-        set({ vault })
-    },
-
     addPassword: (password: DecryptedPassword) => {
-        set((state) => ({ passwords: [...state.passwords, password] }))
+        set({ passwords: [...get().passwords, password] })
     },
 
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => {
@@ -234,5 +230,5 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
         }, ms)
     },
 
-    clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [] })
+    clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [], isLoading: false, removePasswordDialogIsOpen: false }),
 }))
