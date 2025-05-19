@@ -212,4 +212,5 @@ export interface CommonLanguage {
 
     startOnOS: string
     startOnOSDescription: string
+    verifyImageFormat: string
 }

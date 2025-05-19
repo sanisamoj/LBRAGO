@@ -47,11 +47,17 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
     createPassword: async () => {
         set({ isLoading: true })
+        const { translations } = useLanguageState.getState()
 
         let imageUrl: string = get().imageUrl ?? ""
         if(get().file) {
-            const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
-            imageUrl = savedMedia.url
+            try {
+                const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
+                imageUrl = savedMedia.url
+            } catch (error) {
+                toast.warning(translations.verifyImageFormat)
+                return
+            }
         }
 
         const passMetadata: PasswordMetadata = {
@@ -65,7 +71,6 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
         }
 
         const { privateKey } = useGlobalState.getState()
-        const { translations } = useLanguageState.getState()
 
         try {
             const encryptedKey: EncryptedKey = await encryptPassword(passMetadata, get().esvkPubKUser, privateKey)
@@ -85,9 +90,9 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
             get().clearState()
         } catch (error) {
             toast.error(translations.internalErrorTryAgain)
+        } finally {
+            set({ isLoading: false })
         }
-
-        set({ isLoading: false })
     },
 
     clearState: () => set({ name: "", description: "", imageUrl: undefined, username: "", password: "", notes: "", url: "", file: undefined })

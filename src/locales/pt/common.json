@@ -209,5 +209,6 @@
     "appShortcutInfo": "Nota: Utilize atalhos que outros sistemas não utilizam, pois a aplicação pode aparecer enquanto você chama o atalho.",
 
     "startOnOS": "Iniciar com o Sistema Operacional",
-    "startOnOSDescription": "Abrir o aplicativo automaticamente ao iniciar o sistema."
+    "startOnOSDescription": "Abrir o aplicativo automaticamente ao iniciar o sistema.",
+    "verifyImageFormat": "Verifique o formato da imagem. ( png, jpg, jpeg, ico, gif )"
 }

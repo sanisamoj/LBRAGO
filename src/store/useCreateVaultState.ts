@@ -43,8 +43,13 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
 
         let imageUrl: string = get().imageUrl ?? ""
         if(get().file) {
-            const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
-            imageUrl = savedMedia.url
+            try {
+                const savedMedia: SavedMediaResponse = await UploadMedia(get().file!)
+                imageUrl = savedMedia.url
+            } catch (error) {
+                toast.warning(translations.verifyImageFormat)
+                return
+            }
         }
 
         const dto: EncryptVaultMetadataDTO = {
