@@ -146,7 +146,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
+        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec!["--autostart"])))
         .setup(|app| {
             let app_handle = app.handle();
 
@@ -172,6 +172,13 @@ pub fn run() {
                     })
                     .build(),
             )?;
+            let args: Vec<String> = std::env::args().collect();
+
+            if args.contains(&"--autostart".to_string()) {
+                let window = app.get_webview_window("main").unwrap();
+                window.hide()?
+            }
+            
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

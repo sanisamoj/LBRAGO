@@ -50,7 +50,16 @@
       "dangerousInsecureTransportProtocol": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVGQ0Y1MzIyMDcwM0REMDkKUldRSjNRTUhJbFBQNzkwYlNJcEp1MGJ3WDRIcXNUdHh5ZWdXNllxUm9lUkFub0JaVjVOUHVjeksK",
       "endpoints": [
-        "http://217.196.60.110:7888/versions/latest"
+        "https://lembrago.sanisamojrepository.com/api/versions/latest"
+      ]
+    },
+     "cli": {
+      "args": [
+        {
+          "name": "hidden-on-startup",
+          "takesValue": false,
+          "description": "Usado internamente para iniciar o app escondido via autostart."
+        }
       ]
     }
   }
