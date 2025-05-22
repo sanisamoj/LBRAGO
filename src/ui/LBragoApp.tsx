@@ -17,6 +17,7 @@ import VaultsListScreen from "./VaultsListScreen"
 import PasswordsListScreen from "./PasswordsListScreen"
 import { VaultUserListView } from "./VaultUserListView"
 import SplashScreen from "./SplashScreen"
+import UpdateVersionScreen from "./UpdateVersionScreenProps"
 
 export default function LBragoApp() {
   const { getCurrentScreen } = useNavigationState()
@@ -59,6 +60,8 @@ export default function LBragoApp() {
           {getCurrentScreen() === NavigationScreen.ALL_USERS && <UserListView />}
 
           {getCurrentScreen() === NavigationScreen.ADD_USER && <InviteUserScreen />}
+
+          {getCurrentScreen() === NavigationScreen.UPDATE_VERSION && <UpdateVersionScreen /> }
         </div>
       </div>
     </div>

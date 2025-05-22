@@ -27,8 +27,8 @@ import { GlobalRepository } from "@/models/repository/GlobalRepository"
 import { Version } from "@/models/data/interfaces/Version"
 import { checkVersion, VersionCheckResult } from "@/utils/checkVersion"
 
-import { check } from '@tauri-apps/plugin-updater';
-import { relaunch } from '@tauri-apps/plugin-process';
+import { check } from '@tauri-apps/plugin-updater'
+import { relaunch } from '@tauri-apps/plugin-process'
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -36,6 +36,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     privateKey: "",
     publicKey: "",
     availableUpdate: false,
+    latestVersion: {} as Version,
 
     initialAppConfiguration: async () => {
         // Inicia as informações iniciais do app como os estados
@@ -187,9 +188,9 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             const repository: GlobalRepository = GlobalRepository.getInstance()
             const latestVersion: Version = await repository.getLatestVersion()
             
-            const checkedVersion = checkVersion(Config.VERSION, latestVersion.version)
+            const checkedVersion: VersionCheckResult = checkVersion(Config.VERSION, latestVersion.version)
             if(checkedVersion === VersionCheckResult.FEATURE_UPDATE || checkedVersion === VersionCheckResult.PATCH_UPDATE) {
-                set({ availableUpdate: true })
+                set({ availableUpdate: true, latestVersion: latestVersion })
             }
         }
         
@@ -218,34 +219,34 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
 const verifyUpdates = async () => {
     try {
-        const update = await check();
+        const update = await check()
     if (update) {
         console.log(
             `found update ${update.version} from ${update.date} with notes ${update.body}`
-        );
-        let downloaded = 0;
-        let contentLength: number | undefined = 0;
+        )
+        let downloaded = 0
+        let contentLength: number | undefined = 0
         // alternatively we could also call update.download() and update.install() separately
         await update.downloadAndInstall((event) => {
             switch (event.event) {
             case 'Started':
-                contentLength = event.data.contentLength;
-                console.log(`started downloading ${event.data.contentLength} bytes`);
-                break;
+                contentLength = event.data.contentLength
+                console.log(`started downloading ${event.data.contentLength} bytes`)
+                break
             case 'Progress':
-                downloaded += event.data.chunkLength;
-                console.log(`downloaded ${downloaded} from ${contentLength}`);
-                break;
+                downloaded += event.data.chunkLength
+                console.log(`downloaded ${downloaded} from ${contentLength}`)
+                break
             case 'Finished':
-                console.log('download finished');
-                break;
+                console.log('download finished')
+                break
             }
-        });
+        })
 
-        console.log('update installed');
-        await relaunch();
+        console.log('update installed')
+        await relaunch()
     }
     } catch (error) {
-        console.error(error);   
+        console.error(error)   
     }
 }

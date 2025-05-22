@@ -43,6 +43,7 @@ export interface CommonLanguage {
     screenTitlePresentation: string
     screenTitleVerifyCode: string
     screenTitleManageVaultMembers: string
+    screenTitleUpdateVersion: string
 
     loginOrgScreenSelectEnvironmentTitle: string
     loginOrgScreenSelectEnvironmentSubtitle: string
@@ -213,4 +214,16 @@ export interface CommonLanguage {
     startOnOS: string
     startOnOSDescription: string
     verifyImageFormat: string
+
+    updateScreenTitle: string
+    updateScreenSubtitle: string
+    versionLabel: string
+    typeLabel: string
+    releaseNotesLabel: string
+    mainChangesLabel: string
+    releaseDateLabel: string
+    updateNowButton: string
+    appWillRestartMessage: string
+    invalidDateText: string
+    notAvailableText: string
 }

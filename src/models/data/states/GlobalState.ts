@@ -1,6 +1,7 @@
 import { InitGlobalStateData } from "../interfaces/InitGlobalStateData"
 import { UserResponse } from "../interfaces/UserResponse"
 import { UserStore } from "../interfaces/UserStore"
+import { Version } from "../interfaces/Version"
 
 export interface GlobalState {
     user: UserResponse | null
@@ -8,6 +9,7 @@ export interface GlobalState {
     privateKey: string
     publicKey: string
     availableUpdate: boolean
+    latestVersion: Version
 
     loadStore (): Promise<void>
     saveStore (userStore: UserStore): Promise<void>

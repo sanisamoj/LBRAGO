@@ -7,9 +7,10 @@ export interface Version {
   version: string
   notes: string
   pub_date: string // ISO 8601 format (ex: "2024-05-17T12:00:00Z")
-  platforms: {
-    [key: string]: Platform // Ex: "windows", "mac", etc.
-  }
+  platforms: Record<string, Platform>
+  type: string
+  changes: string[]
+  createdAt: string
 }
 
 export interface ApplicationVersion {

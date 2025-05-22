@@ -43,6 +43,7 @@
     "screenTitlePresentation": "LemBraGO",
     "screenTitleVerifyCode": "Verificação de código",
     "screenTitleManageVaultMembers": "Gerenciar membros",
+    "screenTitleUpdateVersion": "Atualizar versão",
 
     "loginOrgScreenSelectEnvironmentTitle": "Selecione um ambiente",
     "loginOrgScreenSelectEnvironmentSubtitle": "Escolha a organização para",
@@ -210,5 +211,17 @@
 
     "startOnOS": "Iniciar com o Sistema Operacional",
     "startOnOSDescription": "Abrir o aplicativo automaticamente ao iniciar o sistema.",
-    "verifyImageFormat": "Verifique o formato da imagem. ( png, jpg, jpeg, ico, gif )"
+    "verifyImageFormat": "Verifique o formato da imagem. ( png, jpg, jpeg, ico, gif )",
+
+    "updateScreenTitle": "Nova Versão Disponível!",
+    "updateScreenSubtitle": "Uma nova atualização para o LemBraGO está pronta para você.",
+    "versionLabel": "Versão",
+    "typeLabel": "Tipo",
+    "releaseNotesLabel": "Notas da Versão",
+    "mainChangesLabel": "Principais Mudanças",
+    "releaseDateLabel": "Data de Lançamento",
+    "updateNowButton": "Atualizar Agora",
+    "appWillRestartMessage": "O aplicativo será reiniciado para aplicar a atualização.",
+    "invalidDateText": "Data inválida",
+    "notAvailableText": "N/A"
 }

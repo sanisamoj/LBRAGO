@@ -16,4 +16,5 @@ export enum NavigationScreen {
     SETTINGS = "settings",
     ALL_USERS = "allUsers",
     ADD_USER = "addUser",
+    UPDATE_VERSION = "updateVersion"
 }
