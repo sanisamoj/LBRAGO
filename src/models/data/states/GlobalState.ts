@@ -1,7 +1,9 @@
 import { InitGlobalStateData } from "../interfaces/InitGlobalStateData"
+import { SavedMediaResponse } from "../interfaces/SavedMediaResponse"
 import { UserResponse } from "../interfaces/UserResponse"
 import { UserStore } from "../interfaces/UserStore"
 import { Version } from "../interfaces/Version"
+import { AppUpdateDownloadState } from "./AppUpdateDownloadState"
 
 export interface GlobalState {
     user: UserResponse | null
@@ -10,6 +12,8 @@ export interface GlobalState {
     publicKey: string
     availableUpdate: boolean
     latestVersion: Version
+    appUpdateDownloadState: AppUpdateDownloadState
+    medias: SavedMediaResponse[]
 
     loadStore (): Promise<void>
     saveStore (userStore: UserStore): Promise<void>
@@ -25,6 +29,7 @@ export interface GlobalState {
     initGlobalState: (config: InitGlobalStateData) => Promise<void>
 
     checkUpdates: () => Promise<void>
+    verifyUpdatesInternal: () => Promise<void>
     updateAppVersion: () => Promise<void>
 
     clearAllStates: () => void

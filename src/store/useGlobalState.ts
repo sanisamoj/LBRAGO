@@ -26,9 +26,7 @@ import { jwtDecode } from 'jwt-decode'
 import { GlobalRepository } from "@/models/repository/GlobalRepository"
 import { Version } from "@/models/data/interfaces/Version"
 import { checkVersion, VersionCheckResult } from "@/utils/checkVersion"
-
-import { check } from '@tauri-apps/plugin-updater'
-import { relaunch } from '@tauri-apps/plugin-process'
+import { check, Update } from '@tauri-apps/plugin-updater'
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -37,6 +35,14 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
     publicKey: "",
     availableUpdate: false,
     latestVersion: {} as Version,
+    appUpdateDownloadState: { 
+        isActive: false,
+        progress: 0,
+        status: 'idle',
+        message: '',
+        error: undefined,
+    },
+    medias: [],
 
     initialAppConfiguration: async () => {
         // Inicia as informações iniciais do app como os estados
@@ -56,7 +62,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
 
-        if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
+        if (!userStore) { return resetNavigation(NavigationScreen.ENVIRONMENT_MEDIA) }
         if (userStore) {
             const decodedToken = jwtDecode<any>(userStore.token)
             const currentTimeInSeconds: number = Math.floor(Date.now() / 1000)
@@ -201,12 +207,127 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         }, 1000 * 60 * 60 * 12) // 12 hours
     },
 
-    updateAppVersion: async () => {
-        await verifyUpdates()
+    verifyUpdatesInternal: async () => {
+        set(state => ({
+        appUpdateDownloadState: {
+            ...state.appUpdateDownloadState,
+            isActive: true,
+            status: 'checking',
+            progress: 0,
+            message: 'Verificando atualizações...',
+            error: undefined,
+        }
+        }))
+
+        try {
+        const update: Update | null = await check()
+        if (update) {
+            set(state => ({
+            appUpdateDownloadState: {
+                ...state.appUpdateDownloadState,
+                status: 'downloading',
+                message: `Baixando ${update.version} (0%)...`,
+                progress: 0,
+            }
+            }))
+
+            let downloadedBytes = 0
+            let totalBytes: number | undefined = undefined
+
+            await update.downloadAndInstall((progressEvent) => {
+            switch (progressEvent.event) {
+                case 'Started':
+                totalBytes = progressEvent.data.contentLength
+                set(state => ({
+                    appUpdateDownloadState: {
+                    ...state.appUpdateDownloadState,
+                    status: 'downloading',
+                    progress: 0,
+                    message: `Iniciando download de ${update.version}...`,
+                    }
+                }))
+                break
+                case 'Progress':
+                downloadedBytes += progressEvent.data.chunkLength
+                const percentage: number = totalBytes ? Math.round((downloadedBytes / totalBytes) * 100) : get().appUpdateDownloadState.progress
+                
+                set({ appUpdateDownloadState: { 
+                    ...get().appUpdateDownloadState,
+                    status: 'downloading',
+                    progress: totalBytes ? percentage : 0,
+                    message: `Iniciando download de ${update.version}...`,
+                    }
+                })
+                break
+                case 'Finished':
+                set(state => ({
+                    appUpdateDownloadState: {
+                    ...state.appUpdateDownloadState,
+                    status: 'installing',
+                    progress: 100,
+                    message: `Download de ${update.version} concluído. Instalando...`,
+                    }
+                }))
+                break
+            }
+            })
+            
+            set(state => ({
+            appUpdateDownloadState: {
+                ...state.appUpdateDownloadState,
+                status: 'completed_relaunching',
+                message: `Atualização ${update.version} instalada. Reiniciando o aplicativo...`,
+            }
+            }))
+            
+        } else {
+            set(_ => ({
+            availableUpdate: false,
+            appUpdateDownloadState: {
+                isActive: false,
+                status: 'idle',
+                progress: 0,
+                message: 'Seu aplicativo está atualizado.',
+                error: undefined,
+            }
+            }))
+            toast.success('Seu aplicativo está atualizado.')
+        }
+        } catch (error) {
+        console.error("Falha na atualização:", error)
+        set(_ => ({
+            appUpdateDownloadState: {
+            isActive: false,
+            status: 'error',
+            progress: 0,
+            message: 'Falha ao verificar ou instalar a atualização.',
+            error: String(error),
+            }
+        }))
+        toast.error('Falha ao buscar ou instalar a atualização.')
+        }
     },
 
-    clearAllStates: () => {
-        set({ user: null, store: null, privateKey: "", publicKey: "" })
+    updateAppVersion: async () => {
+        await get().verifyUpdatesInternal()
+    },
+
+   clearAllStates: () => {
+        set({
+            user: null,
+            store: null,
+            privateKey: "",
+            publicKey: "",
+            availableUpdate: false,
+            latestVersion: {} as Version,
+            appUpdateDownloadState: {
+                isActive: false,
+                progress: 0,
+                status: 'idle',
+                message: '',
+                error: undefined,
+            }
+        })
         useVaultsState.getState().clearState()
         useUserCreationState.getState().clearState()
         useSelectedVaultState.getState().clearState()
@@ -216,37 +337,3 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         useCreateVaultState.getState().clearState()
     }
 }))
-
-const verifyUpdates = async () => {
-    try {
-        const update = await check()
-    if (update) {
-        console.log(
-            `found update ${update.version} from ${update.date} with notes ${update.body}`
-        )
-        let downloaded = 0
-        let contentLength: number | undefined = 0
-        // alternatively we could also call update.download() and update.install() separately
-        await update.downloadAndInstall((event) => {
-            switch (event.event) {
-            case 'Started':
-                contentLength = event.data.contentLength
-                console.log(`started downloading ${event.data.contentLength} bytes`)
-                break
-            case 'Progress':
-                downloaded += event.data.chunkLength
-                console.log(`downloaded ${downloaded} from ${contentLength}`)
-                break
-            case 'Finished':
-                console.log('download finished')
-                break
-            }
-        })
-
-        console.log('update installed')
-        await relaunch()
-    }
-    } catch (error) {
-        console.error(error)   
-    }
-}

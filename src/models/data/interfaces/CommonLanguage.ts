@@ -44,6 +44,7 @@ export interface CommonLanguage {
     screenTitleVerifyCode: string
     screenTitleManageVaultMembers: string
     screenTitleUpdateVersion: string
+    screenTitleEnvironmentMedia: string
 
     loginOrgScreenSelectEnvironmentTitle: string
     loginOrgScreenSelectEnvironmentSubtitle: string
@@ -226,4 +227,21 @@ export interface CommonLanguage {
     appWillRestartMessage: string
     invalidDateText: string
     notAvailableText: string
+
+    totalStoredLabel: string
+    totalAvailableLabel: string
+    storageExceededError: string
+    searchMediaPlaceholder: string
+    uploadNewMediaButton: string
+    noMediaFoundForSearch: string
+    noMediaItems: string
+    fileSizeLabel: string
+    uploadDateLabel: string
+    downloadButtonLabel: string
+    deleteMediaButton: string
+
+    loadingUpdateInfo: string
+    noNotesAvailable: string
+    updateErrorOccurred: string
+    restartingAppMessage: string
 }

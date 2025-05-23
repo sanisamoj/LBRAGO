@@ -55,6 +55,15 @@ export class EnvironmentRepository {
         return response.data
     }
 
+    public async getAllMedias(): Promise<SavedMediaResponse[]> {
+        const response = await this.api.get<SavedMediaResponse[]>("/vaults/media", {
+            headers: {
+                Authorization: `Bearer ${Config.token}`
+            }
+        })
+        return response.data
+    }
+
     public async signout(): Promise<void> {
         try {
             await this.api.delete("/signout", {

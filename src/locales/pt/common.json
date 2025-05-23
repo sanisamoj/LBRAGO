@@ -44,6 +44,7 @@
     "screenTitleVerifyCode": "Verificação de código",
     "screenTitleManageVaultMembers": "Gerenciar membros",
     "screenTitleUpdateVersion": "Atualizar versão",
+    "screenTitleEnvironmentMedia": "Mídias",
 
     "loginOrgScreenSelectEnvironmentTitle": "Selecione um ambiente",
     "loginOrgScreenSelectEnvironmentSubtitle": "Escolha a organização para",
@@ -223,5 +224,22 @@
     "updateNowButton": "Atualizar Agora",
     "appWillRestartMessage": "O aplicativo será reiniciado para aplicar a atualização.",
     "invalidDateText": "Data inválida",
-    "notAvailableText": "N/A"
+    "notAvailableText": "N/A",
+
+    "totalStoredLabel": "Utilizado:",
+    "totalAvailableLabel": "Disponível:",
+    "storageExceededError": "Limite de armazenamento excedido!",
+    "searchMediaPlaceholder": "Buscar mídias por nome...",
+    "uploadNewMediaButton": "Fazer Upload de Nova Mídia",
+    "noMediaFoundForSearch": "Nenhuma mídia encontrada para",
+    "noMediaItems": "Nenhuma mídia encontrada neste ambiente.",
+    "fileSizeLabel": "Tamanho:",
+    "uploadDateLabel": "Data do Upload:",
+    "downloadButtonLabel": "Baixar",
+    "deleteMediaButton": "Excluir Mídia",
+
+    "loadingUpdateInfo": "Carregando informações da atualização...",
+    "noNotesAvailable": "Nenhuma nota para esta versão.",
+    "updateErrorOccurred": "Ocorreu um erro durante a atualização:",
+    "restartingAppMessage": "Reiniciando o aplicativo..."
 }
