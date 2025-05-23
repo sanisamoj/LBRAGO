@@ -62,7 +62,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         const userStore: UserStore | undefined = await store.get<UserStore>('userStore')
         const { resetNavigation } = useNavigationState.getState()
 
-        if (!userStore) { return resetNavigation(NavigationScreen.ENVIRONMENT_MEDIA) }
+        if (!userStore) { return resetNavigation(NavigationScreen.LOGIN_EMAIL) }
         if (userStore) {
             const decodedToken = jwtDecode<any>(userStore.token)
             const currentTimeInSeconds: number = Math.floor(Date.now() / 1000)
