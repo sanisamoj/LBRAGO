@@ -1,7 +1,7 @@
 export class Config {
     public static API_URL = "https://lembrago.sanisamojrepository.com/api"
     public static FAVICON_URL = `${Config.API_URL}/favicon.ico`
-    public static VERSION = "0.10.2"
+    public static VERSION = "0.10.3"
 
     static token: string
 
