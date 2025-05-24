@@ -42,7 +42,6 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
         message: '',
         error: undefined,
     },
-    medias: [],
 
     initialAppConfiguration: async () => {
         // Inicia as informações iniciais do app como os estados

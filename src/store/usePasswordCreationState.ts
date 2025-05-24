@@ -94,6 +94,6 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
         }
     },
 
-    clearState: () => set({ name: "", description: "", imageUrl: undefined, username: "", password: "", notes: "", url: "", file: undefined })
+    clearState: () => set({ name: "", description: "", username: "", password: "", notes: "", url: "", file: undefined, imageUrl: Config.FAVICON_URL })
 }))
 
