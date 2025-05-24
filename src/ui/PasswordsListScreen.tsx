@@ -22,11 +22,13 @@ export default function PasswordsListScreen() {
     const { translations } = useLanguageState()
     const { user } = useGlobalState()
     const { navigateTo, resetNavigation } = useNavigationState()
-    const { selectedVault, deleteVault, buttonIsLoading } = useVaultsState()
+    const { selectedVault, deleteVault, buttonIsLoading, passwords: allPasswords } = useVaultsState()
     const {
-        passwords, handleCreatePassword, removePassword, isLoading: removePasswordLoading,
+        handleCreatePassword, removePassword, isLoading: removePasswordLoading,
         removePasswordDialogIsOpen, setRemovePasswordDialogIsOpen, updatePassword, copyToClipboard: copyPassword
     } = useSelectedVaultState()
+
+    const passwords: DecryptedPassword[] = useMemo(() => allPasswords.get(selectedVault!.id) ?? [], [allPasswords])
 
     const [showPassword, setShowPassword] = useState(false)
     const [selectedPassword, setSelectedPassword] = useState<DecryptedPassword | null>(null)

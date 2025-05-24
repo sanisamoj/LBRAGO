@@ -7,13 +7,12 @@ import { VaultMemberResponse } from "../interfaces/VaultMemberResponse"
 export interface SelectedVaultState {
     vault: DecryptedVault
     members: VaultMemberResponse[]
-    passwords: DecryptedPassword[]
 
     isLoading: boolean
     removePasswordDialogIsOpen: boolean 
     setRemovePasswordDialogIsOpen: (isOpen: boolean) => void
 
-    initState: (vault: DecryptedVault, passwords: DecryptedPassword[]) => Promise<void>
+    initState: (vault: DecryptedVault) => Promise<void>
     addPassword: (password: DecryptedPassword) => void
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => void
     removePassword: (passwordId: string) => Promise<void>

@@ -10,10 +10,14 @@ import { useNavigationState } from "./useNavigationState"
 import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
-import { decryptPasswords } from "@/utils/ED_passwords"
+import { decryptPassword, decryptPasswords } from "@/utils/ED_passwords"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
 import { useSelectedVaultState } from "./useSelectedVaultState"
+import { EncryptedKey } from "@/models/data/interfaces/EncryptedKey"
+import { encryptPassword } from "@/utils/encryptPassword"
+import { UpdatePasswordRequest } from "@/models/data/interfaces/UpdatePasswordRequest"
+import { UploadPassword } from "@/models/data/interfaces/UploadPassword"
 
 export const useVaultsState = create<VaultsState>((set, get) => ({
   e_vaults: [],
@@ -59,9 +63,15 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
       const vaultsRespository = VaultRepository.getInstance()
       await vaultsRespository.deleteVault(vaultId)
       toast.success(translations.vaultRemovedSuccessfully)
-      
-      set({ vaults: get().vaults.filter(vault => vault.id !== vaultId) })
-      set({ removeVaultDialogIsOpen: false })
+
+      get().e_passwords.delete(vaultId)
+      get().passwords.delete(vaultId)
+
+      set({ 
+        vaults: get().vaults.filter(vault => vault.id !== vaultId),
+        removeVaultDialogIsOpen: false,
+        selectedVault: null
+      })
 
       useSelectedVaultState.getState().clearState()
     } catch (error) {
@@ -83,10 +93,52 @@ export const useVaultsState = create<VaultsState>((set, get) => ({
 
   selectVault: async (vault: DecryptedVault) => {
     set({ selectedVault: vault })
-    const passwords: DecryptedPassword[] = get().passwords.get(vault.id) ?? []
-
-    await useSelectedVaultState.getState().initState(vault, passwords)
+    await useSelectedVaultState.getState().initState(vault)
     useNavigationState.getState().navigateTo(NavigationScreen.PASSWORDS)
+  },
+
+  addPassword: (vaultId: string, password: DecryptedPassword) => {
+    const current: DecryptedPassword[] = get().passwords.get(vaultId) ?? []
+    const updatedPasswords = new Map(get().passwords)
+    updatedPasswords.set(vaultId, [...current, password])
+    set({ passwords: updatedPasswords })
+  },
+
+  removePassword: (passwordId: string) => {
+    const currentPasswords: Map<string, DecryptedPassword[]> = get().passwords
+    const newPasswords: Map<string, DecryptedPassword[]> = new Map()
+    currentPasswords.forEach((passwords, vaultId) => {
+      newPasswords.set(vaultId, passwords.filter(password => password.id !== passwordId))
+    })
+
+    set({ passwords: newPasswords })
+  },
+
+  updatePassword: async (update: UploadPassword) => {
+    const { privateKey } = useGlobalState.getState()
+    const { translations } = useLanguageState.getState()
+
+    try {
+        const encryptedKey: EncryptedKey = await encryptPassword(update.passwordMetadata, update.esvkPubKUser, privateKey)
+
+        const request: UpdatePasswordRequest = {
+            passwordId: update.id,
+            encryptedItemData: encryptedKey
+        }
+
+        const vaultsRepository = VaultRepository.getInstance()
+        const ePasswordResponse: EPasswordResponse = await vaultsRepository.updatePassword(request)
+
+        const vault: DecryptedVault = get().vaults.find(v => v.id === update.vaultId)!
+        const decryptedPassword: DecryptedPassword = await decryptPassword(ePasswordResponse, update.esvkPubKUser, privateKey, vault.permission)
+
+        const currentPasswords: DecryptedPassword[] = get().passwords.get(update.vaultId) ?? []
+        const updatedPasswords = new Map(get().passwords)
+        updatedPasswords.set(update.vaultId, [...currentPasswords, decryptedPassword])
+        set({ passwords: updatedPasswords })
+    } catch (error) {
+        toast.error(translations.internalErrorTryAgain)
+    }
   },
 
   clearState: () => set({

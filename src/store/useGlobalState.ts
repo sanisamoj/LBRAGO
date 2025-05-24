@@ -204,7 +204,7 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
 
         setInterval( async () => {
             await check()
-        }, 1000 * 60 * 60 * 12) // 12 hours
+        }, 1000 * 60 * 60 * 6) // 6 hours
     },
 
     verifyUpdatesInternal: async () => {

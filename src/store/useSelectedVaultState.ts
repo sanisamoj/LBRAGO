@@ -18,19 +18,15 @@ import { invoke } from "@tauri-apps/api/core"
 import { AddMemberRequest } from "@/models/data/interfaces/AddMemberRequest"
 import { UpdateMemberRequest } from "@/models/data/interfaces/UpdateMemberRequest"
 import { PasswordMetadata } from "@/models/data/interfaces/PasswordMetadata"
-import { EncryptedKey } from "@/models/data/interfaces/EncryptedKey"
-import { encryptPassword } from "@/utils/encryptPassword"
-import { decryptPassword } from "@/utils/ED_passwords"
-import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
-import { UpdatePasswordRequest } from "@/models/data/interfaces/UpdatePasswordRequest"
 import { usePreferencesState } from "./usePreferencesState"
 import { Window } from "@tauri-apps/api/window"
 import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import { useVaultsState } from "./useVaultsState"
+import { UploadPassword } from "@/models/data/interfaces/UploadPassword"
 
 export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     vault: {} as DecryptedVault,
     members: [],
-    passwords: [],
 
     removePasswordDialogIsOpen: false,
     isLoading: false,
@@ -39,11 +35,11 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
         set({ removePasswordDialogIsOpen: isOpen })
     },
 
-    initState: async (vault: DecryptedVault, passwords: DecryptedPassword[]) => {
-        set({ vault, passwords })
+    initState: async (vault: DecryptedVault) => {
+        set({ vault })
 
         const { user } = useGlobalState.getState()
-        if (user?.role === UserPermissionType.ADMIN) {
+        if (user?.role === UserPermissionType.ADMIN && get().members.length === 0) {
             const vaultsRepository = VaultRepository.getInstance()
             const members: VaultMemberResponse[] = await vaultsRepository.getMembers(vault.id)
             set({ members })
@@ -51,7 +47,7 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
     },
 
     addPassword: (password: DecryptedPassword) => {
-        set({ passwords: [...get().passwords, password] })
+        useVaultsState.getState().addPassword(get().vault.id, password)
     },
 
     handleCreatePassword: (vaultId: string, esvkPubKUser: string) => {
@@ -61,16 +57,15 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
 
     removePassword: async (passwordId: string) => {
         set({ isLoading: true })
+
         const { translations } = useLanguageState.getState()
 
         try {
             const vautRepository = VaultRepository.getInstance()
             await vautRepository.deletePassword(passwordId)
-
-            const newPasswords: DecryptedPassword[] = get().passwords.filter(password => password.id !== passwordId)
-            set({ passwords: newPasswords, removePasswordDialogIsOpen: false })
-
             toast.success(translations.passwordRemoveSuccessfully)
+            useVaultsState.getState().removePassword(passwordId)
+            set({ removePasswordDialogIsOpen: false })
         } catch (error) {
             toast.error(translations.errorInRemovePassword)
         }
@@ -91,28 +86,15 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
             notes: password.notes
         }
 
-        const { privateKey } = useGlobalState.getState()
-        const { translations } = useLanguageState.getState()
         const esvkPubKUser: string = get().vault.esvkPubKUser
-
-        try {
-            const encryptedKey: EncryptedKey = await encryptPassword(passwordMetadata, esvkPubKUser, privateKey)
-
-            const request: UpdatePasswordRequest = {
-                passwordId: password.id,
-                encryptedItemData: encryptedKey
-            }
-
-            const vaultsRepository = VaultRepository.getInstance()
-            const ePasswordResponse: EPasswordResponse = await vaultsRepository.updatePassword(request)
-
-            const decryptedPassword: DecryptedPassword = await decryptPassword(ePasswordResponse, esvkPubKUser, privateKey, get().vault.permission)
-
-            const newPasswords: DecryptedPassword[] = get().passwords.map(p => p.id === password.id ? decryptedPassword : p)
-            set({ passwords: newPasswords })
-        } catch (error) {
-            toast.error(translations.internalErrorTryAgain)
+        const uploadPassword: UploadPassword = {
+            id: password.id,
+            vaultId: get().vault.id,
+            esvkPubKUser: esvkPubKUser,
+            passwordMetadata: passwordMetadata
         }
+
+        await useVaultsState.getState().updatePassword(uploadPassword)
 
         set({ isLoading: false })
     },
@@ -230,5 +212,5 @@ export const useSelectedVaultState = create<SelectedVaultState>((set, get) => ({
         }, ms)
     },
 
-    clearState: () => set({ vault: {} as DecryptedVault, members: [], passwords: [], isLoading: false, removePasswordDialogIsOpen: false }),
+    clearState: () => set({ vault: {} as DecryptedVault, members: [], isLoading: false, removePasswordDialogIsOpen: false }),
 }))

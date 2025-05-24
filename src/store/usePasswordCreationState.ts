@@ -7,7 +7,6 @@ import { create } from "zustand"
 import { useLanguageState } from "./useLanguageState"
 import { toast } from "sonner"
 import { useNavigationState } from "./useNavigationState"
-import { NavigationScreen } from "@/models/data/enums/NavigationScreen"
 import { useGlobalState } from "./useGlobalState"
 import { EPasswordResponse } from "@/models/data/interfaces/EPasswordResponse"
 import { DecryptedPassword } from "@/models/data/interfaces/DecryptedPassword"
@@ -86,7 +85,7 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
             useSelectedVaultState.getState().addPassword(decryptedPassword)
 
             toast.success(translations.passwordCreatedSuccessfully)
-            useNavigationState.getState().navigateReplace(NavigationScreen.PASSWORDS)
+            useNavigationState.getState().navigateBack()
             get().clearState()
         } catch (error) {
             toast.error(translations.internalErrorTryAgain)

@@ -2,6 +2,7 @@ import { DecryptedPassword } from "./DecryptedPassword"
 import { DecryptedVault } from "./DecryptedVault"
 import { EPasswordResponse } from "./EPasswordResponse"
 import { EVaultWithMemberInfo } from "./EVaultWithMemberInfo"
+import { UploadPassword } from "./UploadPassword"
 
 export interface VaultsState {
     initVaultState: () => Promise<void>
@@ -13,6 +14,10 @@ export interface VaultsState {
 
     removeVaultDialogIsOpen: boolean
     setRemoveVaultDialogIsOpen: (isOpen: boolean) => void
+
+    addPassword: (vaultId: string, password: DecryptedPassword) => void
+    removePassword: (passwordId: string) => void
+    updatePassword: (update: UploadPassword) => Promise<void>
 
     e_vaults: EVaultWithMemberInfo[]
     vaults: DecryptedVault[]
