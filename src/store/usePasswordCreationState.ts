@@ -17,6 +17,7 @@ import { useSelectedVaultState } from "./useSelectedVaultState"
 import { encryptPassword } from "@/utils/encryptPassword"
 import { SavedMediaResponse } from "@/models/data/interfaces/SavedMediaResponse"
 import { UploadMedia } from "@/utils/uploadMedia"
+import { useMediaState } from "./useMediaState"
 
 export const usePasswordsCreationViewState = create<PasswordCreationState>((set, get) => ({
     vaultId: "",
@@ -55,6 +56,7 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
                 imageUrl = savedMedia.url
             } catch (error) {
                 toast.warning(translations.verifyImageFormat)
+                set({ isLoading: false })
                 return
             }
         }
@@ -86,6 +88,9 @@ export const usePasswordsCreationViewState = create<PasswordCreationState>((set,
 
             toast.success(translations.passwordCreatedSuccessfully)
             useNavigationState.getState().navigateBack()
+
+            await useMediaState.getState().initState()
+
             get().clearState()
         } catch (error) {
             toast.error(translations.internalErrorTryAgain)

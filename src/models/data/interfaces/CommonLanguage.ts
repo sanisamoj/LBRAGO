@@ -244,4 +244,6 @@ export interface CommonLanguage {
     noNotesAvailable: string
     updateErrorOccurred: string
     restartingAppMessage: string
+
+    manageMedias: string
 }

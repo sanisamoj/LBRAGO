@@ -56,7 +56,7 @@ export class EnvironmentRepository {
     }
 
     public async getAllMedias(): Promise<SavedMediaResponse[]> {
-        const response = await this.api.get<SavedMediaResponse[]>("/vaults/media", {
+        const response = await this.api.get<SavedMediaResponse[]>("/vaults/medias", {
             headers: {
                 Authorization: `Bearer ${Config.token}`
             }

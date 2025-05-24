@@ -27,6 +27,7 @@ import { GlobalRepository } from "@/models/repository/GlobalRepository"
 import { Version } from "@/models/data/interfaces/Version"
 import { checkVersion, VersionCheckResult } from "@/utils/checkVersion"
 import { check, Update } from '@tauri-apps/plugin-updater'
+import { useMediaState } from "./useMediaState"
 
 export const useGlobalState = create<GlobalState>((set, get) => ({
     user: null,
@@ -186,6 +187,8 @@ export const useGlobalState = create<GlobalState>((set, get) => ({
             }
             get().saveUserSession(userStore)
         }
+
+        await useMediaState.getState().initState()
     },
 
     checkUpdates: async () => {

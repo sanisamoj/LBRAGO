@@ -212,7 +212,7 @@
 
     "startOnOS": "Iniciar com o Sistema Operacional",
     "startOnOSDescription": "Abrir o aplicativo automaticamente ao iniciar o sistema.",
-    "verifyImageFormat": "Verifique o formato da imagem. ( png, jpg, jpeg, ico, gif )",
+    "verifyImageFormat": "Verifique o formato da imagem. ( png, jpg, jpeg, ico, gif ) ou tamanho maior do arquivo de 2MB.",
 
     "updateScreenTitle": "Nova Versão Disponível!",
     "updateScreenSubtitle": "Uma nova atualização para o LemBraGO está pronta para você.",
@@ -241,5 +241,7 @@
     "loadingUpdateInfo": "Carregando informações da atualização...",
     "noNotesAvailable": "Nenhuma nota para esta versão.",
     "updateErrorOccurred": "Ocorreu um erro durante a atualização:",
-    "restartingAppMessage": "Reiniciando o aplicativo..."
+    "restartingAppMessage": "Reiniciando o aplicativo...",
+
+    "manageMedias": "Gerenciar Mídias"
 }

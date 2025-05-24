@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react"
+import { BookImage, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -50,90 +50,98 @@ export default function SettingsScreen() {
                     </TabsList>
 
                     <TabsContent value={translations.general} className="mt-2 space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="text-sm font-medium">{translations.darkTheme}</h3>
-                                    <p className="text-xs text-muted-foreground">{translations.useThemeInSystem}</p>
-                                </div>
-                                <Switch checked={isDarkTheme} onCheckedChange={setDarkTheme} />
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-sm font-medium">{translations.darkTheme}</h3>
+                                <p className="text-xs text-muted-foreground">{translations.useThemeInSystem}</p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="text-sm font-medium">{translations.minimizeOnCopy}</h3>
-                                    <p className="text-xs text-muted-foreground">{translations.minimizeOnCopyDescription}</p>
-                                </div>
-                                <Switch checked={minimizeOnCopy} onCheckedChange={setMinimizeOnCopy} />
+                            <Switch checked={isDarkTheme} onCheckedChange={setDarkTheme} />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-sm font-medium">{translations.minimizeOnCopy}</h3>
+                                <p className="text-xs text-muted-foreground">{translations.minimizeOnCopyDescription}</p>
                             </div>
-                            {/* Nova opção adicionada aqui */}
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="text-sm font-medium">{translations.startOnOS}</h3>
-                                    <p className="text-xs text-muted-foreground">{translations.startOnOSDescription}</p>
-                                </div>
-                                <Switch checked={autoStartup} onCheckedChange={setAutoStartup} title={translations.startOnOSDescription} />
+                            <Switch checked={minimizeOnCopy} onCheckedChange={setMinimizeOnCopy} />
+                        </div>
+                        {/* Nova opção adicionada aqui */}
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-sm font-medium">{translations.startOnOS}</h3>
+                                <p className="text-xs text-muted-foreground">{translations.startOnOSDescription}</p>
                             </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="clipboard-clear" className="text-sm font-medium">{translations.clearClipboardInSeconds}</Label>
-                                <p className="text-xs text-muted-foreground pb-1">0 = {translations.notClearAuto}</p>
-                                <Input id="clipboard-clear" type="number" min="0" max="300" value={clearClipboardTimeout}
-                                    onChange={(e) => setClearClipboardTimeout(Math.max(0, Number.parseInt(e.target.value) || 0))}
-                                    className="h-7 text-xs" />
-                            </div>
+                            <Switch checked={autoStartup} onCheckedChange={setAutoStartup} title={translations.startOnOSDescription} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="clipboard-clear" className="text-sm font-medium">{translations.clearClipboardInSeconds}</Label>
+                            <p className="text-xs text-muted-foreground pb-1">0 = {translations.notClearAuto}</p>
+                            <Input id="clipboard-clear" type="number" min="0" max="300" value={clearClipboardTimeout}
+                                onChange={(e) => setClearClipboardTimeout(Math.max(0, Number.parseInt(e.target.value) || 0))}
+                                className="h-7 text-xs" />
+                        </div>
 
-                            <div className="space-y-1 pt-2">
-                                <Label htmlFor="app-shortcut" className="text-sm font-medium">
-                                    {translations.appShortcutLabel}
-                                </Label>
-                                <p className="text-xs text-muted-foreground pb-1">
-                                    {translations.appShortcutDescription}
-                                </p>
-                                <Input
-                                    id="app-shortcut"
-                                    type="text"
-                                    placeholder={translations.appShortcutPlaceholder}
-                                    value={customOpenAppShortcut}
-                                    readOnly
-                                    onKeyDown={(e) => {
-                                        e.preventDefault()
-                                        const modifiers = []
-                                        if (e.ctrlKey) modifiers.push('Ctrl')
-                                        if (e.altKey) modifiers.push('Alt')
-                                        if (e.shiftKey) modifiers.push('Shift')
-                                        if (e.metaKey) modifiers.push(navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl')
+                        <div className="space-y-1 pt-2">
+                            <Label htmlFor="app-shortcut" className="text-sm font-medium">
+                                {translations.appShortcutLabel}
+                            </Label>
+                            <p className="text-xs text-muted-foreground pb-1">
+                                {translations.appShortcutDescription}
+                            </p>
+                            <Input
+                                id="app-shortcut"
+                                type="text"
+                                placeholder={translations.appShortcutPlaceholder}
+                                value={customOpenAppShortcut}
+                                readOnly
+                                onKeyDown={(e) => {
+                                    e.preventDefault()
+                                    const modifiers = []
+                                    if (e.ctrlKey) modifiers.push('Ctrl')
+                                    if (e.altKey) modifiers.push('Alt')
+                                    if (e.shiftKey) modifiers.push('Shift')
+                                    if (e.metaKey) modifiers.push(navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl')
 
-                                        let key = e.key.toUpperCase()
-                                        const isLetter = key.length === 1 && key >= 'A' && key <= 'Z'
-                                        const isDigit = key.length === 1 && key >= '0' && key <= '9'
-                                        const isFunctionKey = key.startsWith('F') && key.length > 1 && key.length <= 3 && !isNaN(Number(key.substring(1)))
-                                        const otherValidKeys = ['SPACE', 'TAB', 'ENTER', 'ESCAPE', 'BACKSPACE', 'DELETE', 'HOME', 'END', 'PAGEUP', 'PAGEDOWN', 'ARROWUP', 'ARROWDOWN', 'ARROWLEFT', 'ARROWRIGHT', '+', '-', '=', '[', ']', '\\', ';', '\'', ',', '.', '/'];
+                                    let key = e.key.toUpperCase()
+                                    const isLetter = key.length === 1 && key >= 'A' && key <= 'Z'
+                                    const isDigit = key.length === 1 && key >= '0' && key <= '9'
+                                    const isFunctionKey = key.startsWith('F') && key.length > 1 && key.length <= 3 && !isNaN(Number(key.substring(1)))
+                                    const otherValidKeys = ['SPACE', 'TAB', 'ENTER', 'ESCAPE', 'BACKSPACE', 'DELETE', 'HOME', 'END', 'PAGEUP', 'PAGEDOWN', 'ARROWUP', 'ARROWDOWN', 'ARROWLEFT', 'ARROWRIGHT', '+', '-', '=', '[', ']', '\\', ';', '\'', ',', '.', '/'];
 
-                                        if (isLetter || isDigit || isFunctionKey || otherValidKeys.includes(key)) {
-                                            if (modifiers.length > 0) {
-                                                const shortcutString = [...modifiers, key].join('+')
+                                    if (isLetter || isDigit || isFunctionKey || otherValidKeys.includes(key)) {
+                                        if (modifiers.length > 0) {
+                                            const shortcutString = [...modifiers, key].join('+')
+                                            updateShortcut(shortcutString)
+                                        } else {
+                                            if (isFunctionKey || otherValidKeys.includes(key)) { // Correção aqui: deve ser otherValidKeys.includes(key)
+                                                const shortcutString = key
                                                 updateShortcut(shortcutString)
-                                            } else {
-                                                if (isFunctionKey || otherValidKeys.includes(key)) { // Correção aqui: deve ser otherValidKeys.includes(key)
-                                                    const shortcutString = key
-                                                    updateShortcut(shortcutString)
-                                                }
                                             }
-                                        } else { }
-                                    }}
-                                    className="h-7 text-xs"
-                                />
-                                <p className="text-xs text-muted-foreground pt-1">
-                                    {translations.appShortcutInfo}
-                                </p>
-                            </div>
-                        </TabsContent>
+                                        }
+                                    } else { }
+                                }}
+                                className="h-7 text-xs"
+                            />
+                            <p className="text-xs text-muted-foreground pt-1">
+                                {translations.appShortcutInfo}
+                            </p>
+                        </div>
+                    </TabsContent>
 
                     {user?.role && (
                         <TabsContent value={translations.environment} className="space-y-4 flex-1 overflow-y-auto pb-2 pr-2 pl-2">
                             {user?.role === "admin" && (
-                                <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
-                                    <Plus className="h-3.5 w-3.5 mr-1" />
-                                    {translations.manageUsers}
-                                </Button>
+                                <div className="flex flex-col">
+                                    <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ALL_USERS)}>
+                                        <Plus className="h-3.5 w-3.5 mr-1" />
+                                        {translations.manageUsers}
+                                    </Button>
+
+                                    <Button variant="outline" size="sm" className="w-full mt-2 h-8 text-xs" onClick={() => navigateTo(NavigationScreen.ENVIRONMENT_MEDIA)}>
+                                        <BookImage className="h-3.5 w-3.5 mr-1" />
+                                        {translations.manageMedias}
+                                    </Button>
+                                </div>
+
                             )}
 
                             <div className="rounded-lg border border-border overflow-hidden">

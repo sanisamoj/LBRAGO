@@ -18,6 +18,7 @@ import { useVaultsState } from "./useVaultsState"
 import { AxiosError } from "axios"
 import { SavedMediaResponse } from "@/models/data/interfaces/SavedMediaResponse"
 import { UploadMedia } from "@/utils/uploadMedia"
+import { useMediaState } from "./useMediaState"
 
 export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
     name: "",
@@ -79,6 +80,8 @@ export const useCreateVaultState = create<CreateVaultState>((set, get) => ({
 
             toast.success(translations.vaultCreatedSuccessfully)
             resetNavigation(NavigationScreen.VAULTS)
+
+            useMediaState.getState().initState()
         } catch (error: AxiosError | any) {
             if (error instanceof AxiosError) {
                 if (error.status === 403) {

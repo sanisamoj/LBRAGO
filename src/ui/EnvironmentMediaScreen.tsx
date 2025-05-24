@@ -1,22 +1,21 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Download, Image as ImageIcon, FileText, Search, UploadCloud } from 'lucide-react'
+import { Download, Image as ImageIcon, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useLanguageState } from '@/store/useLanguageState'
 import { SavedMediaResponse } from '@/models/data/interfaces/SavedMediaResponse'
-import { useGlobalState } from '@/store/useGlobalState'
+import { useMediaState } from '@/store/useMediaState'
 
 const MOCKED_TOTAL_AVAILABLE_STORAGE_BYTES = 5 * 1024 * 1024 * 1024 // 5 GB
 
 export default function EnvironmentMediaScreen() {
     const { translations } = useLanguageState()
-    const { medias: mediaItemsData } = useGlobalState()
+    const { medias: mediaItemsData } = useMediaState()
     const [mediaItems, setMediaItems] = useState<SavedMediaResponse[]>(mediaItemsData)
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, _] = useState('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
@@ -24,6 +23,7 @@ export default function EnvironmentMediaScreen() {
     }, [mediaItemsData])
 
     const totalStoredBytes = useMemo(() => {
+        if(!mediaItems) return 0
         return mediaItems.reduce((acc, item) => acc + item.size, 0)
     }, [mediaItems])
 
@@ -84,7 +84,7 @@ export default function EnvironmentMediaScreen() {
 
     return (
         <div className="p-4 h-full flex flex-col">
-            <div className="mb-6 p-4 border rounded-lg bg-card shadow flex flex-col gap-2">
+            <div className="mb-2 p-4 border rounded-lg bg-card shadow flex flex-col gap-2">
                 <div className="flex flex-raw sm:flex-row justify-between items-center text-sm mb-2">
                     <p className='flex flex-col gap-1'>{translations.totalStoredLabel} <Badge variant="secondary">{formatFileSize(totalStoredBytes)}</Badge></p>
                     <p className='flex flex-col gap-1'>{translations.totalAvailableLabel} <Badge variant="outline">{formatFileSize(MOCKED_TOTAL_AVAILABLE_STORAGE_BYTES)}</Badge></p>
@@ -95,7 +95,7 @@ export default function EnvironmentMediaScreen() {
                 )}
             </div>
 
-            <div className="mb-4 flex flex-col sm:flex-row gap-2 items-center">
+            {/* <div className="mb-4 flex flex-col sm:flex-row gap-2 items-center">
                 <div className="relative flex-grow w-full">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -110,7 +110,7 @@ export default function EnvironmentMediaScreen() {
                     <UploadCloud className="mr-2 h-4 w-4" />
                     <p className='text-xs'>{translations.uploadNewMediaButton}</p>
                 </Button>
-            </div>
+            </div> */}
 
             {filteredMediaItems.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
